@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <script src="{{ asset('assets') }}/js/axios.min.js"></script>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="{{asset("assets")}}/images/site_icon.png"/>
 	 {{-- <link rel="icon" type="image/png" href="{{asset("assets")}}/{{asset("assets/images/site_icon.png")}}"/> --}}
@@ -94,22 +95,16 @@
 	</script>
 <!--===============================================================================================-->
 <script>
-  async function onLogin(event){
+async function onLogin(event){
     event.preventDefault();
-
-    // Clear old errors
 
     document.getElementsByClassName('login_email_error')[0].innerText = "";
     document.getElementsByClassName('login_password_error')[0].innerText = "";
 
-    // Get values
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
 
     let isError = false;
-
-    // Validate
-
 
     if (!email) {
         document.getElementsByClassName('login_email_error')[0].innerText = "Email is required";
@@ -119,20 +114,39 @@
     if (!password) {
         document.getElementsByClassName('login_password_error')[0].innerText = "Password is required";
         isError = true;
-    }else if(password < 8){
+    } else if(password.length < 8){
         document.getElementsByClassName('login_password_error')[0].innerText = "Password must be at least 8 characters";
         isError = true;
     }
 
     if (isError) return false;
 
-    // If no error, prepare data
     let data = {
         email: email,
         password: password
     };
-    console.log(data); 
+
+    try {
+        let res = await axios.post("/admin/login/store", data);
+        if (res.data.status == "otp_send_success") {
+            localStorage.setItem('pending_email', res.data.email);
+            window.location.href = "/otp/verify";
+        }
+
+        if (res.data.status == "login_success") {
+            localStorage.setItem("token", res.data.token);
+            window.location.href = "/admin/dashboard";
+        }
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+            alert(error.response.data.message);
+        } else {
+            alert("Something went wrong. Please try again.");
+        }
+        console.error("error", error);
+    }
 }
+
 
 </script>
 	

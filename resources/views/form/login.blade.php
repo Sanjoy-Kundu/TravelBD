@@ -132,12 +132,6 @@
         password: password
     };
     console.log(data); 
-	try{
-		let res = await axios.post("/admin_store_login",data)
-		console.log(res);
-	}catch(error){
-		console.log("error");
-	}
 }
 
 </script>

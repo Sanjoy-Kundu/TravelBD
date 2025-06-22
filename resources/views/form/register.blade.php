@@ -50,7 +50,7 @@
                         <h3 style="color:rgb(16, 148, 220)">Admin Registration</h3>
                     </span>
                     <div class="alert alert-success d-none" role="alert">
-                        <h2 id="registration_success"></h2>
+                        <h5 id="registration_success"></h5>
                     </div>
                     <div class="wrap-input100">
                         <input class="input100 " type="text" value="" name="name" placeholder="User Name"
@@ -183,7 +183,7 @@
             };
            // console.log(data);
             try {
-                let res = await axios.post("/store_registration", data);
+                let res = await axios.post("/admin/registration/store", data);
                 if (res.data.status === 'success') {
                     document.getElementById("registration_success").innerText = res.data.message
                     let alertBox = document.getElementsByClassName("alert-success")[0];

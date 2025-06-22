@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
@@ -17,3 +18,5 @@ use App\Http\Controllers\RegistrationController;
 
 Route::get("/admin/registration", [RegistrationController::class, "adminRegisterPage"]);
 Route::get("/admin/login", [LoginController::class, "adminLoginPage"]);
+
+Route::post("/admin/registration/store", [AdminController::class, "admin_registration_store"]);

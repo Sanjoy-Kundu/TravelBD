@@ -19,4 +19,5 @@ use App\Http\Controllers\RegistrationController;
 Route::get("/admin/registration", [RegistrationController::class, "adminRegisterPage"]);
 Route::get("/admin/login", [LoginController::class, "adminLoginPage"]);
 
+Route::post("/admin/login/store", [AdminController::class, "admin_login_store"]);
 Route::post("/admin/registration/store", [AdminController::class, "admin_registration_store"]);

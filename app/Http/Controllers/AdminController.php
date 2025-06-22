@@ -52,7 +52,7 @@ class AdminController extends Controller
                 $admin->otp_expires_at = now()->addMinutes(5);
                 $admin->save();
 
-                Mail::to($admin->email)->send(new AdminOtp($admin));
+                Mail::to($admin->email)->send(new AdminOtp($admin->fresh()));
 
                 return response()->json([
                     'status' => 'otp_send_success',

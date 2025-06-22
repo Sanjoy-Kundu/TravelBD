@@ -128,6 +128,12 @@ async function onLogin(event){
 
     try {
         let res = await axios.post("/admin/login/store", data);
+
+		if(res.data.status == "message_error"){
+			document.getElementsByClassName('login_email_error')[0].innerText = res.data.message;
+		}
+
+
         if (res.data.status == "otp_send_success") {
             localStorage.setItem('pending_email', res.data.email);
             window.location.href = "/otp/verify";

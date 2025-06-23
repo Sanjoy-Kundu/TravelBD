@@ -25,5 +25,10 @@ Route::post("/admin/registration/store", [AdminController::class, "admin_registr
 Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
 
 
-//admin dashboard
+//dashboard page 
 Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);
+
+//admin dashboard
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+  Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
+});

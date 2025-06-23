@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -172,11 +173,16 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Admin details for dashboard
      */
-    public function edit(Admin $admin)
+    public function adminDetails()
     {
-        //
+        try{
+            $user = Auth::user();
+            return response()->json(["status" => "success","data" => $user]);
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
     }
 
     /**

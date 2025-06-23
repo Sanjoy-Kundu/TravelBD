@@ -17,9 +17,13 @@ use App\Http\Controllers\RegistrationController;
 */
 
 Route::get("/admin/registration", [RegistrationController::class, "adminRegisterPage"]);
-Route::get("/admin/login", [LoginController::class, "adminLoginPage"]);
+Route::get("/admin/login", [LoginController::class, "adminLoginPage"])->name("login");
 Route::get("/otp/verify", [AdminController::class, "otpVerifyPage"]);
 
 Route::post("/admin/login/store", [AdminController::class, "admin_login_store"]);
 Route::post("/admin/registration/store", [AdminController::class, "admin_registration_store"]);
 Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
+
+
+//admin dashboard
+Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);

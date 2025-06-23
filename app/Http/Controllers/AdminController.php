@@ -12,8 +12,22 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * admin dashboard page
+     */
+    public function adminDashboardPage(){
+        try{
+            return view("pages.backend.adminDashboardPage");
+        }catch(Exception $ex){
+            return redirect()->back()->with('error', $ex->getMessage());
+        }
+    }
+
+
+
+    /**
+     * verify otp page
      */
     public function otpVerifyPage()
     {

@@ -16,11 +16,32 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a class="dropdown-item nav_admin_user_name" href="#!"></a></li>
+                        <li class="dropdown-item">role: <span class="nav_admin_user_role"></span></li>
+                        <li class="dropdown-item nav_admin_user_email"></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li class="dropdown-item" onclick="onLogout(event)" style="cursor: pointer;">Logout</li>
                     </ul>
                 </li>
             </ul>
         </nav>
+
+        <script>
+            async function onLogout(event){
+                event.preventDefault();
+                try{
+                    let res = await axios.post("/admin/logout",{},{headers:{
+                        'Authorization':`Bearer ${localStorage.getItem('token')}`
+                    }})
+                    if(res.data.status == "success"){
+                        localStorage.removeItem('token');
+                        window.location.href = "/admin/login";
+                    }else{
+                        console.log("error",res.data.message)
+                    }
+
+                }catch(error){
+                    console.error("error",error);
+                }
+            }
+        </script>

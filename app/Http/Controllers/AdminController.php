@@ -186,11 +186,19 @@ class AdminController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * admin logout
      */
-    public function update(Request $request, Admin $admin)
+    public function adminLogout(Request $request)
     {
-        //
+        try{
+            $user = $request->user(); #for authetication user info 
+            if($user && $user->currentAccessToken()){
+                $user->currentAccessToken()->delete();
+            };
+            return response()->json(["status" => "success", "message" => "Logout successfully"]);
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
     }
 
     /**

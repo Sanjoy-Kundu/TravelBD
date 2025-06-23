@@ -31,4 +31,5 @@ Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
+  Route::post("/admin/logout", [AdminController::class, "adminLogout"]);
 });

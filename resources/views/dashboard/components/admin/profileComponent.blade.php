@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="phone">Admin Id</label>
-                        <input type="tel" class="form-control" id="profile_admin_id" name="admin_id">
+                        <input type="tel" class="form-control" id="profile_admin_id" name="admin_id" readonly>
                     </div>
                 </div>
                 <div class="row">
@@ -232,31 +232,81 @@ async function adminProfile(event) {
     if (isError) return;
 
     // Prepare Data
-    let data = {
-        admin_id: admin_id,
-        phone: phone,
-        alternate_phone: alternate_phone,
-        address: address,
-        city: city,
-        state: state,
-        country: country,
-        zip_code: zip_code,
-        profile_image: profile_image,
-        about: about,
-        designation: designation,
-        facebook: facebook,
-        twitter: twitter,
-        linkedin: linkedin,
-        website: website
-    };
+    let data = new FormData();
+    data.append('admin_id', admin_id);
+    data.append('phone', phone);
+    data.append('alternate_phone', alternate_phone);
+    data.append('address', address);
+    data.append('city', city);
+    data.append('state', state);
+    data.append('country', country);
+    data.append('zip_code', zip_code);
+    if (profile_image) {
+    data.append('profile_image', profile_image);
+    }else{
+      data.append('profile_image', '')   
+    }
+    data.append('about', about);
+    data.append('designation', designation);
+    data.append('facebook', facebook);
+    data.append('twitter', twitter);
+    data.append('linkedin', linkedin);
+    data.append('website', website);
 
-    console.log(data); // Later use for submission via axios
+    //only can see when i use FormData
+    // for (let keyValue of data.entries()) {
+    //     console.log(keyValue[0] + ': ' + keyValue[1]);
+    //     }
+   
     try{
-        let res = await axios.post("/admin/profile/store",data,{headers:{"Authorization":`Bearer ${token}`,}});
+        let res = await axios.post("/admin/profile/store",data,{
+            headers:{
+                "Authorization":`Bearer ${token}`
+            }});
+
+            if(res.data.status == "success"){
+                await getAdminProfileDetails();
+                console.log("data insertd successfully")
+            }else{
+                console.log("data not insertd successfully")
+            }
     }catch(error){
         console.error("error",error)
     }
 }
 
+
+
+//admin profile details
+getAdminProfileDetails();
+async function getAdminProfileDetails(){
+    let token = localStorage.getItem("token");
+    try{
+        let res = await axios.get("/admin/profile/details",{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if(res.data.status == "success"){
+                console.log(res.data.data)
+                document.querySelector("#profile_admin_phone").value = res.data.data.phone;
+                document.querySelector("#profile_admin_alternate_phone").value = res.data.data.alternate_phone;
+                document.querySelector("#profile_admin_address").value = res.data.data.address;
+                document.querySelector("#profile_admin_city").value = res.data.data.city;
+                document.querySelector("#profile_admin_state").value = res.data.data.state;
+                document.querySelector("#profile_admin_country").value = res.data.data.country;
+                document.querySelector("#profile_admin_zip_code").value = res.data.data.zip_code;
+                document.querySelector("#profile_admin_about").value = res.data.data.about;
+                document.querySelector("#profile_admin_designation").value = res.data.data.designation;
+                document.querySelector("#profile_admin_facebook").value = res.data.data.facebook;
+                document.querySelector("#profile_admin_twitter").value = res.data.data.twitter;
+                document.querySelector("#profile_admin_linkedin").value = res.data.data.linkedin;
+                document.querySelector("#profile_admin_website").value = res.data.data.website;
+            }
+    }catch(error){
+        console.error("error",error)
+    }
+}
    
 </script>

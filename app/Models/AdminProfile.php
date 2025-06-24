@@ -25,4 +25,8 @@ class AdminProfile extends Model
         'linkedin',
         'website',
     ];
+
+    public function admin(){
+        return $this->belongsTo(Admin::class);
+    }
 }

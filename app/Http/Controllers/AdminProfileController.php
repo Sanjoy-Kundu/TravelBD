@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Admin;
+use Illuminate\Support\Str;
 use App\Models\AdminProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,8 +56,23 @@ class AdminProfileController extends Controller
         try {
             $admin = Admin::find($request->admin_id);
             if(!$admin){
-                return response()->json(['status' => 'error', 'message' => 'Admin not found'],404);
+                return response()->json(['status' => 'error', 'message' => 'Admin not found']);
             }
+
+            $adminProfile = AdminProfile::where('admin_id', $request->admin_id)->first();
+            if(!$adminProfile){
+                $adminProfile = new AdminProfile();
+                $adminProfile->admin_id = $request->admin_id;
+                #$adminProfile->save(); for test
+                #return "admin id inseted successfully";
+                $adminProfile->save();
+                
+            }
+         
+
+            
+            //image handeling 
+         
 
         } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);

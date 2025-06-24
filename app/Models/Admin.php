@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\AdminProfile;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -20,4 +21,8 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'is_verified',
         'otp_expires_at'
     ];
+
+    public function profile(){
+      return $this->hasOne(AdminProfile::class);
+    }
 }

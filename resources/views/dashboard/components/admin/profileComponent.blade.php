@@ -23,11 +23,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>Name</label>
-                        <input type="text" class="form-control" id="profile_admin_name" readonly>
+                    <div class="col-md-12 mb-3">
+                        <label for="profile_admin_name">Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="profile_admin_name" readonly
+                                onclick="enableNameEdit()">
+                            <button class="btn btn-warning" type="button" onclick="updateAdminName()">Update</button>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+
+
+                    <div class="col-md-12 mb-3">
                         <label>Email</label>
                         <input type="email" class="form-control bg-danger text-white" id="profile_admin_email"
                             readonly>
@@ -153,7 +159,74 @@
 
 <script>
     // Fetch Admin Basic Info
-    getUserProfileInfo();
+    getUserProfileInfo().then(() => {
+        getAdminProfileDetails();
+    });
+
+    //only name 
+    function enableNameEdit() {
+        const nameInput = document.querySelector("#profile_admin_name");
+        nameInput.removeAttribute("readonly");
+        nameInput.focus();
+    }
+    // Update name by calling backend
+    async function updateAdminName() {
+        const email = document.querySelector("#profile_admin_email").value.trim();
+        const name = document.querySelector("#profile_admin_name").value.trim();
+        const token = localStorage.getItem("token");
+
+        if (name === "") {
+            alert("Name field is required");
+            return;
+        }
+
+        try {
+            const res = await axios.post("/admin/name/update-by-email", {
+                email: email,
+                name: name
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.data.status === "success") {
+                let alertBox = document.querySelector("#admin_profile_success_alert");
+                alertBox.textContent = "Name updated successfully!";
+                alertBox.classList.remove("d-none");
+                alertBox.classList.add("show");
+
+                setTimeout(() => {
+                    alertBox.classList.add("d-none");
+                }, 2000);
+
+                // Make it readonly again after update
+                document.querySelector("#profile_admin_name").setAttribute("readonly", true);
+            } else {
+                alert("Update failed: " + res.data.message);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong! Server Error or Token Expired");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     async function getUserProfileInfo() {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -173,6 +246,7 @@
                 document.querySelector("#profile_admin_name").value = res.data.data.name;
                 document.querySelector("#profile_admin_email").value = res.data.data.email;
             }
+            return true;
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 alert(error.response.data.message);
@@ -290,16 +364,20 @@
             });
 
             if (res.data.status == "success") {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                let success_alert_box = document.querySelector("#admin_profile_success_alert")
                 await getAdminProfileDetails();
+                //await updateAdminNameByEmail();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                let success_alert_box = document.querySelector("#admin_profile_success_alert")
                 success_alert_box.classList.remove("d-none");
                 success_alert_box.classList.add("show");
 
                 setTimeout(() => {
                     success_alert_box.classList.add("d-none");
                 }, 2000);
-               
+
             } else {
                 console.log(res.data)
             }
@@ -311,11 +389,17 @@
 
 
     //admin profile details
-    getAdminProfileDetails();
+    // getAdminProfileDetails();
     async function getAdminProfileDetails() {
+        //catcg admin_id
+        let admin_id = document.querySelector("#profile_admin_id").value;
+        console.log(admin_id);
         let token = localStorage.getItem("token");
         try {
-            let res = await axios.get("/admin/profile/details", {
+            //pass admin id
+            let res = await axios.post("/admin/profile/details", {
+                admin_id: admin_id
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'

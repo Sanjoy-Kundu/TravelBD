@@ -87,17 +87,17 @@ public function adminProfileStore(Request $request)
         // Step 3: Insert
         $adminProfile->phone = $request->phone;
         $adminProfile->alternate_phone = $request->alternate_phone ?? null;
-        $adminProfile->address = $request->address ?? null;
-        $adminProfile->designation = $request->designation;
-        $adminProfile->about = $request->about ?? null;
-        $adminProfile->city = $request->city ?? null;
-        $adminProfile->state = $request->state ?? null;
-        $adminProfile->country = $request->country ?? null;
+        $adminProfile->address = Str::upper($request->address) ?? null;
+        $adminProfile->designation = Str::upper($request->designation);
+        $adminProfile->about = Str::upper($request->about) ?? null;
+        $adminProfile->city = Str::upper($request->city) ?? null;
+        $adminProfile->state = Str::upper($request->state) ?? null;
+        $adminProfile->country = Str::upper($request->country) ?? null;
         $adminProfile->zip_code = $request->zip_code ?? null;
-        $adminProfile->facebook = $request->facebook ?? null;
-        $adminProfile->twitter = $request->twitter ?? null;
-        $adminProfile->linkedin = $request->linkedin ?? null;
-        $adminProfile->website = $request->website ?? null;
+        $adminProfile->facebook = Str::lower($request->facebook) ?? null;
+        $adminProfile->twitter = Str::lower($request->twitter) ?? null;
+        $adminProfile->linkedin = Str::lower($request->linkedin) ?? null;
+        $adminProfile->website = Str::lower($request->website) ?? null;
 
         $adminProfile->save();
 
@@ -111,10 +111,10 @@ public function adminProfileStore(Request $request)
     /**
      * admin profile details
      */
-    public function adminProfileDetails()
+    public function adminProfileDetails(Request $request)
     {
         try{
-            $adminProfile = AdminProfile::first();
+            $adminProfile = AdminProfile::where('admin_id', $request->admin_id)->first();
             return response()->json(['status' => 'success', 'data' => $adminProfile]);
         }catch(Exception $ex){
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
@@ -124,9 +124,13 @@ public function adminProfileStore(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AdminProfile $adminProfile)
+    public function adminProfileViewPage()
     {
-        //
+        try{
+            return view('pages.backend.adminProfileViewPage');
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
     }
 
     /**

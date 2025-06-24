@@ -33,7 +33,7 @@
                      <i class="fas fa-user-tag me-2"></i>Role: <span class="nav_admin_user_role"></span>
                  </li>
                   <li>
-                     <a class="dropdown-item" href="#!">
+                     <a class="dropdown-item" href="{{url('/admin/view/profile')}}" target="_blank">
                          <i class="fas fa-user-circle me-2"></i>Profile
                      </a>
                  </li>

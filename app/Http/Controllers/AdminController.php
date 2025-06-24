@@ -202,10 +202,34 @@ class AdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * admin name update by email
      */
-    public function destroy(Admin $admin)
-    {
-        //
+public function adminNameUpdateByEmail(Request $request)
+{
+    // Step 1: Validation
+    $request->validate([
+        'email' => 'required|email',
+        'name' => 'required|string|max:255',
+    ]);
+
+    $admin = Admin::where('email', $request->email)->first();
+
+    if (!$admin) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Admin not found with this email'
+        ]);
     }
+
+    $admin->name = Str::upper($request->name);
+    $admin->save();
+
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Admin name updated successfully',
+       
+    ]);
+}
+
 }

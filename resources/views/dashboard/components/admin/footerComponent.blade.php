@@ -28,7 +28,7 @@
         }})
 
         if(res.data.status == "success"){
-            console.log(res.data.data.name)
+            console.log(res.data.data)
             document.querySelector(".admin_name").innerHTML = res.data.data.name;
             document.querySelector(".nav_admin_user_name").innerHTML = res.data.data.name;
             document.querySelector(".nav_admin_user_role").innerHTML = res.data.data.role;

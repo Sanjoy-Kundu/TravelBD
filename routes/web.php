@@ -29,7 +29,8 @@ Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
 //dashboard page 
 Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);
 Route::get('/admin/profile/create', [AdminProfileController::class, "adminProfilePage"]);
- Route::get("/admin/view/profile", [AdminProfileController::class, "adminProfileViewPage"]); #frontend page
+Route::get("/admin/view/profile", [AdminProfileController::class, "adminProfileViewPage"]); #frontend page
+Route::get("/admin/lists", [AdminController::class, "adminListsPage"]); 
 
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -39,6 +40,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 //for admin profile 
   Route::post("/admin/profile/details", [AdminProfileController::class, "adminProfileDetails"]); #backend
   Route::post("/admin/profile/store", [AdminProfileController::class, "adminProfileStore"]);
+
+
+  #Route::get('/admin/lists/data', [AdminController::class, 'adminListData']); #datatable
 
 });
 

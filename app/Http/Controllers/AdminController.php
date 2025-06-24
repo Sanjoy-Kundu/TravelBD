@@ -7,12 +7,98 @@ use App\Models\Admin;
 use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
+
+
+    /**
+     * how to use yazara datable : composer require yajra/laravel-datatables-oracle
+
+     * 
+     */
+
+// public function adminListData(Request $request)
+// {
+//     if ($request->ajax()) {
+//         $admins = Admin::with('adminProfile')->select(['id', 'name', 'email', 'role', 'created_at']);
+
+//         return DataTables::of($admins)
+//             ->addIndexColumn()
+//             ->editColumn('created_at', function ($admin) {
+//                 return $admin->created_at->format('Y-m-d');
+//             })
+
+//             // Profile fields (safely check using optional())
+//             ->addColumn('phone', function ($admin) {
+//                 return optional($admin->adminProfile)->phone ?? 'N/A';
+//             })
+//             ->addColumn('alternate_phone', function ($admin) {
+//                 return optional($admin->adminProfile)->alternate_phone ?? 'N/A';
+//             })
+//             ->addColumn('address', function ($admin) {
+//                 return optional($admin->adminProfile)->address ?? 'N/A';
+//             })
+//             ->addColumn('city', function ($admin) {
+//                 return optional($admin->adminProfile)->city ?? 'N/A';
+//             })
+//             ->addColumn('state', function ($admin) {
+//                 return optional($admin->adminProfile)->state ?? 'N/A';
+//             })
+//             ->addColumn('country', function ($admin) {
+//                 return optional($admin->adminProfile)->country ?? 'N/A';
+//             })
+//             ->addColumn('zip_code', function ($admin) {
+//                 return optional($admin->adminProfile)->zip_code ?? 'N/A';
+//             })
+//             ->addColumn('designation', function ($admin) {
+//                 return optional($admin->adminProfile)->designation ?? 'N/A';
+//             })
+//             ->addColumn('facebook', function ($admin) {
+//                 return optional($admin->adminProfile)->facebook ?? 'N/A';
+//             })
+//             ->addColumn('twitter', function ($admin) {
+//                 return optional($admin->adminProfile)->twitter ?? 'N/A';
+//             })
+//             ->addColumn('linkedin', function ($admin) {
+//                 return optional($admin->adminProfile)->linkedin ?? 'N/A';
+//             })
+//             ->addColumn('website', function ($admin) {
+//                 return optional($admin->adminProfile)->website ?? 'N/A';
+//             })
+
+//             // Profile image (if needed)
+//             ->addColumn('profile_image', function ($admin) {
+//                 $img = optional($admin->adminProfile)->profile_image;
+//                 $path = $img ? asset('upload/dashboard/images/admin/' . $img) : asset('upload/dashboard/images/admin/default.png');
+//                 return '<img src="'.$path.'" width="50" height="50" class="rounded-circle"/>';
+//             })
+
+//             ->rawColumns(['profile_image']) // Allow HTML for image
+//             ->make(true);
+//     }
+// }
+
+
+
+/**
+ * admin list page
+ * 
+ */
+public function adminListsPage(){
+    try{
+        return view("pages.backend.adminListPage");
+    }catch(Exception $ex){
+        return redirect()->back()->with('error', $ex->getMessage());
+    }
+}
+
+
+
 
     /**
      * admin dashboard page
@@ -26,6 +112,18 @@ class AdminController extends Controller
     }
 
 
+
+    /** 
+     * admin list page
+     */
+    public function adminListPage(){
+        try{
+            #$all_admins = Admin::where('role', 'admin')->get();
+            return view("pages.backend.adminListPage");
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
+    }
 
     /**
      * verify otp page

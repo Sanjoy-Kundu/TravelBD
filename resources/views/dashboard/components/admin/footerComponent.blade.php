@@ -26,6 +26,7 @@
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
         }})
+        console.log(res.data)
 
         if(res.data.status == "success"){
             console.log(res.data.data)

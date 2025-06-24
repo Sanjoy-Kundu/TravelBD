@@ -77,8 +77,23 @@ class AdminProfileController extends Controller
                 $adminProfile->profile_image = $imageName;
             }
             #return "Profile image uploaded successully successfully";
-         
 
+            //now upload all data to the adminProfile table
+            $adminProfile->phone = $request->phone;
+            $adminProfile->alternate_phone = $request->alternate_phone ?? 'NULL';
+            $adminProfile->address = $request->address ?? 'NULL';
+            $adminProfile->city = $request->city ?? 'NULL';
+            $adminProfile->state = $request->state ?? 'NULL';
+            $adminProfile->country = $request->country ?? 'NULL';
+            $adminProfile->zip_code = $request->zip_code ?? 'NULL';
+            $adminProfile->about = $request->about ?? 'NULL';
+            $adminProfile->facebook = $request->facebook ?? 'NULL';
+            $adminProfile->twitter = $request->twitter ?? 'NULL';
+            $adminProfile->linkedin = $request->linkedin ?? 'NULL';
+            $adminProfile->website = $request->website ?? 'NULL';
+            $adminProfile->save();
+             return response()->json(['status' => 'success', 'message' => 'Profile saved successfully']);
+        
         } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }

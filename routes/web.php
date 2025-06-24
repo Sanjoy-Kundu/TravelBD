@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
@@ -27,9 +28,13 @@ Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
 
 //dashboard page 
 Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);
+Route::get('/admin/profile/create', [AdminProfileController::class, "adminProfilePage"]);
 
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
   Route::post("/admin/logout", [AdminController::class, "adminLogout"]);
+//for admin profile 
+  
 });
+

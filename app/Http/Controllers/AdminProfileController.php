@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Exception;
+use App\Models\AdminProfile;
+use Illuminate\Http\Request;
+
+class AdminProfileController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * admin profile page 
+     */
+    public function adminProfilePage()
+    {
+        try{
+            return view('pages.backend.adminProfilePage');
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(AdminProfile $adminProfile)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(AdminProfile $adminProfile)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, AdminProfile $adminProfile)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(AdminProfile $adminProfile)
+    {
+        //
+    }
+}

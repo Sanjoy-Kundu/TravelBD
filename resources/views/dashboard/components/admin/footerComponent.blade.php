@@ -35,10 +35,10 @@
             document.querySelector(".nav_admin_user_email").innerHTML = res.data.data.email;
         }
         }catch(error){
-           // ✅ এখানে middleware থেকে আসা error ধরবে
+           // middleware error check 
             if (error.response && error.response.status === 401) {
                 alert(error.response.data.message); // "Unauthorized"
-                // 🔁 Token invalid → redirect to login
+                //  Token invalid → redirect to login
                 localStorage.removeItem('token');
                 window.location.href = "/admin/login";
             } else {

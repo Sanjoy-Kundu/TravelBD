@@ -4,170 +4,259 @@
         <li class="breadcrumb-item active">Profile Create</li>
     </ol>
 
-    <!-- Card wrapper -->
     <div class="card mb-4 shadow w-75 mx-auto">
         <div class="card-header bg-primary text-white">
             <i class="fas fa-user"></i> Admin Profile Information
         </div>
         <div class="card-body">
             <form action="" method="" enctype="multipart/form-data">
-
                 <div class="row">
-                     <!-- Row 0 -->
                     <div class="col-md-12 mb-3">
                         <label for="phone">Admin Id</label>
-                        <input type="tel" name="admin_id" class="form-control" id="profile_admin_id">
+                        <input type="tel" class="form-control" id="profile_admin_id" name="admin_id">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="name">Name</label>
-                        <input type="tel" name="" class="form-control" id="profile_admin_name" readonly>
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="profile_admin_name" readonly>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="email">Email</label>
-                        <input type="tel" name="" class="form-control bg-danger text-white" id="profile_admin_email" readonly>
+                        <label>Email</label>
+                        <input type="email" class="form-control bg-danger text-white" id="profile_admin_email" readonly>
                     </div>
                 </div>
 
-                <!--Row 1-->
+                <!-- Phone -->
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="phone">Phone</label>
-                        <input type="tel" name="phone" class="form-control" id="phone"
-                            value="{{ old('phone') }}">
+                        <label>Phone</label>
+                        <input type="tel" class="form-control" id="profile_admin_phone" placeholder="Enter Your Phone">
+                        <span class="text-danger" id="profile_admin_phone_error"></span>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="alternate_phone">Alternate Phone</label>
-                        <input type="tel" name="alternate_phone" class="form-control" id="alternate_phone"
-                            value="{{ old('alternate_phone') }}">
+                        <label>Alternate Phone (optional)</label>
+                        <input type="tel" class="form-control" id="profile_admin_alternate_phone" placeholder="Enter Your Alternate Phone">
                     </div>
                 </div>
 
-                <div class="row">
-                    <!-- Row 2 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" class="form-control" id="address"
-                            value="{{ old('address') }}">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Row 3 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="city">City</label>
-                        <input type="text" name="city" class="form-control" id="city"
-                            value="{{ old('city') }}">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="state">State</label>
-                        <input type="text" name="state" class="form-control" id="state"
-                            value="{{ old('state') }}">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Row 4 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="country">Country</label>
-                        <input type="text" name="country" class="form-control" id="country"
-                            value="{{ old('country') }}">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="zip_code">Zip Code</label>
-                        <input type="text" name="zip_code" class="form-control" id="zip_code"
-                            value="{{ old('zip_code') }}">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Row 5 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="designation">Designation</label>
-                        <input type="text" name="designation" class="form-control" id="designation"
-                            value="{{ old('designation') }}">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="profile_image">Profile Image</label>
-                        <input type="file" name="profile_image" class="form-control-file" id="profile_image">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Row 6 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="about">About</label>
-                        <textarea name="about" class="form-control" id="about" rows="4">{{ old('about') }}</textarea>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Social Links Row 7 -->
-                    <div class="col-md-12 mb-3">
-                        <label for="facebook">Facebook URL</label>
-                        <input type="url" name="facebook" class="form-control" id="facebook"
-                            value="{{ old('facebook') }}">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="twitter">Twitter URL</label>
-                        <input type="url" name="twitter" class="form-control" id="twitter"
-                            value="{{ old('twitter') }}">
-                    </div>
-                </div>
-
+                <!-- Address -->
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="linkedin">LinkedIn URL</label>
-                        <input type="url" name="linkedin" class="form-control" id="linkedin"
-                            value="{{ old('linkedin') }}">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="website">Website</label>
-                        <input type="url" name="website" class="form-control" id="website"
-                            value="{{ old('website') }}">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="profile_admin_address" placeholder="Enter Your Address">
+                        <span class="text-danger" id="profile_admin_address_error"></span>
                     </div>
                 </div>
 
+                <!-- City, State -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>City</label>
+                        <input type="text" class="form-control" id="profile_admin_city" placeholder="Enter Your City">
+                        <span class="text-danger" id="profile_admin_city_error"></span>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>State</label>
+                        <input type="text" class="form-control" id="profile_admin_state" placeholder="Enter Your State">
+                        <span class="text-danger" id="profile_admin_state_error"></span>
+                    </div>
+                </div>
 
-                <!-- Submit -->
+                <!-- Country, Zip -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Country</label>
+                        <input type="text" class="form-control" id="profile_admin_country" placeholder="Enter Your Country">
+                        <span class="text-danger" id="profile_admin_country_error"></span>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Zip Code</label>
+                        <input type="text" class="form-control" id="profile_admin_zip_code" placeholder="Enter Your Zip Code">
+                        <span class="text-danger" id="profile_admin_zip_code_error"></span>
+                    </div>
+                </div>
+
+                <!-- Designation & Image -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Designation</label>
+                        <input type="text" class="form-control" id="profile_admin_designation" placeholder="Enter Your Designation">
+                        <span class="text-danger" id="profile_admin_designation_error"></span>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Profile Image</label>
+                        <input type="file" class="form-control-file" id="profile_admin_profile_image">
+                    </div>
+                </div>
+
+                <!-- About -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>About</label>
+                        <textarea class="form-control" id="profile_admin_about" rows="4"></textarea>
+                        <span class="text-danger" id="profile_admin_about_error"></span>
+                    </div>
+                </div>
+
+                <!-- Social -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Facebook URL</label>
+                        <input type="url" class="form-control" id="profile_admin_facebook" placeholder="https://facebook.com/">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Twitter URL</label>
+                        <input type="url" class="form-control" id="profile_admin_twitter" placeholder="https://twitter.com/">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>LinkedIn URL</label>
+                        <input type="url" class="form-control" id="profile_admin_linkedin" placeholder="https://linkedin.com/">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Website</label>
+                        <input type="url" class="form-control" id="profile_admin_website" placeholder="https://yourwebsite.com/">
+                    </div>
+                </div>
+
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success px-4">Save Profile</button>
+                    <button type="submit" class="btn btn-success px-4" onclick="adminProfile(event)">Save Profile</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
+    // Fetch Admin Basic Info
     getUserProfileInfo();
-    async function getUserProfileInfo(){
+    async function getUserProfileInfo() {
         let token = localStorage.getItem('token');
-        if(!token){
+        if (!token) {
             window.location.href = "/admin/login";
         }
-        try{
-          let res = await axios.get("/user/details/admin",{headers:{
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }})
 
-        if(res.data.status == "success"){
-            //console.log(res.data.data)
-            document.querySelector("#profile_admin_id").value = res.data.data.id;
-            document.querySelector("#profile_admin_name").value = res.data.data.name;
-            document.querySelector("#profile_admin_email").value = res.data.data.email;
-        }
-        }catch(error){
-           // middleware error check 
+        try {
+            let res = await axios.get("/user/details/admin", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.data.status === "success") {
+                document.querySelector("#profile_admin_id").value = res.data.data.id;
+                document.querySelector("#profile_admin_name").value = res.data.data.name;
+                document.querySelector("#profile_admin_email").value = res.data.data.email;
+            }
+        } catch (error) {
             if (error.response && error.response.status === 401) {
-                alert(error.response.data.message); // "Unauthorized"
-                //  Token invalid → redirect to login
+                alert(error.response.data.message);
                 localStorage.removeItem('token');
                 window.location.href = "/admin/login";
             } else {
                 alert("Something went wrong!");
-                console.error("Unexpected error:", error);
+                console.error(error);
             }
         }
     }
+
+// Save Admin Profile
+async function adminProfile(event) {
+    event.preventDefault();
+    let token = localStorage.getItem('token');
+
+    // Clear all error messages
+    document.querySelector("#profile_admin_phone_error").innerHTML = "";
+    document.querySelector("#profile_admin_address_error").innerHTML = "";
+    document.querySelector("#profile_admin_city_error").innerHTML = "";
+    document.querySelector("#profile_admin_state_error").innerHTML = "";
+    document.querySelector("#profile_admin_country_error").innerHTML = "";
+    document.querySelector("#profile_admin_zip_code_error").innerHTML = "";
+    document.querySelector("#profile_admin_designation_error").innerHTML = "";
+    document.querySelector("#profile_admin_about_error").innerHTML = "";
+
+    // Get all input values
+    let admin_id = document.querySelector("#profile_admin_id").value.trim();
+    let phone = document.querySelector("#profile_admin_phone").value.trim();
+    let alternate_phone = document.querySelector("#profile_admin_alternate_phone").value.trim();
+    let address = document.querySelector("#profile_admin_address").value.trim();
+    let city = document.querySelector("#profile_admin_city").value.trim();
+    let state = document.querySelector("#profile_admin_state").value.trim();
+    let country = document.querySelector("#profile_admin_country").value.trim();
+    let zip_code = document.querySelector("#profile_admin_zip_code").value.trim();
+    let profile_image = document.querySelector("#profile_admin_profile_image").files[0];
+    let about = document.querySelector("#profile_admin_about").value.trim();
+    let designation = document.querySelector("#profile_admin_designation").value.trim();
+    let facebook = document.querySelector("#profile_admin_facebook").value.trim();
+    let twitter = document.querySelector("#profile_admin_twitter").value.trim();
+    let linkedin = document.querySelector("#profile_admin_linkedin").value.trim();
+    let website = document.querySelector("#profile_admin_website").value.trim();
+
+    let isError = false;
+
+    // Validation
+    if (phone === "") {
+        document.querySelector("#profile_admin_phone_error").innerHTML = "Phone is required";
+        isError = true;
+    }
+    if (address === "") {
+        document.querySelector("#profile_admin_address_error").innerHTML = "Address is required";
+        isError = true;
+    }
+    if (city === "") {
+        document.querySelector("#profile_admin_city_error").innerHTML = "City is required";
+        isError = true;
+    }
+    if (state === "") {
+        document.querySelector("#profile_admin_state_error").innerHTML = "State is required";
+        isError = true;
+    }
+    if (country === "") {
+        document.querySelector("#profile_admin_country_error").innerHTML = "Country is required";
+        isError = true;
+    }
+    if (zip_code === "") {
+        document.querySelector("#profile_admin_zip_code_error").innerHTML = "Zip Code is required";
+        isError = true;
+    }
+    if (designation === "") {
+        document.querySelector("#profile_admin_designation_error").innerHTML = "Designation is required";
+        isError = true;
+    }
+    if (about === "") {
+        document.querySelector("#profile_admin_about_error").innerHTML = "About is required";
+        isError = true;
+    }
+
+    if (isError) return;
+
+    // Prepare Data
+    let data = {
+        admin_id: admin_id,
+        phone: phone,
+        alternate_phone: alternate_phone,
+        address: address,
+        city: city,
+        state: state,
+        country: country,
+        zip_code: zip_code,
+        profile_image: profile_image,
+        about: about,
+        designation: designation,
+        facebook: facebook,
+        twitter: twitter,
+        linkedin: linkedin,
+        website: website
+    };
+
+    console.log(data); // Later use for submission via axios
+    try{
+        let res = await axios.post("/admin/profile/store",data,{headers:{"Authorization":`Bearer ${token}`,}});
+    }catch(error){
+        console.error("error",error)
+    }
+}
+
+   
 </script>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Admin;
 use App\Models\AdminProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminProfileController extends Controller
 {
@@ -17,13 +19,13 @@ class AdminProfileController extends Controller
     }
 
     /**
-     * admin profile page 
+     * admin profile page
      */
     public function adminProfilePage()
     {
-        try{
+        try {
             return view('pages.backend.adminProfilePage');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -31,9 +33,34 @@ class AdminProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function adminProfileStore(Request $request)
     {
-        //
+        //    $request->validate([
+        //         'phone' => 'required|string|max:20',
+        //         'address' => 'required|string|max:255',
+        //         'designation' => 'required|string|max:100',
+        //         'about' => 'required|string',
+        //         //wihtout required 
+        //         'alternate_phone' => 'nullable|string|max:20',
+        //         'city' => 'nullable|string|max:100',
+        //         'state' => 'nullable|string|max:100',
+        //         'country' => 'nullable|string|max:100',
+        //         'zip_code' => 'nullable|string|max:20',
+        //         'facebook' => 'nullable|url',
+        //         'twitter' => 'nullable|url',
+        //         'linkedin' => 'nullable|url',
+        //         'website' => 'nullable|url',
+        //         'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        //     ]);
+        try {
+            $admin = Admin::find($request->admin_id);
+            if(!$admin){
+                return response()->json(['status' => 'error', 'message' => 'Admin not found'],404);
+            }
+
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
     }
 
     /**

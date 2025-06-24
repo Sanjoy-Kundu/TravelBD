@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
   Route::post("/admin/logout", [AdminController::class, "adminLogout"]);
 //for admin profile 
+  Route::post("/admin/profile/store", [AdminProfileController::class, "adminProfileStore"]);
   
 });
 

@@ -61,17 +61,22 @@ class AdminProfileController extends Controller
 
             $adminProfile = AdminProfile::where('admin_id', $request->admin_id)->first();
             if(!$adminProfile){
-                $adminProfile = new AdminProfile();
+                $adminProfile = new AdminProfile(); #make object 
                 $adminProfile->admin_id = $request->admin_id;
                 #$adminProfile->save(); for test
                 #return "admin id inseted successfully";
-                $adminProfile->save();
-                
             }
          
 
             
             //image handeling 
+            if($request->hasFile('profile_image')){
+                $image = $request->file('profile_image');
+                $imageName = Str::random(10)."-".time().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('upload/dashboard/images/admin'), $imageName);
+                $adminProfile->profile_image = $imageName;
+            }
+            #return "Profile image uploaded successully successfully";
          
 
         } catch (Exception $ex) {

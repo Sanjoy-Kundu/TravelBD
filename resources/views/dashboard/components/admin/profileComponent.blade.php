@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <form action="" method="" enctype="multipart/form-data" id="admin_profile_form">
-                <div class="row">
+                <div class="row" hidden>
                     <div class="col-md-12 mb-3">
                         <label for="phone">Admin Id</label>
                         <input type="tel" class="form-control" id="profile_admin_id" name="admin_id" readonly>

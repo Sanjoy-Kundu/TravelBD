@@ -49,6 +49,10 @@
                                 <label>Role</label>
                                 <input readonly type="text" class="form-control" id="admin_role">
                             </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <input readonly type="text" class="form-control" id="admin_gender">
+                            </div>
                         </div>
 
                         <!-- Right Column -->
@@ -158,6 +162,7 @@
                 document.getElementById("admin_linkedin").value = '';
                 document.getElementById("admin_twitter").value = '';
                 document.getElementById("admin_website").value = '';
+                document.getElementById("admin_gender").value = '';
                 document.getElementById("admin_profile_image").src = '/upload/dashboard/images/admin/default.png';
 
 
@@ -185,6 +190,7 @@
                 document.getElementById("admin_linkedin").value = profile.linkedin ?? 'N/A';
                 document.getElementById("admin_twitter").value = profile.twitter ?? 'N/A';
                 document.getElementById("admin_website").value = profile.website ?? 'N/A';
+                document.getElementById("admin_gender").value = profile.gender ?? 'N/A';
 
                 // Profile Image set
                 let image = profile.profile_image ?

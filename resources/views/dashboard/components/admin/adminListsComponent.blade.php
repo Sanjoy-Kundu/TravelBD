@@ -50,18 +50,26 @@
             });
             if (res.data.status === "success") {
                 //console.log(res.data.admin_lists);
-                    let tableBody = $('#adminListTableBody')
-                    tableBody.empty(); // clear previous data
-                    let admins = res.data.admin_lists
+                let tableBody = $('#adminListTableBody')
+                tableBody.empty(); // clear previous data
+                let admins = res.data.admin_lists
 
-                    if (admins.length == 0) {
-                        tableBody.append('<tr><td colspan="5" class="text-center">No data found</td></tr>');
+                if (admins.length == 0) {
+                    tableBody.append('<tr><td colspan="5" class="text-center">No data found</td></tr>');
+                }
+
+                admins.forEach((element, index) => {
+                    console.log(element)
+                    //console.log("index", index)
+                    let deleteButton = '';
+                    if (element.is_verified == 0) {
+                        deleteButton =
+                            `<button type="button" class="btn btn-danger admin_delete_not_verified" data-id="${element.id}">DELETE</button>`;
                     }
 
-                    admins.forEach((element, index) => {
-                        console.log(element)
-                        //console.log("index", index)
-                        let tr = `
+
+
+                    let tr = `
                         <tr>
                             <th scope="row">${index+1}</th>
                             <td>${element.name}</td>
@@ -75,17 +83,17 @@
 
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-danger admin_delete" data-id = ${element.id}>DELETE</button>
-                                    <button type="button" class="btn btn-warning admin_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">Edit</button>
+                                <button type="button" class="btn btn-warning admin_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
+                                ${deleteButton}
                                 </div>
                             </td>
                        </tr>
-                      `
-                        tableBody.append(tr);
-                    });
+                       `
+                    //<button type="button" class="btn btn-danger admin_delete" data-id = ${element.id}>DELETE</button>
+                    tableBody.append(tr);
+                });
+                $('.adminListDataTable').DataTable();
 
-                    $('.adminListDataTable').DataTable();
-               
 
 
 
@@ -100,12 +108,51 @@
 
 
 
-     //admin details view using modal 
-     $('.admin_view_details').on('click',async function(){
-        let id = $(this).data('id');
-        await getViewAdminDetailsModalFillup(id);
-        console.log("id",id)
-     })
+        //admin details view using modal 
+        $('.admin_view_details').on('click', async function() {
+            let id = $(this).data('id');
+            await getViewAdminDetailsModalFillup(id);
+            console.log("id", id)
+        })
+
+
+        $(document).on('click', '.admin_delete_not_verified', function() {
+            let id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This admin account will be permanently deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let token = localStorage.getItem('token');
+                    try {
+                        const res = await axios.post('/admin/delete-not-verified', {
+                            id: id
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if (res.data.status === 'success') {
+                            Swal.fire('Deleted!', res.data.message, 'success');
+                            adminListLoadData(); // table reload
+                        } else {
+                            Swal.fire('Error!', res.data.message || 'Deletion failed.',
+                            'error');
+                        }
+                    } catch (err) {
+                        Swal.fire('Error!', 'Server error occurred.', 'error');
+                        console.error(err);
+                    }
+                }
+            });
+        });
 
 
     }

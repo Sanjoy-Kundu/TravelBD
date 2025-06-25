@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Exception;
 use App\Models\Admin;
 use App\Mail\AdminOtp;
@@ -11,117 +12,112 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminDeleteNotification;
 
 class AdminController extends Controller
 {
-
-
     /**
      * how to use yazara datable : composer require yajra/laravel-datatables-oracle
 
-     * 
+     *
      */
 
-// public function adminListData(Request $request)
-// {
-//     if ($request->ajax()) {
-//         $admins = Admin::with('adminProfile')->select(['id', 'name', 'email', 'role', 'created_at']);
+    // public function adminListData(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $admins = Admin::with('adminProfile')->select(['id', 'name', 'email', 'role', 'created_at']);
 
-//         return DataTables::of($admins)
-//             ->addIndexColumn()
-//             ->editColumn('created_at', function ($admin) {
-//                 return $admin->created_at->format('Y-m-d');
-//             })
+    //         return DataTables::of($admins)
+    //             ->addIndexColumn()
+    //             ->editColumn('created_at', function ($admin) {
+    //                 return $admin->created_at->format('Y-m-d');
+    //             })
 
-//             // Profile fields (safely check using optional())
-//             ->addColumn('phone', function ($admin) {
-//                 return optional($admin->adminProfile)->phone ?? 'N/A';
-//             })
-//             ->addColumn('alternate_phone', function ($admin) {
-//                 return optional($admin->adminProfile)->alternate_phone ?? 'N/A';
-//             })
-//             ->addColumn('address', function ($admin) {
-//                 return optional($admin->adminProfile)->address ?? 'N/A';
-//             })
-//             ->addColumn('city', function ($admin) {
-//                 return optional($admin->adminProfile)->city ?? 'N/A';
-//             })
-//             ->addColumn('state', function ($admin) {
-//                 return optional($admin->adminProfile)->state ?? 'N/A';
-//             })
-//             ->addColumn('country', function ($admin) {
-//                 return optional($admin->adminProfile)->country ?? 'N/A';
-//             })
-//             ->addColumn('zip_code', function ($admin) {
-//                 return optional($admin->adminProfile)->zip_code ?? 'N/A';
-//             })
-//             ->addColumn('designation', function ($admin) {
-//                 return optional($admin->adminProfile)->designation ?? 'N/A';
-//             })
-//             ->addColumn('facebook', function ($admin) {
-//                 return optional($admin->adminProfile)->facebook ?? 'N/A';
-//             })
-//             ->addColumn('twitter', function ($admin) {
-//                 return optional($admin->adminProfile)->twitter ?? 'N/A';
-//             })
-//             ->addColumn('linkedin', function ($admin) {
-//                 return optional($admin->adminProfile)->linkedin ?? 'N/A';
-//             })
-//             ->addColumn('website', function ($admin) {
-//                 return optional($admin->adminProfile)->website ?? 'N/A';
-//             })
+    //             // Profile fields (safely check using optional())
+    //             ->addColumn('phone', function ($admin) {
+    //                 return optional($admin->adminProfile)->phone ?? 'N/A';
+    //             })
+    //             ->addColumn('alternate_phone', function ($admin) {
+    //                 return optional($admin->adminProfile)->alternate_phone ?? 'N/A';
+    //             })
+    //             ->addColumn('address', function ($admin) {
+    //                 return optional($admin->adminProfile)->address ?? 'N/A';
+    //             })
+    //             ->addColumn('city', function ($admin) {
+    //                 return optional($admin->adminProfile)->city ?? 'N/A';
+    //             })
+    //             ->addColumn('state', function ($admin) {
+    //                 return optional($admin->adminProfile)->state ?? 'N/A';
+    //             })
+    //             ->addColumn('country', function ($admin) {
+    //                 return optional($admin->adminProfile)->country ?? 'N/A';
+    //             })
+    //             ->addColumn('zip_code', function ($admin) {
+    //                 return optional($admin->adminProfile)->zip_code ?? 'N/A';
+    //             })
+    //             ->addColumn('designation', function ($admin) {
+    //                 return optional($admin->adminProfile)->designation ?? 'N/A';
+    //             })
+    //             ->addColumn('facebook', function ($admin) {
+    //                 return optional($admin->adminProfile)->facebook ?? 'N/A';
+    //             })
+    //             ->addColumn('twitter', function ($admin) {
+    //                 return optional($admin->adminProfile)->twitter ?? 'N/A';
+    //             })
+    //             ->addColumn('linkedin', function ($admin) {
+    //                 return optional($admin->adminProfile)->linkedin ?? 'N/A';
+    //             })
+    //             ->addColumn('website', function ($admin) {
+    //                 return optional($admin->adminProfile)->website ?? 'N/A';
+    //             })
 
-//             // Profile image (if needed)
-//             ->addColumn('profile_image', function ($admin) {
-//                 $img = optional($admin->adminProfile)->profile_image;
-//                 $path = $img ? asset('upload/dashboard/images/admin/' . $img) : asset('upload/dashboard/images/admin/default.png');
-//                 return '<img src="'.$path.'" width="50" height="50" class="rounded-circle"/>';
-//             })
+    //             // Profile image (if needed)
+    //             ->addColumn('profile_image', function ($admin) {
+    //                 $img = optional($admin->adminProfile)->profile_image;
+    //                 $path = $img ? asset('upload/dashboard/images/admin/' . $img) : asset('upload/dashboard/images/admin/default.png');
+    //                 return '<img src="'.$path.'" width="50" height="50" class="rounded-circle"/>';
+    //             })
 
-//             ->rawColumns(['profile_image']) // Allow HTML for image
-//             ->make(true);
-//     }
-// }
-
-
-
-/**
- * admin list page
- * 
- */
-public function adminListsPage(){
-    try{
-        return view("pages.backend.adminListPage");
-    }catch(Exception $ex){
-        return redirect()->back()->with('error', $ex->getMessage());
-    }
-}
-
-
-
+    //             ->rawColumns(['profile_image']) // Allow HTML for image
+    //             ->make(true);
+    //     }
+    // }
 
     /**
-     * admin dashboard page
+     * admin list page
+     *
      */
-    public function adminDashboardPage(){
-        try{
-            return view("pages.backend.adminDashboardPage");
-        }catch(Exception $ex){
+    public function adminListsPage()
+    {
+        try {
+            return view('pages.backend.adminListPage');
+        } catch (Exception $ex) {
             return redirect()->back()->with('error', $ex->getMessage());
         }
     }
 
+    /**
+     * admin dashboard page
+     */
+    public function adminDashboardPage()
+    {
+        try {
+            return view('pages.backend.adminDashboardPage');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', $ex->getMessage());
+        }
+    }
 
-
-    /** 
+    /**
      * admin list page
      */
-    public function adminListPage(){
-        try{
+    public function adminListPage()
+    {
+        try {
             #$all_admins = Admin::where('role', 'admin')->get();
-            return view("pages.backend.adminListPage");
-        }catch(Exception $ex){
-            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+            return view('pages.backend.adminListPage');
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 
@@ -275,11 +271,11 @@ public function adminListsPage(){
      */
     public function adminDetails()
     {
-        try{
+        try {
             $user = Auth::user();
-            return response()->json(["status" => "success","data" => $user]);
-        }catch(Exception $ex){
-            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+            return response()->json(['status' => 'success', 'data' => $user]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 
@@ -288,77 +284,105 @@ public function adminListsPage(){
      */
     public function adminLogout(Request $request)
     {
-        try{
-            $user = $request->user(); #for authetication user info 
-            if($user && $user->currentAccessToken()){
+        try {
+            $user = $request->user(); #for authetication user info
+            if ($user && $user->currentAccessToken()) {
                 $user->currentAccessToken()->delete();
-            };
-            return response()->json(["status" => "success", "message" => "Logout successfully"]);
-        }catch(Exception $ex){
-            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+            }
+            return response()->json(['status' => 'success', 'message' => 'Logout successfully']);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 
     /**
      * admin name update by email
      */
-public function adminNameUpdateByEmail(Request $request)
-{
-    // Step 1: Validation
-    $request->validate([
-        'email' => 'required|email',
-        'name' => 'required|string|max:255',
-    ]);
+    public function adminNameUpdateByEmail(Request $request)
+    {
+        // Step 1: Validation
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required|string|max:255',
+        ]);
 
-    $admin = Admin::where('email', $request->email)->first();
+        $admin = Admin::where('email', $request->email)->first();
 
-    if (!$admin) {
+        if (!$admin) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Admin not found with this email',
+            ]);
+        }
+
+        $admin->name = Str::upper($request->name);
+        $admin->save();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Admin not found with this email'
+            'status' => 'success',
+            'message' => 'Admin name updated successfully',
         ]);
     }
 
-    $admin->name = Str::upper($request->name);
-    $admin->save();
-
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Admin name updated successfully',
-       
-    ]);
-}
-
-
-
-/**
- * admin list all data api
- */
-public function adminListsData(){
-    try{
-        $admins = Admin::with('profile')->get();
-        return response()->json(["status" => "success", "message" => "Admin list", "admin_lists" => $admins]);
-    }catch(Exception $ex){
-        return response()->json(["status" => "error", "message" => $ex->getMessage()]);
-    }
-}
-
-
-/**
- * admin view detais by id with profile details 
- */
-public function adminViewDetailsModal(Request $request){
-    try{
-        $admin = Admin::with('profile')->where('id',$request->id)->first();
-        if(!$admin){
-            return response()->json(["status" => "error", "message" => "Admin not found with this id"]);
+    /**
+     * admin list all data api
+     */
+    public function adminListsData()
+    {
+        try {
+            $admins = Admin::with('profile')->get();
+            return response()->json(['status' => 'success', 'message' => 'Admin list', 'admin_lists' => $admins]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
-        
-        return response()->json(["status" => "success", "admin_details" => $admin]);
-    }catch(Exception $ex){
-        return response()->json(["status" => "error", "message" => $ex->getMessage()]);
     }
+
+    /**
+     * admin view detais by id with profile details
+     */
+    public function adminViewDetailsModal(Request $request)
+    {
+        try {
+            $admin = Admin::with('profile')->where('id', $request->id)->first();
+            if (!$admin) {
+                return response()->json(['status' => 'error', 'message' => 'Admin not found with this id']);
+            }
+
+            return response()->json(['status' => 'success', 'admin_details' => $admin]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+    /**
+     * Not Verified Admin delete list
+     */
+ public function adminDeleteNotVerified(Request $request)
+{
+    $request->validate([
+        'id' => 'required|exists:admins,id'
+    ]);
+
+    $admin = Admin::find($request->id);
+
+    if (!$admin) {
+        return response()->json(['status' => 'error', 'message' => 'Admin not found']);
+    }
+
+    if ($admin->is_verified == 1) {
+        return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
+    }
+
+    // Try sending email
+    try {
+        Mail::to($admin->email)->send(new AdminDeleteNotification($admin->name,$admin->email));
+    } catch (Exception $e) {
+        return response()->json(['status' => 'error', 'message' => 'Email sending failed.', 'error' => $e->getMessage()]);
+    }
+
+    $admin->delete();
+
+    return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
 }
 
 }

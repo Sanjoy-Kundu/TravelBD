@@ -42,6 +42,7 @@ public function adminProfileStore(Request $request)
         'address' => 'required|string|max:255',
         'designation' => 'required|string|max:100',
         'about' => 'required|string',
+        'gender' => 'required',
 
         'alternate_phone' => 'nullable|string|max:20',
         'city' => 'nullable|string|max:100',
@@ -80,8 +81,6 @@ public function adminProfileStore(Request $request)
             $imageName = Str::random(10) . "-" . time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('upload/dashboard/images/admin'), $imageName);
             $adminProfile->profile_image = $imageName;
-        }else{
-            $adminProfile->profile_image = null;
         }
 
         // Step 3: Insert
@@ -98,6 +97,7 @@ public function adminProfileStore(Request $request)
         $adminProfile->twitter = Str::lower($request->twitter) ?? null;
         $adminProfile->linkedin = Str::lower($request->linkedin) ?? null;
         $adminProfile->website = Str::lower($request->website) ?? null;
+        $adminProfile->gender = Str::upper($request->gender) ?? null;
 
         $adminProfile->save();
 

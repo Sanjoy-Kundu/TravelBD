@@ -24,6 +24,7 @@ class AdminProfile extends Model
         'twitter',
         'linkedin',
         'website',
+        'gender'
     ];
 
     public function admin(){

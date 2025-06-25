@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('twitter')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('website')->nullable();
+            $table->string('gender')->nullable();
             $table->timestamps();
         });
     }

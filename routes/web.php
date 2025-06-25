@@ -34,6 +34,7 @@ Route::get("/admin/lists", [AdminController::class, "adminListsPage"]);
 
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+  Route::get("/admin/lists/all/data", [AdminController::class, "adminListsData"]);
   Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
   Route::post("/admin/logout", [AdminController::class, "adminLogout"]);
   Route::post("/admin/name/update-by-email", [AdminController::class, "adminNameUpdateByEmail"]);

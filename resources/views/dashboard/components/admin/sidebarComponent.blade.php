@@ -48,7 +48,7 @@
                              <div class="collapse" id="collapseAdmins" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
                                      <a class="nav-link" href="">Add Admin</a>
-                                     <a class="nav-link" href="">Admin List</a>
+                                     <a class="nav-link" href="{{url('/admin/lists')}}" target="_blank">Admin List</a>
                                  </nav>
                              </div>
 

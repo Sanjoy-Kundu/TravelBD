@@ -330,4 +330,18 @@ public function adminNameUpdateByEmail(Request $request)
     ]);
 }
 
+
+
+/**
+ * admin list all data api
+ */
+public function adminListsData(){
+    try{
+        $admins = Admin::with('profile')->get();
+        return response()->json(["status" => "success", "message" => "Admin list", "admin_lists" => $admins]);
+    }catch(Exception $ex){
+        return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+    }
+}
+
 }

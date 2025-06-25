@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 //for admin profile 
   Route::post("/admin/profile/details", [AdminProfileController::class, "adminProfileDetails"]); #backend
   Route::post("/admin/profile/store", [AdminProfileController::class, "adminProfileStore"]);
+  Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
 
 
   #Route::get('/admin/lists/data', [AdminController::class, 'adminListData']); #datatable

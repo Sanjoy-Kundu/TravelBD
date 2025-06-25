@@ -344,4 +344,21 @@ public function adminListsData(){
     }
 }
 
+
+/**
+ * admin view detais by id with profile details 
+ */
+public function adminViewDetailsModal(Request $request){
+    try{
+        $admin = Admin::with('profile')->where('id',$request->id)->first();
+        if(!$admin){
+            return response()->json(["status" => "error", "message" => "Admin not found with this id"]);
+        }
+        
+        return response()->json(["status" => "success", "admin_details" => $admin]);
+    }catch(Exception $ex){
+        return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+    }
+}
+
 }

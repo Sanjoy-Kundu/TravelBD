@@ -50,7 +50,6 @@
             });
             if (res.data.status === "success") {
                 //console.log(res.data.admin_lists);
-                $(document).ready(function() {
                     let tableBody = $('#adminListTableBody')
                     tableBody.empty(); // clear previous data
                     let admins = res.data.admin_lists
@@ -60,7 +59,7 @@
                     }
 
                     admins.forEach((element, index) => {
-                        //console.log(element)
+                        console.log(element)
                         //console.log("index", index)
                         let tr = `
                         <tr>
@@ -68,7 +67,7 @@
                             <td>${element.name}</td>
                             <td>${element.email}</td>
                             <td>
-                                ${element.is_verified == 1 ? '<h5 class="badge bg-success">Verified</h5>' : '<h5 class="badge bg-danger">Not Verified</h5>'} OTP - ${element.otp == null ? 'Approved' : element.otp}</td>
+                                ${element.is_verified == 1 ? '<h5 class="badge bg-success">Verified</h5>' : '<h5 class="badge bg-danger">Not Verified</h5>'} OTP - ${element.otp == null ? '<span class="badge bg-success">0</span>' :  element.otp}</td>
                             <td>${element.profile?.profile_image ? 
                                 `<img src="/upload/dashboard/images/admin/${element.profile.profile_image}" width="80" height="80" style="object-fit:cover; border-radius:50%;">`
                                 : `<img src="/upload/dashboard/images/admin/default.png" width="80" height="80" style="object-fit:cover; border-radius:50%;">`}
@@ -76,8 +75,8 @@
 
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-danger">DELETE</button>
-                                    <button type="button" class="btn btn-warning">View</button>
+                                    <button type="button" class="btn btn-danger admin_delete" data-id = ${element.id}>DELETE</button>
+                                    <button type="button" class="btn btn-warning admin_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">Edit</button>
                                 </div>
                             </td>
                        </tr>
@@ -86,7 +85,7 @@
                     });
 
                     $('.adminListDataTable').DataTable();
-                })
+               
 
 
 
@@ -97,5 +96,17 @@
         } catch (error) {
             console.error("error", error)
         }
+
+
+
+
+     //admin details view using modal 
+     $('.admin_view_details').on('click',async function(){
+        let id = $(this).data('id');
+        await getViewAdminDetailsModalFillup(id);
+        console.log("id",id)
+     })
+
+
     }
 </script>

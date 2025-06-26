@@ -16,6 +16,7 @@
                         style="width: 200px; height: 200px; object-fit: cover;">
                 </div>
 
+
                 <!-- Profile Details -->
                 <div class="col-md-8">
                     <table class="table table-bordered">
@@ -88,6 +89,15 @@
                                 <th>About</th>
                                 <td id="admin_profile_view_about">Loading...</td>
                             </tr>
+                            <tr>
+                                <th>Action</th>
+                                <td>
+                                    <button class="btn btn-info text-white change_admin_password" data-bs-toggle="modal" data-bs-target="#viewAdminPasswordChangeModal">Change
+                                        Password</button>
+                                    <a href="{{ url('admin/profile/create') }}" class="btn btn-primary text-white">Edit
+                                        Your Profile</a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -98,7 +108,6 @@
 
 <script>
     loadAdminProfileView();
-
     async function loadAdminProfileView() {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -171,10 +180,17 @@
         }
     }
 
-    // function removeProfileImage() {
-    //     const preview = document.querySelector("#profile_image_preview");
-    //     preview.src = "/upload/dashboard/images/admin/default.png";
-    //     // Optional: Call backend to remove image from server
-    //     alert("Image removed (frontend preview only).");
-    // }
+    document.querySelector('.change_admin_password').addEventListener('click', async function() {
+        let adminId = document.getElementById('admin_profile_view_id').value;
+        if(!adminId){
+            console.log("admin id not found for admin profile view page")
+            window.location.href = "/admin/login";
+        }
+        
+        //show modal and pass id 
+        //thi is the modal id viewAdminPasswordChangeModal
+        await getAdminPasswordReset(adminId);
+         
+        
+    });
 </script>

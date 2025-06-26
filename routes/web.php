@@ -40,9 +40,6 @@ Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 
 
-
-
-
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/admin/lists/all/data", [AdminController::class, "adminListsData"]);
@@ -54,8 +51,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/profile/store", [AdminProfileController::class, "adminProfileStore"]);
   Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
   Route::post("/admin/delete-not-verified",[AdminController::class, "adminDeleteNotVerified"]);
-
- 
-  
+  Route::post("/admin/reset/password",[AdminController::class, "adminResetPassword"]);
 });
 

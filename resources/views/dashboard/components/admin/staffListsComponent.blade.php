@@ -64,7 +64,7 @@
                     let deleteButton = '';
                     if (element.is_verified == 0) {
                         deleteButton =
-                            `<button type="button" class="btn btn-danger staff_delete_not_verified" data-id="${element.id}">DELETE</button>`;
+                            `<button type="button" class="btn btn-danger staff_delete_not_verified" data-id="${element.id}">TRASH</button>`;
                     }
 
 

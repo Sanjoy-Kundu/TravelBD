@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminDeleteNotification;
+use App\Mail\StaffDeleteNotification;
 
 class AdminController extends Controller
 {
@@ -417,6 +418,24 @@ class AdminController extends Controller
         }
     }
 
+
+
+
+    /**
+     * ===============================
+     * admin dashboard all staff page
+     * ===============================
+     */
+    public function staffListsPage(){
+        try{
+            return view('pages.backend.adminDashboardStaffListsPage');
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
+
+
     /**
      * ===============================
      * Admin create staff
@@ -454,5 +473,60 @@ class AdminController extends Controller
             'status' => 'success',
             'message' => 'Staff created and email sent successfully.',
         ]);
+    }
+
+
+
+
+    /**
+     * ========================
+     * Load staff data 
+     * ========================
+     */
+    public function allStaffsData(){
+        try{
+             //$admins = Staff::with('profile')->get();
+             $staffs = Staff::all();
+            return response()->json(['status' => 'success', 'message' => 'Staff list', 'staff_lists' => $staffs]);
+        }catch(Exception $e){
+            return response()->json(["status" => "error", "message" => $e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * ========================
+     * staff delete not verified 
+     * ==========================
+     */
+        /**
+     * Not Verified Admin delete list
+     */
+    public function staffDeleteNotVerified(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:staffs,id',
+        ]);
+
+        $staff = Staff::find($request->id);
+
+        if (!$staff) {
+            return response()->json(['status' => 'error', 'message' => 'Staff not found']);
+        }
+
+        if ($staff->is_verified == 1) {
+            return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
+        }
+
+        // Try sending email
+        try {
+            Mail::to($staff->email)->send(new StaffDeleteNotification($staff->name, $staff->email));
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Email sending failed.', 'error' => $e->getMessage()]);
+        }
+
+        $staff->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
     }
 }

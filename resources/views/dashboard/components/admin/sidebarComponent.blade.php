@@ -61,7 +61,7 @@
                              <div class="collapse" id="collapseStaffs" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
                                      <a class="nav-link" href="{{url('/staff/create')}}" target="_blank">Add Staff</a>
-                                     <a class="nav-link" href="">Staff List</a>
+                                     <a class="nav-link" href="{{url('/staffs/lists')}}" target="_blank">Staff List</a>
                                  </nav>
                              </div>
 

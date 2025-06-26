@@ -36,6 +36,7 @@ Route::get("/admin/lists", [AdminController::class, "adminListsPage"]);
 
 
 // admin create staff staff create page 
+ Route::get('/staffs/lists',[AdminController::class, "staffListsPage"]);
 Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 
@@ -52,10 +53,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
   Route::post("/admin/delete-not-verified",[AdminController::class, "adminDeleteNotVerified"]);
   Route::post("/admin/reset/password",[AdminController::class, "adminResetPassword"]);
-
-
+  
+  
   //admni create staff 
   Route::post("/admin/create/staff/store", [AdminController::class, "CreateStaffStore"]);
+  Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
+  Route::post("/staff/delete-not-verified",[AdminController::class, "staffDeleteNotVerified"]);
 });
 
 
@@ -63,6 +66,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 
-
 //staff dashboard
+
 

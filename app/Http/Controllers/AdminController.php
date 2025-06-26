@@ -158,7 +158,7 @@ class AdminController extends Controller
             if (!$admin->is_verified) {
                 $otp = rand(100000, 999999);
                 $admin->otp = $otp;
-                $admin->otp_expires_at = now()->addMinutes(5);
+                //$admin->otp_expires_at = now()->addMinutes(5);
                 $admin->save();
 
                 Mail::to($admin->email)->send(new AdminOtp($admin->fresh()));
@@ -226,7 +226,7 @@ class AdminController extends Controller
         try {
             $admin = Admin::where('otp', $request->otp)->first();
 
-            if (!$admin || $admin->otp !== $request->otp || $admin->otp_expires_at < now()) {
+            if (!$admin || $admin->otp !== $request->otp) {
                 return response()->json(
                     [
                         'status' => 'otp_error',
@@ -236,9 +236,8 @@ class AdminController extends Controller
                 );
             }
 
-            // Update the verified status
+            // Update the verified status 'email_verified_at' => now(),
             $admin->update([
-                'email_verified_at' => now(),
                 'otp' => null,
                 'otp_expires_at' => null,
                 'is_verified' => true,

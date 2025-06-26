@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminProfileController;
-use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RegistrationController;
 
 /*
@@ -26,11 +27,21 @@ Route::post("/admin/registration/store", [AdminController::class, "admin_registr
 Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
 
 
-//dashboard page 
+//dashboard page  for admin
 Route::get("/admin/dashboard", [AdminController::class, "adminDashboardPage"]);
 Route::get('/admin/profile/create', [AdminProfileController::class, "adminProfilePage"]);
 Route::get("/admin/view/profile", [AdminProfileController::class, "adminProfileViewPage"]); #frontend page
-Route::get("/admin/lists", [AdminController::class, "adminListsPage"]); 
+Route::get("/admin/lists", [AdminController::class, "adminListsPage"]);
+
+
+
+// admin create staff staff create page 
+Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
+
+
+
+
+
 
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -44,7 +55,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
   Route::post("/admin/delete-not-verified",[AdminController::class, "adminDeleteNotVerified"]);
 
-  #Route::get('/admin/lists/data', [AdminController::class, 'adminListData']); #datatable
-
+ 
+  
 });
 

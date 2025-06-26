@@ -140,6 +140,7 @@ async function onLogin(event){
         }
 
         if (res.data.status == "login_success") {
+			
             localStorage.setItem("token", res.data.token);
             window.location.href = "/admin/dashboard";
         }

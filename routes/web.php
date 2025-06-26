@@ -52,5 +52,17 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
   Route::post("/admin/delete-not-verified",[AdminController::class, "adminDeleteNotVerified"]);
   Route::post("/admin/reset/password",[AdminController::class, "adminResetPassword"]);
+
+
+  //admni create staff 
+  Route::post("/admin/create/staff/store", [AdminController::class, "CreateStaffStore"]);
 });
+
+
+
+
+
+
+
+//staff dashboard
 

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
 use Exception;
 use App\Models\Admin;
+use App\Models\Staff;
 use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\StaffWelcomeMail;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -356,67 +357,102 @@ class AdminController extends Controller
     /**
      * Not Verified Admin delete list
      */
- public function adminDeleteNotVerified(Request $request)
-{
-    $request->validate([
-        'id' => 'required|exists:admins,id'
-    ]);
-
-    $admin = Admin::find($request->id);
-
-    if (!$admin) {
-        return response()->json(['status' => 'error', 'message' => 'Admin not found']);
-    }
-
-    if ($admin->is_verified == 1) {
-        return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
-    }
-
-    // Try sending email
-    try {
-        Mail::to($admin->email)->send(new AdminDeleteNotification($admin->name,$admin->email));
-    } catch (Exception $e) {
-        return response()->json(['status' => 'error', 'message' => 'Email sending failed.', 'error' => $e->getMessage()]);
-    }
-
-    $admin->delete();
-
-    return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
-}
-
-
-
-/***
- * Admin reset password
- */
-public function adminResetPassword(Request $request){
-    try {
+    public function adminDeleteNotVerified(Request $request)
+    {
         $request->validate([
-            "id" => "required|exists:admins,id",
-            "old_password" => "required",
-            "new_password" => "required|min:8",
-            "password" => "required|min:8"
+            'id' => 'required|exists:admins,id',
         ]);
 
         $admin = Admin::find($request->id);
 
-        if ($admin->id !== Auth::id()) {
-            return response()->json(['status' => 'error', 'message' => 'You are not authorized.']);
+        if (!$admin) {
+            return response()->json(['status' => 'error', 'message' => 'Admin not found']);
         }
 
-        if (!Hash::check($request->old_password, $admin->password)) {
-            return response()->json(['status' => 'error', 'message' => 'Old password is incorrect.']);
+        if ($admin->is_verified == 1) {
+            return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
         }
 
-        $admin->password = Hash::make($request->new_password);
-        $admin->save();
+        // Try sending email
+        try {
+            Mail::to($admin->email)->send(new AdminDeleteNotification($admin->name, $admin->email));
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Email sending failed.', 'error' => $e->getMessage()]);
+        }
 
-        return response()->json(['status' => 'success', 'message' => 'Password updated successfully.']);
+        $admin->delete();
 
-    } catch (\Exception $ex) {
-        return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
     }
-}
 
+    /***
+     * Admin reset password
+     */
+    public function adminResetPassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|exists:admins,id',
+                'old_password' => 'required',
+                'new_password' => 'required|min:8',
+                'password' => 'required|min:8',
+            ]);
 
+            $admin = Admin::find($request->id);
+
+            if ($admin->id !== Auth::id()) {
+                return response()->json(['status' => 'error', 'message' => 'You are not authorized.']);
+            }
+
+            if (!Hash::check($request->old_password, $admin->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Old password is incorrect.']);
+            }
+
+            $admin->password = Hash::make($request->new_password);
+            $admin->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Password updated successfully.']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
+    /**
+     * ===============================
+     * Admin create staff
+     * ===============================
+     */
+    public function CreateStaffStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:staffs',
+        ]);
+
+        // Random values
+        $plainPassword = Str::random(8);
+        $staffCode = 'staff-' . strtoupper(Str::random(12));
+        $otp = rand(100000, 999999);
+
+        // Staff create
+        $staff = Staff::create([
+            'admin_id' => $request->admin_id, // যদি Sanctum token এ admin login থাকে
+            'name' => Str::upper($request->name),
+            'email' => Str::lower($request->email),
+            'password' => bcrypt($plainPassword),
+            'staff_code' => $staffCode,
+            'otp' => $otp,
+            // 'otp_expires_at' => now()->addMinutes(15), default null
+            'is_verified' => false,
+            'role' => 'staff',
+        ]);
+
+        // Mail send to staff
+        Mail::to($staff->email)->send(new StaffWelcomeMail($staff, $plainPassword));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Staff created and email sent successfully.',
+        ]);
+    }
 }

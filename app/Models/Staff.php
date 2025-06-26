@@ -14,7 +14,7 @@ class Staff extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens,HasFactory, SoftDeletes;
 
-
+     protected $table = 'staffs'; 
     /**
      * Mass assignable attributes (fillable)
      */

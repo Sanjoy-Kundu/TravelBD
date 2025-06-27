@@ -420,23 +420,19 @@ class AdminController extends Controller
         }
     }
 
-
-
-
     /**
      * ===============================
      * admin dashboard all staff page
      * ===============================
      */
-    public function staffListsPage(){
-        try{
+    public function staffListsPage()
+    {
+        try {
             return view('pages.backend.adminDashboardStaffListsPage');
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
         }
     }
-
-
 
     /**
      * ===============================
@@ -477,31 +473,28 @@ class AdminController extends Controller
         ]);
     }
 
-
-
-
     /**
      * ========================
-     * Load staff data 
+     * Load staff data
      * ========================
      */
-    public function allStaffsData(){
-        try{
-             //$admins = Staff::with('profile')->get();
-             $staffs = Staff::all();
+    public function allStaffsData()
+    {
+        try {
+            //$admins = Staff::with('profile')->get();
+            $staffs = Staff::all();
             return response()->json(['status' => 'success', 'message' => 'Staff list', 'staff_lists' => $staffs]);
-        }catch(Exception $e){
-            return response()->json(["status" => "error", "message" => $e->getMessage()]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-
     /**
      * ========================
-     * staff delete not verified 
+     * staff delete not verified
      * ==========================
      */
-        /**
+    /**
      * Not Verified Admin delete list
      */
     public function stafTrash(Request $request)
@@ -532,109 +525,102 @@ class AdminController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Admin account suspended and email sent.']);
     }
 
-
-
     /**
      * ==========================
-     * Trash staff data load 
+     * Trash staff data load
      * ==========================
      */
-    public function trashStaffsData(){
-        try{
+    public function trashStaffsData()
+    {
+        try {
             $trashStaffLists = Staff::onlyTrashed()->get();
             return response()->json(['status' => 'success', 'trashStaffLists' => $trashStaffLists]);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 
-
     /**
      * staff restore
      */
-public function staffRestore(Request $request)
-{
-    try {
-        // Trashed সহ খুঁজে পাও Staff
-        $staff = Staff::withTrashed()->find($request->id);
+    public function staffRestore(Request $request)
+    {
+        try {
+            // Trashed সহ খুঁজে পাও Staff
+            $staff = Staff::withTrashed()->find($request->id);
 
-        // staff not found
-        if (!$staff) {
+            // staff not found
+            if (!$staff) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Staff not found.',
+                ]);
+            }
+
+            // staff not delete
+            if (!$staff->trashed()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This staff is already active.',
+                ]);
+            }
+
+            // just restore now
+            $staff->restore();
+
+            Mail::to($staff->email)->send(new StaffRestoreNotification($staff));
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Staff restored successfully.',
+            ]);
+        } catch (Exception $ex) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Staff not found.'
+                'message' => $ex->getMessage(),
             ]);
         }
-
-        // staff not delete
-        if (!$staff->trashed()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'This staff is already active.'
-            ]);
-        }
-
-        // just restore now
-        $staff->restore();
-
-         Mail::to($staff->email)->send(new StaffRestoreNotification($staff));
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Staff restored successfully.'
-        ]);
-    } catch (Exception $ex) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $ex->getMessage()
-        ]);
     }
-}
 
+    /**
+     * staff verify
+     */
+    public function staffVerify(Request $request)
+    {
+        try {
+            // find staff
+            $staff = Staff::find($request->id);
 
+            if (!$staff) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Staff not found.',
+                ]);
+            }
 
+            // if previous verfied
+            if ($staff->is_verified == 1) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This staff is already verified.',
+                ]);
+            }
 
-/**
- * staff verify 
- */
-public function staffVerify(Request $request)
-{
-    try {
-        // find staff
-        $staff = Staff::find($request->id);
+            // now update field
+            $staff->is_verified = 1;
+            $staff->save();
 
-        if (!$staff) {
+            // now sending emial
+            Mail::to($staff->email)->send(new StaffVerifiedMail($staff));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Staff has been verified successfully & email sent.',
+            ]);
+        } catch (Exception $ex) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Staff not found.'
+                'message' => $ex->getMessage(),
             ]);
         }
-
-        // if previous verfied
-        if ($staff->is_verified == 1) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'This staff is already verified.'
-            ]);
-        }
-
-        // now update field
-        $staff->is_verified = 1;
-        $staff->save();
-
-        // now sending emial 
-        Mail::to($staff->email)->send(new StaffVerifiedMail($staff));
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Staff has been verified successfully & email sent.'
-        ]);
-
-    } catch (Exception $ex) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $ex->getMessage()
-        ]);
     }
-}
-
 }

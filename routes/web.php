@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Models\Staff;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,29 @@ use App\Http\Controllers\RegistrationController;
 Route::get("/admin/registration", [RegistrationController::class, "adminRegisterPage"]);
 Route::get("/admin/login", [LoginController::class, "adminLoginPage"])->name("login");
 Route::get("/otp/verify", [AdminController::class, "otpVerifyPage"]);
+
+
+
+//for staff
+Route::get("/staff/login", [LoginController::class, "staffLoginPage"])->name("staff.login");
+Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
+
+
+
+
+//for staff post method 
+Route::post("/staff/login/store", [StaffController::class, "staff_login_store"]);
+Route::post("/otp/verify/store", [StaffController::class, "staff_otp_verify_store"]);
+
+
+//dashboard for staff
+Route::get("/staff/dashboard", [StaffController::class, "staffDashboard"]);
+
+
+
+
+
+
 
 Route::post("/admin/login/store", [AdminController::class, "admin_login_store"]);
 Route::post("/admin/registration/store", [AdminController::class, "admin_registration_store"]);
@@ -71,5 +95,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 //staff dashboard
-
+// Route::middleware(['auth', 'second'])->group(function () {
+    
+// });
 

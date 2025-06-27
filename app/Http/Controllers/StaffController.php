@@ -4,28 +4,152 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Staff;
+use App\Mail\StaffOtp;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class StaffController extends Controller
 {
     /**
-     * Staff create page 
+     * staff login store
+     */
+    public function staff_login_store(Request $request)
+    {
+        $request->validate([
+            'email_or_staff_code' => 'required|string',
+            'password' => 'required',
+        ]);
+
+        try {
+            // Step 1: user exists and check password
+            $staff = Staff::withTrashed()
+                ->where(function ($q) use ($request) {
+                    $q->where('email', $request->email_or_staff_code)->orWhere('staff_code', $request->email_or_staff_code);
+                })
+                ->where('role', 'staff')
+                ->first();
+
+            // Step 1: password and email or staff code not mathc
+            if (!$staff || !Hash::check($request->password, $staff->password)) {
+                return response()->json([
+                    'status' => 'message_error',
+                    'message' => 'Invalid email or password',
+                ]);
+            }
+
+            // account jodi trash kora theke
+            if ($staff->trashed()) {
+                return response()->json([
+                    'status' => 'message_error',
+                    'message' => 'This account is deactivated. Contact staff.',
+                ]);
+            }
+
+            // verify na thakle otp diye verify kore login kore dashboard e jete hobe
+            if (!$staff->is_verified && $staff->otp !== null) {
+                return response()->json([
+                    'status' => 'otp_required',
+                    'message' => 'OTP verification is required. Please Check Your Mail.',
+                    'email' => $staff->email,
+                ]);
+            }
+
+            $token = $staff->createToken('token')->plainTextToken;
+
+            return response()->json([
+                'status' => 'login_success',
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $staff,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+
+
+    /**
+     * otp page
+     */
+        public function otpVerifyPage()
+    {
+        try {
+            return view('form.staff.otpPage');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Staff create page
      */
     public function staffCreatePage()
     {
-        try{
+        try {
             return view('pages.backend.staff.staffCreatePage');
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()], 500);
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * otp verify
      */
-    public function create()
+    public function staff_otp_verify_store(Request $request)
     {
-        //
+             $request->validate([
+            'otp' => 'required',
+        ]);
+
+        try {
+            $staff = Staff::where('otp', $request->otp)->first();
+
+            if (!$staff || $staff->otp !== $request->otp) {
+                return response()->json(
+                    [
+                        'status' => 'otp_error',
+                        'message' => 'Invalid OTP',
+                    ],
+                    401,
+                );
+            }
+
+            // Update the verified status 'email_verified_at' => now(),
+            $staff->update([
+                'otp' => null,
+                'otp_expires_at' => null,
+                'is_verified' => true,
+            ]);
+
+            $token = $staff->createToken('token')->plainTextToken;
+
+            return response()->json(
+                [
+                    'status' => 'otp_success',
+                    'message' => 'OTP verified successfully',
+                    'token' => $token,
+                    'staff' => $staff,
+                ],
+                200,
+            );
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $ex->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**

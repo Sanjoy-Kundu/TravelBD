@@ -14,4 +14,13 @@ class LoginController extends Controller
             return response()->json(['error' => $ex->getMessage()]);
         }
     }
+
+    
+    public function staffLoginPage(){
+        try{
+            return view("/form.staff.login");
+        }catch(Exception $ex){
+            return response()->json(['error' => $ex->getMessage()]);
+        }
+    }
 }

@@ -115,6 +115,10 @@
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-warning staff_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
                                   <button type="button" class="btn btn-success staff_trash_btn" data-id="${element.id}">TRASH</button>
+                                  <button type="button" class="btn btn-info staff_verified_btn" data-id="${element.id}"></button>
+                                   ${element.is_verified == 0  ? `<button type="button" class="btn btn-info staff_verified_btn" data-id="${element.id}">Verify Now</button>` 
+                                    : `<button type="button" class="btn btn-secondary" disabled>Verified</button>`}
+
                                 </div>
                             </td>
                         </tr>
@@ -149,10 +153,11 @@
                                             });
 
                                         if (res.data.status === 'success') {
-                                            Swal.fire('Suspend!', res.data.message,'success');
+                                            Swal.fire('Suspend!', res.data.message,
+                                                'success');
                                             await staffListLoadData(); // table reload
                                             await trashStaffListLoadData
-                                        (); //trash table reload
+                                                (); //trash table reload
 
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
@@ -168,6 +173,13 @@
                             });
                         });
 
+
+                        //staff verify
+                        $(document).on('click', '.staff_verified_btn',function(){
+                            let id = $(this).data('id');
+                            console.log("staff verify id",id);
+
+                        })
 
 
 
@@ -252,8 +264,8 @@
 
 
 
-                    // restore 
-                     $(document).on('click', '.trash_staff_restore_btn', function() {
+                        // restore 
+                        $(document).on('click', '.trash_staff_restore_btn', function() {
                             let id = $(this).data('id');
                             console.log("staff id is", id);
 
@@ -280,11 +292,13 @@
                                             });
 
                                         if (res.data.status === 'success') {
-                                            Swal.fire('Staff!', res.data.message,'success');
-                                           
-                                            await trashStaffListLoadData(); //trash table reload
+                                            Swal.fire('Staff!', res.data.message,
+                                                'success');
+
+                                            await trashStaffListLoadData
+                                        (); //trash table reload
                                             await staffListLoadData(); // table reload
-                                        
+
 
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
@@ -299,7 +313,7 @@
                                 }
                             });
                         });
-                    
+
 
 
 

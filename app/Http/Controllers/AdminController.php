@@ -448,7 +448,7 @@ class AdminController extends Controller
 
         // Random values
         $plainPassword = Str::random(8);
-        $staffCode = 'staff-' . strtoupper(Str::random(12));
+        $staffCode = 'STAFF-' . strtoupper(Str::random(12));
         $otp = rand(100000, 999999);
 
         // Staff create
@@ -459,7 +459,7 @@ class AdminController extends Controller
             'password' => bcrypt($plainPassword),
             'staff_code' => $staffCode,
             'otp' => $otp,
-            'otp_expires_at' => now()->addMinutes(1), //default null
+            'otp_expires_at' => now()->addMinutes(20), //default null
             'is_verified' => false,
             'role' => 'staff',
         ]);
@@ -607,6 +607,7 @@ class AdminController extends Controller
 
             // now update field
             $staff->is_verified = 1;
+            $staff->otp = 0;
             $staff->save();
 
             // now sending emial

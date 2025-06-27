@@ -96,7 +96,7 @@
             </p>
 
             <p style="text-align: center;">
-                <a href="{{ url('/admin/login') }}" class="btn">Login to Dashboard</a>
+                <a href="{{ url('/staff/login') }}" class="btn">Login to Dashboard</a>
             </p>
 
             <p>We are happy to have you on the team!</p>

@@ -14,7 +14,7 @@
 
 
                 <!-- Hidden Admin ID (if needed) -->
-                <div class="row d-none">
+                <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="admin_id">Admin ID</label>
                         <input type="text" class="form-control" id="admin_id" name="admin_id" readonly>
@@ -148,7 +148,8 @@
                     showConfirmButton: false
                 });
 
-               document.getElementById('staff_form').reset();
+               document.getElementById('staff_email').value = '';
+               document.getElementById('staff_name').value = '';
             } else {
                Swal.fire('Error', res.data.message);
             }

@@ -126,7 +126,7 @@ class StaffController extends Controller
                 return response()->json(
                     [
                         'status' => 'verified_error',
-                        'message' => 'Admin has not approved you yet. You will get an email notification once approved.',
+                        'message' => 'Admin has been not approve your account yet. If admin Approve You can login Autometically',
                     ],
                     403,
                 ); 
@@ -197,7 +197,7 @@ class StaffController extends Controller
         // OTP expired, নতুন OTP তৈরি ও save করো
         $newOtp = rand(100000, 999999);
         $staff->otp = $newOtp;
-        $staff->otp_expires_at  = $now->addMinutes(1); // 5 মিনিটের OTP validity
+        $staff->otp_expires_at  = $now->addMinutes(20); // 5 মিনিটের OTP validity
         $staff->save();
 
         $staffEmail = $staff->email;

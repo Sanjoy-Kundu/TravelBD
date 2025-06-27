@@ -9,6 +9,7 @@ use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\StaffWelcomeMail;
+use App\Mail\StaffVerifiedMail;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -515,9 +516,9 @@ class AdminController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Staff not found']);
         }
 
-        if ($staff->is_verified == 1) {
-            return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
-        }
+        // if ($staff->is_verified == 1) {
+        //     return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified staff']);
+        // }
 
         // Try sending email
         try {
@@ -581,6 +582,53 @@ public function staffRestore(Request $request)
             'status' => 'success',
             'message' => 'Staff restored successfully.'
         ]);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
+
+
+
+
+/**
+ * staff verify 
+ */
+public function staffVerify(Request $request)
+{
+    try {
+        // find staff
+        $staff = Staff::find($request->id);
+
+        if (!$staff) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Staff not found.'
+            ]);
+        }
+
+        // if previous verfied
+        if ($staff->is_verified == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This staff is already verified.'
+            ]);
+        }
+
+        // now update field
+        $staff->is_verified = 1;
+        $staff->save();
+
+        // now sending emial 
+        Mail::to($staff->email)->send(new StaffVerifiedMail($staff));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Staff has been verified successfully & email sent.'
+        ]);
+
     } catch (Exception $ex) {
         return response()->json([
             'status' => 'error',

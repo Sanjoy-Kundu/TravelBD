@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
   Route::post("/staff/trash",[AdminController::class, "stafTrash"]);
   Route::post("/staff/restore",[AdminController::class, "staffRestore"]);
+  Route::post("/staff/verify",[AdminController::class, "staffVerify"]);
 
   Route::get("/trash/staffs/data", [AdminController::class, "trashStaffsData"]);
 });

@@ -105,7 +105,7 @@
                             <td>
                                 ${element.is_verified == 1 ? '<h5 class="badge bg-success">Verified</h5>' : '<h5 class="badge bg-danger">Not Verified</h5>'} 
                             </td>
-                            <td><button class="btn btn-primary">${(element.role || '').toUpperCase()}</button></td>
+                            <td><span class="btn btn-primary">${(element.staff_code || '').toUpperCase()}</span></td>
                             <td>
                                 ${element.profile && element.profile.profile_image
                                     ? `<img src="/upload/dashboard/images/admin/${element.profile.profile_image}" width="80" height="80" style="object-fit:cover; border-radius:50%;">`
@@ -117,7 +117,7 @@
                                   <button type="button" class="btn btn-success staff_trash_btn" data-id="${element.id}">TRASH</button>
                                   <button type="button" class="btn btn-info staff_verified_btn" data-id="${element.id}"></button>
                                    ${element.is_verified == 0  ? `<button type="button" class="btn btn-info staff_verified_btn" data-id="${element.id}">Verify Now</button>` 
-                                    : `<button type="button" class="btn btn-secondary" disabled>Verified</button>`}
+                                    : `<button class="btn btn-info text-white">VERIFIED</button>`}
 
                                 </div>
                             </td>
@@ -156,8 +156,7 @@
                                             Swal.fire('Suspend!', res.data.message,
                                                 'success');
                                             await staffListLoadData(); // table reload
-                                            await trashStaffListLoadData
-                                                (); //trash table reload
+                                            await trashStaffListLoadData(); //trash table reload
 
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
@@ -178,6 +177,36 @@
                         $(document).on('click', '.staff_verified_btn',function(){
                             let id = $(this).data('id');
                             console.log("staff verify id",id);
+
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "Do you want to verify this staff?",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Yes, verify now'
+                            }).then(async (result) =>{
+                                if (result.isConfirmed) {
+                                    let token = localStorage.getItem('token');
+                                    try{
+                                    const res = await axios.post('/staff/verify', {id: id}, {headers: {Authorization: `Bearer ${token}`}});
+                                     if (res.data.status === 'success') {
+                                            Swal.fire('Verified!', res.data.message,
+                                                'success');
+                                            await staffListLoadData(); // table reload
+                                            await trashStaffListLoadData();
+                                        } else {
+                                            Swal.fire('Error!', res.data.message ||
+                                                'Verified failed.',
+                                                'error');
+                                        }
+                                    }catch(error){
+                                           Swal.fire('Error!', 'Server error occurred.','error');
+                                           console.error(err);
+                                    }
+                                }
+                            })
 
                         })
 

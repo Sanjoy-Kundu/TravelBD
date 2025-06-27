@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminDeleteNotification;
 use App\Mail\StaffDeleteNotification;
+use App\Mail\StaffRestoreNotification;
 
 class AdminController extends Controller
 {
@@ -527,7 +528,7 @@ class AdminController extends Controller
 
         $staff->delete();
 
-        return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
+        return response()->json(['status' => 'success', 'message' => 'Admin account suspended and email sent.']);
     }
 
 
@@ -545,4 +546,47 @@ class AdminController extends Controller
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
+
+
+    /**
+     * staff restore
+     */
+public function staffRestore(Request $request)
+{
+    try {
+        // Trashed সহ খুঁজে পাও Staff
+        $staff = Staff::withTrashed()->find($request->id);
+
+        // staff not found
+        if (!$staff) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Staff not found.'
+            ]);
+        }
+
+        // staff not delete
+        if (!$staff->trashed()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This staff is already active.'
+            ]);
+        }
+
+        // just restore now
+        $staff->restore();
+
+         Mail::to($staff->email)->send(new StaffRestoreNotification($staff));
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Staff restored successfully.'
+        ]);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
+
 }

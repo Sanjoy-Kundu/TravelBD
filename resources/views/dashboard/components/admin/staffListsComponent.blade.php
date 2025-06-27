@@ -82,7 +82,6 @@
 
             let selector = '.staffListDataTable';
 
-            // আগের DataTable destroy করে ফেলো যদি থাকে
             if ($.fn.DataTable.isDataTable(selector)) {
                 $(selector).DataTable().clear().destroy();
             }
@@ -115,7 +114,7 @@
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-warning staff_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
-                                  <button type="button" class="btn btn-danger staff_trash_btn" data-id="${element.id}">TRASH</button>
+                                  <button type="button" class="btn btn-success staff_trash_btn" data-id="${element.id}">TRASH</button>
                                 </div>
                             </td>
                         </tr>
@@ -150,8 +149,7 @@
                                             });
 
                                         if (res.data.status === 'success') {
-                                            Swal.fire('Deleted!', res.data.message,
-                                                'success');
+                                            Swal.fire('Suspend!', res.data.message,'success');
                                             await staffListLoadData(); // table reload
                                             await trashStaffListLoadData
                                         (); //trash table reload
@@ -224,16 +222,7 @@
                     console.log('trash staff list is empty');
                 } else {
                     trash_staff_lists.forEach((element, index) => {
-                        console.log(element)
-                        // let deleteButton = '';
-                        // if (element.is_verified == 0) {
-                        //     deleteButton =
-                        //         ``;
-                        // }else{
-                        //     deleteButton =`<button type="button" class="btn btn-danger trash_staff_delete" data-id="${element.id}">DELETE</button>`;
-
-                        // }
-
+                        console.log(element);
                         let tr = `
                         <tr>
                             <th scope="row">${index + 1}</th>
@@ -253,13 +242,67 @@
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-warning trash_staff_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
     
-                                    <button type="button" class="btn btn-primary trash_staff_restore" data-id="${element.id}">RESTORE</button>
-                                    <button type="button" class="btn btn-danger trash_staff_delete" data-id="${element.id}">DELETE</button>
+                                    <button type="button" class="btn btn-primary trash_staff_restore_btn" data-id="${element.id}">RESTORE</button>
+                                    <button type="button" class="btn btn-danger trash_staff_delete_btn" data-id="${element.id}">DELETE</button>
                                 </div>
                             </td>
                         </tr>
                     `;
                         tableBody.append(tr);
+
+
+
+                    // restore 
+                     $(document).on('click', '.trash_staff_restore_btn', function() {
+                            let id = $(this).data('id');
+                            console.log("staff id is", id);
+
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "This staff will be restore data.",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33  ',
+                                confirmButtonText: 'Yes, I want to restore'
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    let token = localStorage.getItem('token');
+                                    console.log(token);
+                                    try {
+                                        const res = await axios.post(
+                                            '/staff/restore', {
+                                                id: id
+                                            }, {
+                                                headers: {
+                                                    Authorization: `Bearer ${token}`
+                                                }
+                                            });
+
+                                        if (res.data.status === 'success') {
+                                            Swal.fire('Staff!', res.data.message,'success');
+                                           
+                                            await trashStaffListLoadData(); //trash table reload
+                                            await staffListLoadData(); // table reload
+                                        
+
+                                        } else {
+                                            Swal.fire('Error!', res.data.message ||
+                                                'Restore failed.',
+                                                'error');
+                                        }
+                                    } catch (err) {
+                                        Swal.fire('Error!', 'Server error occurred.',
+                                            'error');
+                                        console.error(err);
+                                    }
+                                }
+                            });
+                        });
+                    
+
+
+
                     });
                 }
             } else {

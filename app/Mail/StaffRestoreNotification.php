@@ -9,19 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class StaffDeleteNotification extends Mailable
+class StaffRestoreNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $staffName;
-    public $staffEmail;
-    public function __construct($staffName, $staffEmail)
+    public $staff;
+    public function __construct($staff)
     {
-        $this->staffName = $staffName;
-        $this->staffEmail = $staffEmail;
+        $this->staff = $staff;
     }
 
     /**
@@ -30,7 +28,7 @@ class StaffDeleteNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Staff Delete Notification',
+            subject: 'Staff Restore Notification',
         );
     }
 
@@ -40,8 +38,8 @@ class StaffDeleteNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.staff.staff_suspend',
-             with:['staffName' => $this->staffName, 'staffEmail' => $this->staffEmail]
+            view: 'mail.staff.staff_restored',
+            with:['staff' => $this->staff]
         );
     }
 

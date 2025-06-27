@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/create/staff/store", [AdminController::class, "CreateStaffStore"]);
   Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
   Route::post("/staff/trash",[AdminController::class, "stafTrash"]);
+  Route::post("/staff/restore",[AdminController::class, "staffRestore"]);
 
   Route::get("/trash/staffs/data", [AdminController::class, "trashStaffsData"]);
 });

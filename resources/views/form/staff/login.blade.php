@@ -114,7 +114,7 @@
 				if (res.data.status === 'message_error') {
 					document.querySelector('.login_email_staff_code_error').innerText = res.data.message;
 				} else if (res.data.status === 'otp_required') {
-					localStorage.setItem('pending_email', res.data.email);
+					localStorage.setItem('pending_email', res.data.email); // for reset otp 
 					//alert('OTP sent to your email. Please verify to proceed.');
 					window.location.href = '/staff/otp/verify';
 				} else if (res.data.status === 'login_success') {

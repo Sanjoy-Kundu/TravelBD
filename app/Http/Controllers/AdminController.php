@@ -459,7 +459,7 @@ class AdminController extends Controller
             'password' => bcrypt($plainPassword),
             'staff_code' => $staffCode,
             'otp' => $otp,
-            // 'otp_expires_at' => now()->addMinutes(15), default null
+            'otp_expires_at' => now()->addMinutes(1), //default null
             'is_verified' => false,
             'role' => 'staff',
         ]);

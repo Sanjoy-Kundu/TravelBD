@@ -34,11 +34,13 @@ Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
 
 //for staff post method 
 Route::post("/staff/login/store", [StaffController::class, "staff_login_store"]);
-Route::post("/otp/verify/store", [StaffController::class, "staff_otp_verify_store"]);
+Route::post("/staff/otp/verify/store", [StaffController::class, "staff_otp_verify_store"]);
+Route::post("/staff/resend/otp", [StaffController::class, "staff_resend_otp"]);
 
 
 //dashboard for staff
 Route::get("/staff/dashboard", [StaffController::class, "staffDashboard"]);
+
 
 
 

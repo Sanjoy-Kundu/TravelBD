@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Staff;
 use App\Mail\StaffOtp;
+use App\Mail\ResendOtpMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -42,7 +44,7 @@ class StaffController extends Controller
             if ($staff->trashed()) {
                 return response()->json([
                     'status' => 'message_error',
-                    'message' => 'This account is deactivated. Contact staff.',
+                    'message' => 'This account is deactivated. Contact Our Admin or HR.',
                 ]);
             }
 
@@ -74,12 +76,10 @@ class StaffController extends Controller
         }
     }
 
-
-
     /**
      * otp page
      */
-        public function otpVerifyPage()
+    public function otpVerifyPage()
     {
         try {
             return view('form.staff.otpPage');
@@ -87,7 +87,6 @@ class StaffController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
     /**
      * Staff create page
@@ -106,7 +105,7 @@ class StaffController extends Controller
      */
     public function staff_otp_verify_store(Request $request)
     {
-             $request->validate([
+        $request->validate([
             'otp' => 'required',
         ]);
 
@@ -118,6 +117,26 @@ class StaffController extends Controller
                     [
                         'status' => 'otp_error',
                         'message' => 'Invalid OTP',
+                    ],
+                    401,
+                );
+            }
+
+            if ($staff->is_verified == false) {
+                return response()->json(
+                    [
+                        'status' => 'verified_error',
+                        'message' => 'Admin has not approved you yet. You will get an email notification once approved.',
+                    ],
+                    403,
+                ); 
+            }
+
+            if ($staff->otp_expires_at && Carbon::now()->gt(Carbon::parse($staff->otp_expires_at))) {
+                return response()->json(
+                    [
+                        'status' => 'otp_expired',
+                        'message' => 'OTP Expired',
                     ],
                     401,
                 );
@@ -150,6 +169,63 @@ class StaffController extends Controller
                 500,
             );
         }
+    }
+
+    /**
+     * Staff resend Otp
+     */
+    public function staff_resend_otp(Request $request){
+       try {
+        $email = $request->email;
+        $staff = Staff::where('email', $email)->first();
+
+        if (!$staff) {
+            return response()->json(['status' => 'error', 'message' => 'Staff not found'], 404);
+        }
+
+        // OTP expiration time check
+        $now = now();
+
+        // time validation
+        if ($staff->otp_expires_at  && $now->lt($staff->otp_expires_at )) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'OTP is still valid. Please wait before requesting a new OTP. Just Wait for 22 minutes. Or check your Email First OTP is send to your Email.',
+            ], 429); // Too Many Requests
+        }
+
+        // OTP expired, নতুন OTP তৈরি ও save করো
+        $newOtp = rand(100000, 999999);
+        $staff->otp = $newOtp;
+        $staff->otp_expires_at  = $now->addMinutes(1); // 5 মিনিটের OTP validity
+        $staff->save();
+
+        $staffEmail = $staff->email;
+        // Send OTP Email (যেমন )
+        Mail::to($staff->email)->send(new ResendOtpMail($newOtp,$staffEmail));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'New OTP has been sent to your email.'
+        ]);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ], 500);
+    }
+    }
+
+
+
+
+
+    /**
+     * Staff Dashboard
+     */
+    public function staffDashboard()
+    {
+        return 'Im Staff Dashboard';
     }
 
     /**

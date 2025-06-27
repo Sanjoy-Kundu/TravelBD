@@ -8,6 +8,7 @@ use App\Models\Staff;
 use App\Mail\StaffOtp;
 use App\Mail\ResendOtpMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -225,8 +226,44 @@ class StaffController extends Controller
      */
     public function staffDashboard()
     {
-        return 'Im Staff Dashboard';
+        return view('pages.backend.staff.staffDashboardPage');
     }
+
+    /**
+     * Staff details for nav 
+     */
+    public function staffDetails(){
+        try{
+            $user = Auth::user();
+            return response()->json(['status' => 'success', 'data' => $user]);
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage()
+            ]);
+        }
+    }
+
+
+
+    /**
+     * staff logout 
+     */
+    public function logout(Request $request){
+       $request->user()->currentAccessToken()->delete();
+          return response()->json([
+        'status' => 'success',
+        'message' => 'Logged out successfully',
+    ]);
+    }
+
+
+
+
+
+
+
+
 
     /**
      * Store a newly created resource in storage.

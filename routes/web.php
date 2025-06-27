@@ -97,7 +97,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 //staff dashboard
-// Route::middleware(['auth', 'second'])->group(function () {
-    
-// });
+Route::middleware(['auth:sanctum', 'staff'])->group(function () {
+    Route::get('/auth/staff', [StaffController::class, "staffDetails"]);
+    Route::post('/staff/logout', [StaffController::class, "logout"]);
+});
 

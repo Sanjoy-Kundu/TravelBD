@@ -502,7 +502,7 @@ class AdminController extends Controller
         /**
      * Not Verified Admin delete list
      */
-    public function staffDeleteNotVerified(Request $request)
+    public function stafTrash(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:staffs,id',
@@ -528,5 +528,21 @@ class AdminController extends Controller
         $staff->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Admin account deleted and email sent.']);
+    }
+
+
+
+    /**
+     * ==========================
+     * Trash staff data load 
+     * ==========================
+     */
+    public function trashStaffsData(){
+        try{
+            $trashStaffLists = Staff::onlyTrashed()->get();
+            return response()->json(['status' => 'success', 'trashStaffLists' => $trashStaffLists]);
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
     }
 }

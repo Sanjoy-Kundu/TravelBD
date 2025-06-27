@@ -58,7 +58,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   //admni create staff 
   Route::post("/admin/create/staff/store", [AdminController::class, "CreateStaffStore"]);
   Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
-  Route::post("/staff/delete-not-verified",[AdminController::class, "staffDeleteNotVerified"]);
+  Route::post("/staff/trash",[AdminController::class, "stafTrash"]);
+
+  Route::get("/trash/staffs/data", [AdminController::class, "trashStaffsData"]);
 });
 
 

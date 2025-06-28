@@ -7,9 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard</title>
+        <title>Staff Dashboard</title>
         <link href="{{asset('assets/admin_db')}}/css/styles.css" rel="stylesheet" />
-         <script src="{{asset('assets/admin_db')}}/js/axios.min.js"></script>
+         <script src="{{asset('assets/js')}}/axios.min.js"></script>
          <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />

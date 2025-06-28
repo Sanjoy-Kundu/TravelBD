@@ -29,9 +29,9 @@
         console.log(res.data)
 
         if(res.data.status == "success"){
-            console.log(res.data.data)
+            console.log(res.data.data.staff_code)
             document.querySelector(".staff_name").innerHTML = res.data.data.name;
-            document.querySelector(".nav_staff_user_name").innerHTML = res.data.data.name;
+            document.querySelector(".nav_staff_user_code").innerHTML = res.data.data.staff_code;
             document.querySelector(".nav_staff_user_role").innerHTML = res.data.data.role;
             document.querySelector(".nav_staff_user_email").innerHTML = res.data.data.email;
         }

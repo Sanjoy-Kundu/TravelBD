@@ -4,7 +4,7 @@
      <!-- Sidebar Toggle-->
      <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
              class="fas fa-bars"></i></button>
-     <span class="text-white text-center">Wellcome Back To Your Dashboard <b class="staff_name"></b></span>
+     <span class="text-white text-center">Wellcome Back To <b class="staff_name"></b> Dashboard</span>
      <!-- Navbar Search-->
      <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
          <div class="input-group">
@@ -23,7 +23,7 @@
              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                  <li>
                      <a class="dropdown-item nav_staff_user_name" href="#!">
-                         <i class="fas fa-id-badge me-2"></i><span class="nav_staff_user_name"></span>
+                         <i class="fas fa-id-badge me-2"></i><span class="nav_staff_user_code"></span>
                      </a>
                  </li>
                  <li class="dropdown-item">
@@ -33,7 +33,7 @@
                      <i class="fas fa-user-tag me-2"></i>Role: <span class="nav_staff_user_role"></span>
                  </li>
                   <li>
-                     <a class="dropdown-item" href="" target="_blank">
+                     <a class="dropdown-item" href="{{url('/staff/view/profile')}}" target="_blank">
                          <i class="fas fa-user-circle me-2"></i>Profile
                      </a>
                  </li>

@@ -25,7 +25,7 @@ Route::get("/otp/verify", [AdminController::class, "otpVerifyPage"]);
 
 
 
-//for staff
+//for staff login and verify
 Route::get("/staff/login", [LoginController::class, "staffLoginPage"])->name("staff.login");
 Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
 
@@ -38,8 +38,9 @@ Route::post("/staff/otp/verify/store", [StaffController::class, "staff_otp_verif
 Route::post("/staff/resend/otp", [StaffController::class, "staff_resend_otp"]);
 
 
-//dashboard for staff
-Route::get("/staff/dashboard", [StaffController::class, "staffDashboard"]);
+//=======================StaffController pages ============================
+Route::get("/staff/dashboard", [StaffController::class, "staffDashboardPage"]);
+Route::get("/staff/view/profile", [StaffController::class, "staffProfileViewPage"]); #frontend page
 
 
 
@@ -48,6 +49,10 @@ Route::get("/staff/dashboard", [StaffController::class, "staffDashboard"]);
 
 
 
+
+/**
+ * =====================Admin Controller and Pages ==========================
+ */
 Route::post("/admin/login/store", [AdminController::class, "admin_login_store"]);
 Route::post("/admin/registration/store", [AdminController::class, "admin_registration_store"]);
 Route::post("/otp/verify/store", [AdminController::class, "otp_verify_store"]);
@@ -62,7 +67,7 @@ Route::get("/admin/lists", [AdminController::class, "adminListsPage"]);
 
 
 // admin create staff staff create page 
- Route::get('/staffs/lists',[AdminController::class, "staffListsPage"]);
+Route::get('/staffs/lists',[AdminController::class, "staffListsPage"]);
 Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 

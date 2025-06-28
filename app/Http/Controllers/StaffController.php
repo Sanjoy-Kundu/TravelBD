@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Staff;
 use App\Mail\StaffOtp;
 use App\Mail\ResendOtpMail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -244,18 +245,35 @@ class StaffController extends Controller
   
 
 
-    /**
-     * staff Dashboard profile view page
-     */
-    public function staffProfilePage(){
-         try{
-            return view('pages.backend.staff.staffProfilePage');
-        }catch(Exception $ex){
-            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
-        }
-    }
-  
 
+/**
+ * staff name update
+ */
+    public function staffNameUpdateByEmail(Request $request)
+    {
+        // Step 1: Validation
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $staff = Staff::where('email', $request->email)->first();
+
+        if (!$staff) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Staff not found with this email',
+            ]);
+        }
+
+        $staff->name = Str::upper($request->name);
+        $staff->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Admin name updated successfully',
+        ]);
+    }
 
 
 

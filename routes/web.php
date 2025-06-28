@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\StaffProfileController;
 use App\Models\Staff;
 
 /*
@@ -41,7 +42,7 @@ Route::post("/staff/resend/otp", [StaffController::class, "staff_resend_otp"]);
 //=======================StaffController pages ============================
 Route::get("/staff/dashboard", [StaffController::class, "staffDashboardPage"]);
 Route::get("/staff/view/profile", [StaffController::class, "staffProfileViewPage"]); #frontend page
-Route::get('/staff/profile/create', [StaffController::class, "staffProfilePage"]);
+Route::get('/staff/profile/create', [StaffProfileController::class, "staffProfilePage"]);
 
 
 
@@ -106,5 +107,10 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'staff'])->group(function () {
     Route::get('/auth/staff', [StaffController::class, "staffDetails"]);
     Route::post('/staff/logout', [StaffController::class, "logout"]);
+
+    //staff profile 
+    Route::post("/staff/profile/store", [StaffProfileController::class, "staffProfileStore"]);
+    Route::post("/staff/profile/details", [StaffProfileController::class, "staffProfileDetails"]);
+     Route::post("/staff/name/update-by-email", [StaffController::class, "staffNameUpdateByEmail"]);
 });
 

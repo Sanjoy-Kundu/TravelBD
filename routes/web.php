@@ -44,7 +44,8 @@ Route::get("/staff/dashboard", [StaffController::class, "staffDashboardPage"]);
 Route::get("/staff/view/profile", [StaffController::class, "staffProfileViewPage"]); #frontend page
 Route::get('/staff/profile/create', [StaffProfileController::class, "staffProfilePage"]);
 
-
+//staff dahbord customer create page
+Route::get('/staff/customer/create', [StaffController::class, "customerCreatePage"]);
 
 
 
@@ -74,6 +75,10 @@ Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 
 
+//admin create customer create page form 
+Route::get('/admin/customer/create', [AdminController::class, "customerCreatePage"]);
+
+
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/admin/lists/all/data", [AdminController::class, "adminListsData"]);
@@ -98,6 +103,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
   Route::get("/trash/staffs/data", [AdminController::class, "trashStaffsData"]);
   Route::post("/staff/view/details/modal",[AdminController::class, "staffViewDetailsModal"]);
+
+
+
+  //admin customer create form store
+  
 });
 
 

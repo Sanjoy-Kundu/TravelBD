@@ -386,4 +386,23 @@ class StaffController extends Controller
     {
         //
     }
+
+
+
+
+
+
+    
+    /*
+    ===============================================
+    Customer create page
+    ================================================
+    */
+    public function customerCreatePage(){
+        try{
+            return view('pages.backend.staff.customerCreatePage');
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
+    }
 }

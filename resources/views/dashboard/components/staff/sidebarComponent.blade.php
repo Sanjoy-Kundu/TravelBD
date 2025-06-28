@@ -35,7 +35,7 @@
                              </a>
                              <div class="collapse" id="staffCollapseCustomer" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
-                                     <a class="nav-link" href="">Add Customer</a>
+                                     <a class="nav-link" href="{{url('/staff/customer/create')}}" target="_blank">Add Customer</a>
                                      <a class="nav-link" href="" target="_blank">Customer List</a>
                                  </nav>
                              </div>

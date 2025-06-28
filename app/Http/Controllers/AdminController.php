@@ -632,4 +632,32 @@ class AdminController extends Controller
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    ===============================================
+    Customer create page
+    ================================================
+    */
+    public function customerCreatePage(){
+        try{
+            return view('pages.backend.customerCreatePage');
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
+    }
+
 }

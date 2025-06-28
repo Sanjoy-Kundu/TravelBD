@@ -12,80 +12,17 @@ use App\Mail\StaffWelcomeMail;
 use App\Mail\StaffVerifiedMail;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminDeleteNotification;
 use App\Mail\StaffDeleteNotification;
+use App\Mail\StaffPermanentDeleteMail;
 use App\Mail\StaffRestoreNotification;
 
 class AdminController extends Controller
 {
-    /**
-     * how to use yazara datable : composer require yajra/laravel-datatables-oracle
 
-     *
-     */
-
-    // public function adminListData(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $admins = Admin::with('adminProfile')->select(['id', 'name', 'email', 'role', 'created_at']);
-
-    //         return DataTables::of($admins)
-    //             ->addIndexColumn()
-    //             ->editColumn('created_at', function ($admin) {
-    //                 return $admin->created_at->format('Y-m-d');
-    //             })
-
-    //             // Profile fields (safely check using optional())
-    //             ->addColumn('phone', function ($admin) {
-    //                 return optional($admin->adminProfile)->phone ?? 'N/A';
-    //             })
-    //             ->addColumn('alternate_phone', function ($admin) {
-    //                 return optional($admin->adminProfile)->alternate_phone ?? 'N/A';
-    //             })
-    //             ->addColumn('address', function ($admin) {
-    //                 return optional($admin->adminProfile)->address ?? 'N/A';
-    //             })
-    //             ->addColumn('city', function ($admin) {
-    //                 return optional($admin->adminProfile)->city ?? 'N/A';
-    //             })
-    //             ->addColumn('state', function ($admin) {
-    //                 return optional($admin->adminProfile)->state ?? 'N/A';
-    //             })
-    //             ->addColumn('country', function ($admin) {
-    //                 return optional($admin->adminProfile)->country ?? 'N/A';
-    //             })
-    //             ->addColumn('zip_code', function ($admin) {
-    //                 return optional($admin->adminProfile)->zip_code ?? 'N/A';
-    //             })
-    //             ->addColumn('designation', function ($admin) {
-    //                 return optional($admin->adminProfile)->designation ?? 'N/A';
-    //             })
-    //             ->addColumn('facebook', function ($admin) {
-    //                 return optional($admin->adminProfile)->facebook ?? 'N/A';
-    //             })
-    //             ->addColumn('twitter', function ($admin) {
-    //                 return optional($admin->adminProfile)->twitter ?? 'N/A';
-    //             })
-    //             ->addColumn('linkedin', function ($admin) {
-    //                 return optional($admin->adminProfile)->linkedin ?? 'N/A';
-    //             })
-    //             ->addColumn('website', function ($admin) {
-    //                 return optional($admin->adminProfile)->website ?? 'N/A';
-    //             })
-
-    //             // Profile image (if needed)
-    //             ->addColumn('profile_image', function ($admin) {
-    //                 $img = optional($admin->adminProfile)->profile_image;
-    //                 $path = $img ? asset('upload/dashboard/images/admin/' . $img) : asset('upload/dashboard/images/admin/default.png');
-    //                 return '<img src="'.$path.'" width="50" height="50" class="rounded-circle"/>';
-    //             })
-
-    //             ->rawColumns(['profile_image']) // Allow HTML for image
-    //             ->make(true);
-    //     }
-    // }
 
     /**
      * admin list page
@@ -546,7 +483,7 @@ class AdminController extends Controller
     public function staffRestore(Request $request)
     {
         try {
-            // Trashed সহ খুঁজে পাও Staff
+            // Trashed soho khujbo
             $staff = Staff::withTrashed()->find($request->id);
 
             // staff not found
@@ -579,6 +516,55 @@ class AdminController extends Controller
                 'message' => $ex->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * staff permanent delete
+     */
+
+    public function staffPermanentDelete(Request $request)
+    {
+        // 1. Find the staff with trashed
+        $staff = Staff::withTrashed()->with('profile')->find($request->id);
+
+        // 2. If staff not found
+        if (!$staff) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Staff not found.',
+            ]);
+        }
+
+        // 3. If staff is not trashed (still active)
+        if (!$staff->trashed()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This staff is still active.',
+            ]);
+        }
+
+        // 4. Handle profile image & delete profile record
+        if ($staff->profile && $staff->profile->profile_image) {
+            $imagePath = public_path('upload/dashboard/images/staff/' . $staff->profile->profile_image);
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+
+            $staff->profile->delete();
+        }
+
+        // 5. Send permanent delete mail
+        Mail::to($staff->email)->send(new StaffPermanentDeleteMail($staff));
+
+        // 6. Finally permanently delete staff
+        $staff->forceDelete();
+
+        // 7. Return success
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Staff and profile permanently deleted and mail sent.',
+        ]);
     }
 
     /**
@@ -622,6 +608,28 @@ class AdminController extends Controller
                 'status' => 'error',
                 'message' => $ex->getMessage(),
             ]);
+        }
+    }
+
+    /**
+     * view staff details
+     */
+    public function staffViewDetailsModal(Request $request)
+    {
+        try {
+            $staffDetails = Staff::with('profile')->where('id', $request->id)->first();
+            if (!$staffDetails) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Staff not found.',
+                ]);
+            }
+            return response()->json([
+                'status' => 'success',
+                'data' => $staffDetails,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 }

@@ -93,9 +93,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
   Route::post("/staff/trash",[AdminController::class, "stafTrash"]);
   Route::post("/staff/restore",[AdminController::class, "staffRestore"]);
+  Route::post('/staff/permanent/delete',[AdminController::class, "staffPermanentDelete"]);
   Route::post("/staff/verify",[AdminController::class, "staffVerify"]);
 
   Route::get("/trash/staffs/data", [AdminController::class, "trashStaffsData"]);
+  Route::post("/staff/view/details/modal",[AdminController::class, "staffViewDetailsModal"]);
 });
 
 
@@ -111,6 +113,7 @@ Route::middleware(['auth:sanctum', 'staff'])->group(function () {
     //staff profile 
     Route::post("/staff/profile/store", [StaffProfileController::class, "staffProfileStore"]);
     Route::post("/staff/profile/details", [StaffProfileController::class, "staffProfileDetails"]);
-     Route::post("/staff/name/update-by-email", [StaffController::class, "staffNameUpdateByEmail"]);
+    Route::post("/staff/name/update-by-email", [StaffController::class, "staffNameUpdateByEmail"]);
+    Route::post("/staff/reset/password",[StaffController::class, "staffResetPassword"]);
 });
 

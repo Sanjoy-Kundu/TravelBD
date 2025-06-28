@@ -6,5 +6,5 @@
     @include('dashboard.components.admin.staffListsComponent')
     @include('dashboard.components.admin.footerComponent')
     {{-- modal --}}
-    {{-- @include('dashboard.components.admin.modal.viewComponent') --}}
+    @include('dashboard.components.admin.modal.viewStaffDetailsComponent')
 @endsection

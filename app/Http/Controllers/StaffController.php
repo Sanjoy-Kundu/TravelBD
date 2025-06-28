@@ -311,6 +311,39 @@ class StaffController extends Controller
 
 
 
+        /***
+     * Admin reset password
+     */
+    public function staffResetPassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|exists:admins,id',
+                'old_password' => 'required',
+                'new_password' => 'required|min:8',
+                'password' => 'required|min:8',
+            ]);
+
+            $staff = Staff::find($request->id);
+
+            if ($staff->id !== Auth::id()) {
+                return response()->json(['status' => 'error', 'message' => 'You are not authorized.']);
+            }
+
+            if (!Hash::check($request->old_password, $staff->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Old password is incorrect.']);
+            }
+
+            $staff->password = Hash::make($request->new_password);
+            $staff->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Password updated successfully.']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
+
 
 
 

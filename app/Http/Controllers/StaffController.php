@@ -244,6 +244,21 @@ class StaffController extends Controller
   
 
 
+    /**
+     * staff Dashboard profile view page
+     */
+    public function staffProfilePage(){
+         try{
+            return view('pages.backend.staff.staffProfilePage');
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+  
+
+
+
+
 
     /**
      * Staff details for nav 

@@ -9,7 +9,7 @@
                          Dashboard
                      </a>
                      <div class="sb-sidenav-menu-heading">Interface</div>
-                     <a class="nav-link" href="" target="_blank">
+                     <a class="nav-link" href="{{url('/staff/profile/create')}}" target="_blank">
                         <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                         Profile Info
                     </a>

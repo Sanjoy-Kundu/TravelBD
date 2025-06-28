@@ -41,6 +41,7 @@ Route::post("/staff/resend/otp", [StaffController::class, "staff_resend_otp"]);
 //=======================StaffController pages ============================
 Route::get("/staff/dashboard", [StaffController::class, "staffDashboardPage"]);
 Route::get("/staff/view/profile", [StaffController::class, "staffProfileViewPage"]); #frontend page
+Route::get('/staff/profile/create', [StaffController::class, "staffProfilePage"]);
 
 
 

@@ -14,8 +14,23 @@
             <form id="admin_customer_form">
                 <div class="row">
                     <div class="col-12 mb-3">
+                        <label>Admin Id</label>
+                        <input type="number" class="form-control" name="admin_id" placeholder="Admin id">
+                    </div>
+
+                    <div class="col-12 mb-3">
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email"
+                            placeholder="e.g. rubelsarder@gmail.com">
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label>Phone</label>
+                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
@@ -41,7 +56,8 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Company Name</label>
-                        <input type="text" class="form-control" name="company_name" placeholder="e.g. RAMLY FOOD PROCESSING">
+                        <input type="text" class="form-control" name="company_name"
+                            placeholder="e.g. RAMLY FOOD PROCESSING">
                     </div>
                     <div class="col-12 mb-3">
                         <label>PIC</label>
@@ -77,11 +93,13 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Center</label>
-                        <input type="text" class="form-control" name="medical_center" placeholder="e.g. Green Life Medical">
+                        <input type="text" class="form-control" name="medical_center"
+                            placeholder="e.g. Green Life Medical">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Result</label>
-                        <input type="text" class="form-control" name="medical_result" placeholder="e.g. FIT / UNFIT">
+                        <input type="text" class="form-control" name="medical_result"
+                            placeholder="e.g. FIT / UNFIT">
                     </div>
 
                     <!-- Step Status -->
@@ -143,7 +161,7 @@
                     </div>
 
                     <!-- Payment Summary -->
-                   <div class="col-12 mb-3">
+                    <div class="col-12 mb-3">
                         <label>Method of Payment</label>
                         <select class="form-control" name="payment_method" id="payment_method"
                             onchange="admintoggleAccountField()">
@@ -159,14 +177,19 @@
                         <input type="text" class="form-control" name="account_number"
                             placeholder="e.g. 1234567890">
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Approval</label>
-                        <input type="text" class="form-control" name="approval" placeholder="e.g. Approved / Rejected">
+                        <select class="form-control" name="approval">
+                            <option value="">Select approval</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Complete">Complete</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <button  class="btn btn-primary px-4">Submit</button>
+                    <button class="btn btn-primary px-4">Submit</button>
                 </div>
             </form>
         </div>

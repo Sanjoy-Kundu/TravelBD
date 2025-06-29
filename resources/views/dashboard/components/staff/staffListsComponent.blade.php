@@ -156,7 +156,8 @@
                                             Swal.fire('Suspend!', res.data.message,
                                                 'success');
                                             await staffListLoadData(); // table reload
-                                            await trashStaffListLoadData(); //trash table reload
+                                            await trashStaffListLoadData
+                                                (); //trash table reload
 
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
@@ -174,9 +175,9 @@
 
 
                         //staff verify
-                        $(document).on('click', '.staff_verified_btn',function(){
+                        $(document).on('click', '.staff_verified_btn', function() {
                             let id = $(this).data('id');
-                            console.log("staff verify id",id);
+                            console.log("staff verify id", id);
 
                             Swal.fire({
                                 title: 'Are you sure?',
@@ -186,12 +187,18 @@
                                 confirmButtonColor: '#28a745',
                                 cancelButtonColor: '#6c757d',
                                 confirmButtonText: 'Yes, verify now'
-                            }).then(async (result) =>{
+                            }).then(async (result) => {
                                 if (result.isConfirmed) {
                                     let token = localStorage.getItem('token');
-                                    try{
-                                    const res = await axios.post('/staff/verify', {id: id}, {headers: {Authorization: `Bearer ${token}`}});
-                                     if (res.data.status === 'success') {
+                                    try {
+                                        const res = await axios.post('/staff/verify', {
+                                            id: id
+                                        }, {
+                                            headers: {
+                                                Authorization: `Bearer ${token}`
+                                            }
+                                        });
+                                        if (res.data.status === 'success') {
                                             Swal.fire('Verified!', res.data.message,
                                                 'success');
                                             await staffListLoadData(); // table reload
@@ -201,9 +208,10 @@
                                                 'Verified failed.',
                                                 'error');
                                         }
-                                    }catch(error){
-                                           Swal.fire('Error!', 'Server error occurred.','error');
-                                           console.error(err);
+                                    } catch (error) {
+                                        Swal.fire('Error!', 'Server error occurred.',
+                                            'error');
+                                        console.error(err);
                                     }
                                 }
                             })
@@ -290,63 +298,97 @@
                         </tr>
                     `;
                         tableBody.append(tr);
-
-
-
-                        // restore 
-                        $(document).on('click', '.trash_staff_restore_btn', function() {
-                            let id = $(this).data('id');
-                            console.log("staff id is", id);
-
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: "This staff will be restore data.",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33  ',
-                                confirmButtonText: 'Yes, I want to restore'
-                            }).then(async (result) => {
-                                if (result.isConfirmed) {
-                                    let token = localStorage.getItem('token');
-                                    console.log(token);
-                                    try {
-                                        const res = await axios.post(
-                                            '/staff/restore', {
-                                                id: id
-                                            }, {
-                                                headers: {
-                                                    Authorization: `Bearer ${token}`
-                                                }
-                                            });
-
-                                        if (res.data.status === 'success') {
-                                            Swal.fire('Staff!', res.data.message,
-                                                'success');
-
-                                            await trashStaffListLoadData
-                                        (); //trash table reload
-                                            await staffListLoadData(); // table reload
-
-
-                                        } else {
-                                            Swal.fire('Error!', res.data.message ||
-                                                'Restore failed.',
-                                                'error');
-                                        }
-                                    } catch (err) {
-                                        Swal.fire('Error!', 'Server error occurred.',
-                                            'error');
-                                        console.error(err);
-                                    }
-                                }
-                            });
-                        });
-
-
-
-
                     });
+                    // restore 
+                    $(document).on('click', '.trash_staff_restore_btn', function() {
+                        let id = $(this).data('id');
+                        console.log("staff id is", id);
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "This staff will be restore data.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33  ',
+                            confirmButtonText: 'Yes, I want to restore'
+                        }).then(async (result) => {
+                            if (result.isConfirmed) {
+                                let token = localStorage.getItem('token');
+                                console.log(token);
+                                try {
+                                    const res = await axios.post(
+                                        '/staff/restore', {
+                                            id: id
+                                        }, {
+                                            headers: {
+                                                Authorization: `Bearer ${token}`
+                                            }
+                                        });
+
+                                    if (res.data.status === 'success') {
+                                        Swal.fire('Staff!', res.data.message,
+                                            'success');
+
+                                        await trashStaffListLoadData(); //trash table reload
+                                        await staffListLoadData(); // table reload
+
+
+                                    } else {
+                                        Swal.fire('Error!', res.data.message ||
+                                            'Restore failed.',
+                                            'error');
+                                    }
+                                } catch (err) {
+                                    Swal.fire('Error!', 'Server error occurred.',
+                                        'error');
+                                    console.error(err);
+                                }
+                            }
+                        });
+                    });
+
+                    //trash permanent delte 
+                    $(document).on('click', '.trash_staff_delete_btn', function() {
+                        let id = $(this).data('id');
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "This staff will be permanently deleted.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, permanently delete'
+                        }).then(async (result) => {
+                            if (result.isConfirmed) {
+                                let token = localStorage.getItem('token');
+                                try {
+                                    const res = await axios.post('/staff/permanent/delete', {
+                                        id: id
+                                    }, {
+                                        headers: {
+                                            Authorization: `Bearer ${token}`
+                                        }
+                                    });
+
+                                    if (res.data.status === 'success') {
+                                        Swal.fire('Deleted!', res.data.message, 'success');
+                                        await trashStaffListLoadData(); // Reload trash
+                                        await staffListLoadData();
+                                    } else {
+                                        Swal.fire('Error!', res.data.message ||
+                                            'Deletion failed.', 'error');
+                                    }
+                                } catch (err) {
+                                    Swal.fire('Error!', 'Server error occurred.', 'error');
+                                    console.error(err);
+                                }
+                            }
+                        });
+                    });
+
+
                 }
             } else {
                 tableBody.append('<tr><td colspan="7" class="text-center">No data found</td></tr>');

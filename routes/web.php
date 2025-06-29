@@ -9,37 +9,31 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Models\Staff;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
+//login get route for admin
 Route::get("/admin/registration", [RegistrationController::class, "adminRegisterPage"]);
 Route::get("/admin/login", [LoginController::class, "adminLoginPage"])->name("login");
 Route::get("/otp/verify", [AdminController::class, "otpVerifyPage"]);
 
 
 
-//for staff login and verify
+//login get route for staff
 Route::get("/staff/login", [LoginController::class, "staffLoginPage"])->name("staff.login");
 Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
 
 
 
 
-//for staff post method 
+//for staff post method for login and otp verify
 Route::post("/staff/login/store", [StaffController::class, "staff_login_store"]);
 Route::post("/staff/otp/verify/store", [StaffController::class, "staff_otp_verify_store"]);
 Route::post("/staff/resend/otp", [StaffController::class, "staff_resend_otp"]);
 
 
+
+
 //=======================StaffController pages ============================
+//staff controller dashboard page get route
 Route::get("/staff/dashboard", [StaffController::class, "staffDashboardPage"]);
 Route::get("/staff/view/profile", [StaffController::class, "staffProfileViewPage"]); #frontend page
 Route::get('/staff/profile/create', [StaffProfileController::class, "staffProfilePage"]);
@@ -82,6 +76,7 @@ Route::get('/admin/customer/create', [AdminController::class, "customerCreatePag
 //admin dashboard
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get("/admin/lists/all/data", [AdminController::class, "adminListsData"]);
+  Route::get("/admin/lists/all/trash/data", [AdminController::class, "adminListsTrashData"]);
   Route::get("/user/details/admin", [AdminController::class, "adminDetails"]);
   Route::post("/admin/logout", [AdminController::class, "adminLogout"]);
   Route::post("/admin/name/update-by-email", [AdminController::class, "adminNameUpdateByEmail"]);
@@ -89,13 +84,16 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post("/admin/profile/details", [AdminProfileController::class, "adminProfileDetails"]); #backend
   Route::post("/admin/profile/store", [AdminProfileController::class, "adminProfileStore"]);
   Route::post("/admin/view/details/modal",[AdminController::class, "adminViewDetailsModal"]);
-  Route::post("/admin/delete-not-verified",[AdminController::class, "adminDeleteNotVerified"]);
+  Route::post("/admin/delete/trash",[AdminController::class, "adminDeleteTrash"]);
   Route::post("/admin/reset/password",[AdminController::class, "adminResetPassword"]);
   
   
   //admni create staff 
   Route::post("/admin/create/staff/store", [AdminController::class, "CreateStaffStore"]);
   Route::get("/all/staffs/data", [AdminController::class, "allStaffsData"]);
+  Route::post("/admin/restore",[AdminController::class, "adminRestore"]);
+  Route::post('/admin/permanent/delete',[AdminController::class, "adminPermanentDelete"]);
+
   Route::post("/staff/trash",[AdminController::class, "stafTrash"]);
   Route::post("/staff/restore",[AdminController::class, "staffRestore"]);
   Route::post('/staff/permanent/delete',[AdminController::class, "staffPermanentDelete"]);
@@ -106,7 +104,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 
-  //admin customer create form store
+
   
 });
 

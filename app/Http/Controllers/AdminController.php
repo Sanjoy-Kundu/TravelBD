@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminDeleteNotification;
 use App\Mail\StaffDeleteNotification;
+use App\Mail\AdminPermanentDeleteMail;
+use App\Mail\AdminRestoreNotification;
 use App\Mail\StaffPermanentDeleteMail;
 use App\Mail\StaffRestoreNotification;
 
@@ -277,6 +279,30 @@ class AdminController extends Controller
         }
     }
 
+    //trash data show
+public function adminListsTrashData()
+{
+    try {
+        // get trash admin
+        $admins = Admin::onlyTrashed()->with('profile')->get();
+
+        return response()->json(['status' => 'success','message' => 'Trashed admin list','trash_admin_lists' => $admins]);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
+
+
+
+
+
+
+
+
+
     /**
      * admin view detais by id with profile details
      */
@@ -297,7 +323,7 @@ class AdminController extends Controller
     /**
      * Not Verified Admin delete list
      */
-    public function adminDeleteNotVerified(Request $request)
+    public function adminDeleteTrash(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:admins,id',
@@ -309,9 +335,9 @@ class AdminController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Admin not found']);
         }
 
-        if ($admin->is_verified == 1) {
-            return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
-        }
+        // if ($admin->is_verified == 1) {
+        //     return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified admin']);
+        // }
 
         // Try sending email
         try {
@@ -477,6 +503,112 @@ class AdminController extends Controller
         }
     }
 
+
+    /**
+     * Admin restore
+     */
+    public function adminRestore(Request $request)
+    {
+        try {
+            // Trashed soho khujbo
+            $admin = Admin::withTrashed()->find($request->id);
+
+            // amdin not found
+            if (!$admin) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Admin not found.',
+                ]);
+            }
+
+            // admin not delete
+            if (!$admin->trashed()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This admin is already active.',
+                ]);
+            }
+
+            // just restore now
+            $admin->restore();
+
+            Mail::to($admin->email)->send(new AdminRestoreNotification($admin));
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Admin restored successfully.',
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
+
+
+        /**
+     * staff permanent delete
+     */
+
+    public function adminPermanentDelete(Request $request)
+    {
+        // 1. Find the admin with trashed
+        $admin = Admin::withTrashed()->with('profile')->find($request->id);
+
+        // 2. If admin not found
+        if (!$admin) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Admin not found.',
+            ]);
+        }
+
+        // 3. If admin is not trashed (still active)
+        if (!$admin->trashed()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This admin is still active.',
+            ]);
+        }
+
+        // 4. Handle profile image & delete profile record
+        if ($admin->profile && $admin->profile->profile_image) {
+            $imagePath = public_path('upload/dashboard/images/admin/' . $admin->profile->profile_image);
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+
+            $admin->profile->delete();
+        }
+
+        // 5. Send permanent delete mail
+        Mail::to($admin->email)->send(new AdminPermanentDeleteMail($admin));
+
+        // 6. Finally permanently delete staff
+        $admin->forceDelete();
+
+        // 7. Return success
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Admin and profile permanently deleted and mail sent.',
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * staff restore
      */
@@ -566,6 +698,7 @@ class AdminController extends Controller
             'message' => 'Staff and profile permanently deleted and mail sent.',
         ]);
     }
+
 
     /**
      * staff verify

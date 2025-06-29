@@ -13,8 +13,22 @@
             <form id="staff_customer_form">
                 <div class="row">
                     <div class="col-12 mb-3">
+                        <label>Staff Id</label>
+                        <input type="number" class="form-control" name="staff_id" placeholder="Staff id">
+                    </div>
+                    <div class="col-12 mb-3">
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email"
+                            placeholder="e.g. rubelsarder@gmail.com">
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label>Phone</label>
+                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
@@ -144,10 +158,14 @@
                         <input type="text" class="form-control" name="account_number"
                             placeholder="e.g. 1234567890">
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Approval</label>
-                        <input type="text" class="form-control" name="approval"
-                            placeholder="e.g. Approved / Pending">
+                        <select class="form-control" name="approval">
+                            <option value="">Select approval</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Complete">Complete</option>
+                        </select>
                     </div>
                 </div>
 

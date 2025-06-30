@@ -6,5 +6,5 @@
     @include('dashboard.components.agent.agentListsComponent')
     @include('dashboard.components.admin.footerComponent')
     {{-- modal --}}
-    {{-- @include('dashboard.components.admin.modal.viewStaffDetailsComponent') --}}
+    @include('dashboard.components.admin.modal.viewAgentDetailsComponent')
 @endsection

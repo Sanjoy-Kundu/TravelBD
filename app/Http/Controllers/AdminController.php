@@ -913,6 +913,34 @@ public function adminListsTrashData()
 
 
     /**
+     * =====================================
+     * admin agent view details madal agentViewDetailsModal
+     * ====================================
+     */
+
+         public function agentViewDetailsModal(Request $request)
+    {
+        try {
+            //$agentDetails = Staff::with('profile')->where('id', $request->id)->first();
+            $agentDetails = Agent::where('id', $request->id)->first();
+            if (!$agentDetails) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Agent not found.',
+                ]);
+            }
+            return response()->json([
+                'status' => 'success',
+                'data' => $agentDetails,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+
+
+    /**
      * ===========================
      * Admin dashboard agent trash with mail 
      * ===========================

@@ -113,7 +113,7 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-warning agent_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
+                                    <button type="button" class="btn btn-warning agent_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAgentDetails">View Details</button>
                                   <button type="button" class="btn btn-success agent_trash_btn" data-id="${element.id}">TRASH</button>
                                    ${element.is_verified == 0  ? `<button type="button" class="btn btn-info agent_verified_btn" data-id="${element.id}">Verify Now</button>` 
                                     : `<button class="btn btn-info text-white">VERIFIED</button>`}
@@ -215,6 +215,12 @@
 
                         })
 
+                        //agent view details 
+                        $(document).on('click', '.agent_view_details', async function(){
+                            let id = $(this).data('id');
+                            await getViewagentDetailsModalFillup(id);
+
+                        })
                 }
             } else {
                 tableBody.append('<tr><td colspan="7" class="text-center">No data found</td></tr>');
@@ -281,9 +287,6 @@
                                     : `<img src="/upload/dashboard/images/admin/default.png" width="80" height="80" style="object-fit:cover; border-radius:50%;">`}
                             </td>
                             <td>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-warning trash_agent_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
-    
                                     <button type="button" class="btn btn-primary trash_agent_restore_btn" data-id="${element.id}">RESTORE</button>
                                     <button type="button" class="btn btn-danger trash_agent_delete_btn" data-id="${element.id}">DELETE</button>
                                 </div>

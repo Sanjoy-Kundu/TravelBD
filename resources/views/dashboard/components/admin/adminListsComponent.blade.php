@@ -48,6 +48,8 @@
     </div>
 </div>
 
+
+
 <script>
     getAuthCheck();
 
@@ -119,7 +121,7 @@
                     //<button type="button" class="btn btn-danger admin_delete" data-id = ${element.id}>DELETE</button>
                     tableBody.append(tr);
                 });
-                $('.adminListDataTable').DataTable();
+                $('.adminListDataTable').DataTable({destroy:true});
 
                 //admin details view using modal 
                 $(document).on('click', '.admin_view_details', async function(){
@@ -237,7 +239,7 @@
                     //<button type="button" class="btn btn-danger admin_delete" data-id = ${element.id}>DELETE</button>
                     tableBody.append(tr);
                 });
-                $('.trashAdminListDataTable').DataTable();
+                $('.trashAdminListDataTable').DataTable({destroy:true});
 
                 //trash admin restore  
                 $(document).on('click', '.trash_admin_restore_btn', async function() {

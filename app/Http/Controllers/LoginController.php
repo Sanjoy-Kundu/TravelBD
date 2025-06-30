@@ -23,4 +23,18 @@ class LoginController extends Controller
             return response()->json(['error' => $ex->getMessage()]);
         }
     }
+
+
+
+    public function agentLoginPage(){
+        try{
+            return view("/form.agent.login");
+        }catch(Exception $ex){
+            return response()->json(['error' => $ex->getMessage()]);
+        }
+    }
+
+
+
+
 }

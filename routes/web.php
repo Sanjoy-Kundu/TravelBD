@@ -23,6 +23,10 @@ Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
 
 
 
+//login get route for agent
+Route::get("/agent/login", [LoginController::class, "agentLoginPage"])->name("agent.login");
+
+
 
 //for staff post method for login and otp verify
 Route::post("/staff/login/store", [StaffController::class, "staff_login_store"]);
@@ -63,9 +67,13 @@ Route::get("/admin/lists", [AdminController::class, "adminListsPage"]);
 
 
 
-// admin create staff staff create page 
+// admin dashboard staff staff create page 
 Route::get('/staffs/lists',[AdminController::class, "staffListsPage"]);
 Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
+
+
+
+
 
 
 

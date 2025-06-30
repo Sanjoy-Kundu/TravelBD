@@ -15,7 +15,7 @@
             <form id="staffPasswordChangeForm" autocomplete="off">
                 <div class="modal-body bg-light">
                     <!-- Hidden staff ID -->
-                    <input type="hidden" id="staff_password_reset_id" name="staff_id">
+                    <input type="text" id="staff_password_reset_id" name="staff_id">
 
                     <div class="mb-3">
                         <label for="staff_old_password" class="form-label">Old Password</label>
@@ -33,8 +33,8 @@
 
                     <div class="mb-3">
                         <label for="staff_confirm_password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="staff_confirm_password" name="password"
-                            placeholder="Confirm your new password">
+                        <input type="password" class="form-control" id="staff_confirm_password"
+                            name="new_password_confirmation" placeholder="Confirm your new password">
                         <span class="text-danger" id="staff_confirm_password_error"></span>
                     </div>
                 </div>
@@ -121,8 +121,10 @@
             id: staff_id,
             old_password: oldPassword,
             new_password: newPassword,
-            password: newPassword
+            new_password_confirmation: confirmPassword,
         };
+
+
 
         // Send Request
         try {
@@ -133,10 +135,16 @@
             });
 
             if (res.data.status === 'success') {
-                //alert(res.data.message);
+                console.log(res.data);
+                console.log(res.data.message);
                 document.getElementById("staffPasswordChangeForm").reset();
-                const modal = bootstrap.Modal.getInstance(document.getElementById("viewstaffPasswordChangeModal"));
+
+                const modalEl = document.getElementById("viewstaffPasswordChangeModal");
+                const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
+
+
+
                 //redirect to login page
                 Swal.fire({
                     icon: 'success',
@@ -149,8 +157,9 @@
                     window.location.href = "/staff/login";
                 });
             } else {
-                if(res.data.status === "error"){
+                if (res.data.status === "error") {
                     document.getElementById("staff_old_password_error").innerHTML = res.data.message;
+                    console.log(res.data)
                 }
                 //alert(res.data.message);
             }
@@ -158,12 +167,13 @@
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 let errors = error.response.data.errors;
+                console.log(errors);
                 if (errors.old_password)
                     document.getElementById("staff_old_password_error").innerHTML = errors.old_password[0];
                 if (errors.new_password)
                     document.getElementById("staff_new_password_error").innerHTML = errors.new_password[0];
-                if (errors.password)
-                    document.getElementById("staff_confirm_password_error").innerHTML = errors.password[0];
+                if (errors.new_password_confirmation)
+                    document.getElementById("staff_confirm_password_error").innerHTML = errors.new_password_confirmation[0];
             } else {
                 alert(error.response?.data?.message || "Something went wrong. Please try again later.");
                 console.error(error);

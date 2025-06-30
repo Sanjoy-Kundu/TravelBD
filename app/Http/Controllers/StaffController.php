@@ -131,7 +131,7 @@ class StaffController extends Controller
                         'message' => 'Admin has been not approve your account yet. If admin Approve You can login Autometically',
                     ],
                     403,
-                ); 
+                );
             }
 
             if ($staff->otp_expires_at && Carbon::now()->gt(Carbon::parse($staff->otp_expires_at))) {
@@ -176,51 +176,54 @@ class StaffController extends Controller
     /**
      * Staff resend Otp
      */
-    public function staff_resend_otp(Request $request){
-       try {
-        $email = $request->email;
-        $staff = Staff::where('email', $email)->first();
+    public function staff_resend_otp(Request $request)
+    {
+        try {
+            $email = $request->email;
+            $staff = Staff::where('email', $email)->first();
 
-        if (!$staff) {
-            return response()->json(['status' => 'error', 'message' => 'Staff not found'], 404);
-        }
+            if (!$staff) {
+                return response()->json(['status' => 'error', 'message' => 'Staff not found'], 404);
+            }
 
-        // OTP expiration time check
-        $now = now();
+            // OTP expiration time check
+            $now = now();
 
-        // time validation
-        if ($staff->otp_expires_at  && $now->lt($staff->otp_expires_at )) {
+            // time validation
+            if ($staff->otp_expires_at && $now->lt($staff->otp_expires_at)) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'OTP is still valid. Please wait before requesting a new OTP. Just Wait for 22 minutes. Or check your Email First OTP is send to your Email.',
+                    ],
+                    429,
+                ); // Too Many Requests
+            }
+
+            // OTP expired, নতুন OTP তৈরি ও save করো
+            $newOtp = rand(100000, 999999);
+            $staff->otp = $newOtp;
+            $staff->otp_expires_at = $now->addMinutes(20); // 5 মিনিটের OTP validity
+            $staff->save();
+
+            $staffEmail = $staff->email;
+            // Send OTP Email (যেমন )
+            Mail::to($staff->email)->send(new ResendOtpMail($newOtp, $staffEmail));
+
             return response()->json([
-                'status' => 'error',
-                'message' => 'OTP is still valid. Please wait before requesting a new OTP. Just Wait for 22 minutes. Or check your Email First OTP is send to your Email.',
-            ], 429); // Too Many Requests
+                'status' => 'success',
+                'message' => 'New OTP has been sent to your email.',
+            ]);
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $ex->getMessage(),
+                ],
+                500,
+            );
         }
-
-        // OTP expired, নতুন OTP তৈরি ও save করো
-        $newOtp = rand(100000, 999999);
-        $staff->otp = $newOtp;
-        $staff->otp_expires_at  = $now->addMinutes(20); // 5 মিনিটের OTP validity
-        $staff->save();
-
-        $staffEmail = $staff->email;
-        // Send OTP Email (যেমন )
-        Mail::to($staff->email)->send(new ResendOtpMail($newOtp,$staffEmail));
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'New OTP has been sent to your email.'
-        ]);
-    } catch (Exception $ex) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $ex->getMessage()
-        ], 500);
     }
-    }
-
-
-
-
 
     /**
      * Staff Dashboard
@@ -230,25 +233,21 @@ class StaffController extends Controller
         return view('pages.backend.staff.staffDashboardPage');
     }
 
-
-
     /**
      * staff Dashboard profile view page
      */
-    public function staffProfileViewPage(){
-         try{
+    public function staffProfileViewPage()
+    {
+        try {
             return view('pages.backend.staff.staffProfileViewPage');
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
-  
 
-
-
-/**
- * staff name update
- */
+    /**
+     * staff name update
+     */
     public function staffNameUpdateByEmail(Request $request)
     {
         // Step 1: Validation
@@ -275,56 +274,51 @@ class StaffController extends Controller
         ]);
     }
 
-
-
-
     /**
-     * Staff details for nav 
+     * Staff details for nav
      */
-    public function staffDetails(){
-        try{
+    public function staffDetails()
+    {
+        try {
             $user = Auth::user();
             return response()->json(['status' => 'success', 'data' => $user]);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json([
                 'status' => 'error',
-                'message' => $ex->getMessage()
+                'message' => $ex->getMessage(),
             ]);
         }
     }
 
-
-
     /**
-     * staff logout 
+     * staff logout
      */
-    public function logout(Request $request){
-       $request->user()->currentAccessToken()->delete();
-          return response()->json([
-        'status' => 'success',
-        'message' => 'Logged out successfully',
-    ]);
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ]);
     }
 
-
-
-
-
-
-        /***
+    /***
      * Admin reset password
      */
-    public function staffResetPassword(Request $request)
+public function staffResetPassword(Request $request)
     {
         try {
             $request->validate([
-                'id' => 'required|exists:admins,id',
+                'id' => 'required|exists:staffs,id',
                 'old_password' => 'required',
-                'new_password' => 'required|min:8',
-                'password' => 'required|min:8',
+                'new_password' => 'required|min:8|confirmed',
             ]);
 
             $staff = Staff::find($request->id);
+
+            if (!$staff) {
+                return response()->json(['status' => 'error', 'message' => 'Staff not found.']);
+            }
 
             if ($staff->id !== Auth::id()) {
                 return response()->json(['status' => 'error', 'message' => 'You are not authorized.']);
@@ -338,14 +332,10 @@ class StaffController extends Controller
             $staff->save();
 
             return response()->json(['status' => 'success', 'message' => 'Password updated successfully.']);
-        } catch (\Exception $ex) {
-            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
-
-
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -387,22 +377,17 @@ class StaffController extends Controller
         //
     }
 
-
-
-
-
-
-    
     /*
     ===============================================
     Customer create page
     ================================================
     */
-    public function customerCreatePage(){
-        try{
+    public function customerCreatePage()
+    {
+        try {
             return view('pages.backend.staff.customerCreatePage');
-        }catch(Exception $ex){
-            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 }

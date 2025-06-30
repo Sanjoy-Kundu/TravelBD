@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Agent;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,9 +45,7 @@ class AgentController extends Controller
      * Otp verify store
      * ======================
      */
-       /**
-     * otp verify
-     */
+     
     public function agent_otp_verify_store(Request $request)
     {
         $request->validate([
@@ -200,19 +199,67 @@ class AgentController extends Controller
         /**
      * Agent details for nav
      */
+    /**
+     * Admin details for dashboard
+     */
     public function agentDetails()
     {
         try {
             $user = Auth::user();
             return response()->json(['status' => 'success', 'data' => $user]);
         } catch (Exception $ex) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $ex->getMessage(),
-            ]);
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
 
+
+
+   /**
+    * =====================================
+    *Agent Name Update by Email Agent dashboard 
+    *===========================================
+    */
+
+    public function agentNameUpdateByEmail(Request $request)
+    {
+        // Step 1: Validation
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $staff = Agent::where('email', $request->email)->first();
+
+        if (!$staff) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Staff not found with this email',
+            ]);
+        }
+
+        $staff->name = Str::upper($request->name);
+        $staff->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Agent name updated successfully',
+        ]);
+    }
+
+
+    /** 
+     * =========================
+     * agent logout
+     * ===========================
+    */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ]);
+    }
 
 
     /**

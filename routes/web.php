@@ -7,6 +7,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AgentProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 
@@ -39,6 +40,7 @@ Route::post("/agent/otp/verify/store", [AgentController::class, "agent_otp_verif
 
 //agent dashboard pages
 Route::get("/agent/dashboard", [AgentController::class, "agentDashboard"])->name("agent.dashboard");
+Route::get("/agent/profile/create",[AgentProfileController::class, "agentProfileCreate"])->name("agent.profile.create");
 
 
 
@@ -167,5 +169,12 @@ Route::middleware(['auth:sanctum', 'staff'])->group(function () {
 //Agent Dashboard
 Route::middleware(['auth:sanctum', 'agent'])->group(function () {
   Route::get("/auth/agent", [AgentController::class, 'agentDetails']);
+  Route::post("/agent/logout", [AgentController::class, "logout"]);
+
+  Route::get("/user/details/agent", [AgentController::class, "agentDetails"]);
+  Route::post("/agent/name/update-by-email", [AgentController::class, "agentNameUpdateByEmail"]); #done
+  Route::post("/agent/profile/store", [AgentProfileController::class, "agentProfileStore"]);
+  Route::post("/agent/profile/details", [AgentProfileController::class, "agentProfileDetails"]);
+  
 });
 

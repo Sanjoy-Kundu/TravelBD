@@ -120,7 +120,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::get('/all/agents/data', [AdminController::class, "allAgentsData"]);
   Route::post("/admin/create/agent/store", [AdminController::class, "CreateAgentStore"]);
   Route::post("/agent/verify",[AdminController::class, "agentVerify"]);
-
+  Route::post("/agent/trash",[AdminController::class, "agentTrash"]);
+  Route::get("/trash/agents/data", [AdminController::class, "trashAgentsData"]);
+  Route::post("/agent/permanent/delete",[AdminController::class, "agentPermanentDelete"]);
   
 });
 

@@ -115,7 +115,6 @@
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-warning agent_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAdminDetails">View Details</button>
                                   <button type="button" class="btn btn-success agent_trash_btn" data-id="${element.id}">TRASH</button>
-                                  <button type="button" class="btn btn-info agent_verified_btn" data-id="${element.id}"></button>
                                    ${element.is_verified == 0  ? `<button type="button" class="btn btn-info agent_verified_btn" data-id="${element.id}">Verify Now</button>` 
                                     : `<button class="btn btn-info text-white">VERIFIED</button>`}
 
@@ -155,8 +154,7 @@
                                             Swal.fire('Suspend!', res.data.message,
                                                 'success');
                                             await agentListLoadData(); // table reload
-                                            await trashagentListLoadData
-                                                (); //trash table reload
+                                            await trashagentListLoadData(); //trash table reload
 
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
@@ -201,7 +199,7 @@
                                             Swal.fire('Verified!', res.data.message,
                                                 'success');
                                             await agentListLoadData(); // table reload
-                                            await trashagentListLoadData();
+                                            //await trashagentListLoadData();
                                         } else {
                                             Swal.fire('Error!', res.data.message ||
                                                 'Verified failed.',
@@ -250,7 +248,7 @@
 
             let selector = '.trashagentListDataTable';
 
-            //আগের DataTable destroy
+            //detroy table
             if ($.fn.DataTable.isDataTable(selector)) {
                 $(selector).DataTable().clear().destroy();
             }
@@ -259,7 +257,7 @@
             tableBody.empty();
 
             if (res.data.status === "success") {
-                let trash_agent_lists = res.data.trashagentLists;
+                let trash_agent_lists = res.data.trashAgentLists;
 
 
                 if (trash_agent_lists === 0) {

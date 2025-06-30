@@ -8,6 +8,7 @@ use App\Models\Agent;
 use App\Models\Staff;
 use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
+use App\Mail\AgentTrashMail;
 use Illuminate\Http\Request;
 use App\Mail\AgentWelcomeMail;
 use App\Mail\StaffWelcomeMail;
@@ -22,6 +23,7 @@ use App\Mail\AdminDeleteNotification;
 use App\Mail\StaffDeleteNotification;
 use App\Mail\AdminPermanentDeleteMail;
 use App\Mail\AdminRestoreNotification;
+use App\Mail\AgentPermanentDeleteMail;
 use App\Mail\StaffPermanentDeleteMail;
 use App\Mail\StaffRestoreNotification;
 
@@ -461,7 +463,7 @@ public function adminListsTrashData()
      * ==========================
      */
     /**
-     * Not Verified Admin delete list
+     * Admin Staff Tash list
      */
     public function stafTrash(Request $request)
     {
@@ -909,10 +911,110 @@ public function adminListsTrashData()
 
 
 
+    /**
+     * ===========================
+     * Admin dashboard agent trash with mail 
+     * ===========================
+     */
+        public function agentTrash(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:agents,id',
+        ]);
+
+        $agent = Agent::find($request->id);
+
+        if (!$agent) {
+            return response()->json(['status' => 'error', 'message' => 'Agent not found']);
+        }
+
+        // if ($agent->is_verified == 1) {
+        //     return response()->json(['status' => 'error', 'message' => 'You cannot delete a verified agent']);
+        // }
+
+        // Try sending email
+        try {
+            Mail::to($agent->email)->send(new AgentTrashMail($agent));
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Email sending failed.', 'error' => $e->getMessage()]);
+        }
+
+        $agent->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Agent account suspended and email sent.']);
+    }
 
 
 
+/**
+ * =================================
+ * Admin dashboard Trash agent data lists
+ * ======================================
+ */
 
+    public function trashAgentsData()
+    {
+        try {
+            $trashAgentLists = Agent::onlyTrashed()->get();
+            return response()->json(['status' => 'success', 'trashAgentLists' => $trashAgentLists]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+
+/**
+ * ================================
+ * Admin dashboard Agent permanet delte
+ * ===================================
+ */
+
+    public function agentPermanentDelete(Request $request)
+    {
+        // 1. Find the agent with trashed
+       // $agent = Agent::withTrashed()->with('profile')->find($request->id);
+        //wihout profile tables
+        $agent = Agent::withTrashed()->find($request->id);
+
+        // 2. If staff not found
+        if (!$agent) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Agent not found.',
+            ]);
+        }
+
+        // 3. If staff is not trashed (still active)
+        if (!$agent->trashed()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This agent is still active.',
+            ]);
+        }
+
+        // 4. Handle profile image & delete profile record
+        if ($agent->profile && $agent->profile->profile_image) {
+            $imagePath = public_path('upload/dashboard/images/agent/' . $agent->profile->profile_image);
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+
+            $agent->profile->delete();
+        }
+
+        // 5. Send permanent delete mail
+        Mail::to($agent->email)->send(new AgentPermanentDeleteMail($agent));
+
+        // 6. Finally permanently delete staff
+        $agent->forceDelete();
+
+        // 7. Return success
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Agent and profile permanently deleted and mail sent.',
+        ]);
+    }
 
 
     /*

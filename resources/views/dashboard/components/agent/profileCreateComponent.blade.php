@@ -174,9 +174,9 @@
 
 <script>
     // Fetch Agent Basic Info
-    // getUserProfileInfo().then(() => {
-    //     getAgentProfileDetails();
-    // });
+    getUserProfileInfo().then(() => {
+        getAgentProfileDetails();
+    });
 
     // Only name enable
     function enableNameEdit() {
@@ -230,7 +230,7 @@
     }
 
     // Get Agent Info (email, id, name)
-    getUserProfileInfo();
+    //getUserProfileInfo();
     async function getUserProfileInfo() {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -391,7 +391,7 @@
     }
 
     // Agent Profile Details Load
-    getAgentProfileDetails();
+   // getAgentProfileDetails();
     async function getAgentProfileDetails() {
         const agent_id = document.querySelector("#profile_agent_id").value;
         const token = localStorage.getItem("token");

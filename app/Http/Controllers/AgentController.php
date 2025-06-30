@@ -280,11 +280,35 @@ class AgentController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * agent password reset
      */
-    public function index()
-    {
-        //
+    public function agentResetPassword(Request $request)
+      {
+        try {
+            $request->validate([
+                'id' => 'required|exists:agents,id',
+                'old_password' => 'required',
+                'new_password' => 'required|min:8',
+                'password' => 'required|min:8',
+            ]);
+
+            $agent = Agent::find($request->id);
+
+            if ($agent->id !== Auth::id()) {
+                return response()->json(['status' => 'error', 'message' => 'You are not authorized.']);
+            }
+
+            if (!Hash::check($request->old_password, $agent->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Old password is incorrect.']);
+            }
+
+            $agent->password = Hash::make($request->new_password);
+            $agent->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Password updated successfully.']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        }
     }
 
     /**

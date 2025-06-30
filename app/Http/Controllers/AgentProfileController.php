@@ -100,6 +100,20 @@ public function agentProfileStore(Request $request)
 
 
 
+
+
+/**
+ * agent profile view page 
+ */
+public function agentProfileViewPage(){
+         try{
+            return view('pages.backend.agent.agentProfileViewPage');
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+}
+
+
     /**
      * Agent profile details
      */
@@ -113,13 +127,7 @@ public function agentProfileStore(Request $request)
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(AgentProfile $agentProfile)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -41,6 +41,7 @@ Route::post("/agent/otp/verify/store", [AgentController::class, "agent_otp_verif
 //agent dashboard pages
 Route::get("/agent/dashboard", [AgentController::class, "agentDashboard"])->name("agent.dashboard");
 Route::get("/agent/profile/create",[AgentProfileController::class, "agentProfileCreate"])->name("agent.profile.create");
+Route::get("/agent/view/profile", [AgentProfileController::class, "agentProfileViewPage"]);
 
 
 
@@ -175,6 +176,6 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
   Route::post("/agent/name/update-by-email", [AgentController::class, "agentNameUpdateByEmail"]); #done
   Route::post("/agent/profile/store", [AgentProfileController::class, "agentProfileStore"]);
   Route::post("/agent/profile/details", [AgentProfileController::class, "agentProfileDetails"]);
-  
+  Route::post("/agent/reset/password",[AgentController::class, "agentResetPassword"]);
 });
 

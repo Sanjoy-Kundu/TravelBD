@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\AgentWelcomeMail;
 use App\Mail\StaffWelcomeMail;
+use App\Mail\AgentVerifiedMail;
 use App\Mail\StaffVerifiedMail;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -809,7 +810,7 @@ public function adminListsTrashData()
             'otp' => $otp,
             'otp_expires_at' => now()->addMinutes(20), //default null
             'is_verified' => false,
-            'role' => 'staff',
+            'role' => 'agent',
         ]);
 
         // Mail send to staff
@@ -856,6 +857,54 @@ public function adminListsTrashData()
         }
     }
 
+
+
+
+    /**
+     * ===============================
+     * admin dashboard agent verify with mail
+     * ===============================
+     */
+    public function agentVerify(Request $request)
+    {
+        try {
+            // find staff
+            $agent = Agent::find($request->id);
+
+            if (!$agent) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Agent not found.',
+                ]);
+            }
+
+            // if previous verfied
+            if ($agent->is_verified == 1) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This staff is already verified.',
+                ]);
+            }
+
+            // now update field
+            $agent->is_verified = 1;
+            $agent->otp = 0;
+            $agent->save();
+
+            // now sending emial
+            Mail::to($agent->email)->send(new AgentVerifiedMail($agent));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Agent has been verified successfully & email sent.',
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
 
 
 

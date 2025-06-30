@@ -124,9 +124,8 @@
                         </tr>
                     `;
                         tableBody.append(tr);
-
-
-                        //agent move to trash 
+                    });
+                     //agent move to trash 
                         $(document).on('click', '.agent_trash_btn', function() {
                             let id = $(this).data('id');
                             console.log("agent id is", id);
@@ -218,10 +217,6 @@
 
                         })
 
-
-
-
-                    });
                 }
             } else {
                 tableBody.append('<tr><td colspan="7" class="text-center">No data found</td></tr>');

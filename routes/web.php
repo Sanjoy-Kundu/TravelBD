@@ -119,6 +119,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   //admin create agent 
   Route::get('/all/agents/data', [AdminController::class, "allAgentsData"]);
   Route::post("/admin/create/agent/store", [AdminController::class, "CreateAgentStore"]);
+  Route::post("/agent/verify",[AdminController::class, "agentVerify"]);
 
   
 });

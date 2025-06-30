@@ -9,10 +9,10 @@
                          Dashboard
                      </a>
                      <div class="sb-sidenav-menu-heading">Interface</div>
-                     <a class="nav-link" href="{{url('/admin/profile/create')}}" target="_blank">
-                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                        Profile Info
-                    </a>
+                     <a class="nav-link" href="{{ url('/admin/profile/create') }}" target="_blank">
+                         <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                         Profile Info
+                     </a>
                      {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                          data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                          <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -48,7 +48,7 @@
                              <div class="collapse" id="collapseAdmins" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
                                      <a class="nav-link" href="">Add Admin</a>
-                                     <a class="nav-link" href="{{url('/admin/lists')}}" target="_blank">Admin List</a>
+                                     <a class="nav-link" href="{{ url('/admin/lists') }}" target="_blank">Admin List</a>
                                  </nav>
                              </div>
 
@@ -60,8 +60,9 @@
                              </a>
                              <div class="collapse" id="collapseStaffs" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
-                                     <a class="nav-link" href="{{url('/staff/create')}}" target="_blank">Add Staff</a>
-                                     <a class="nav-link" href="{{url('/staffs/lists')}}" target="_blank">Staff List</a>
+                                     <a class="nav-link" href="{{ url('/staff/create') }}" target="_blank">Add Staff</a>
+                                     <a class="nav-link" href="{{ url('/staffs/lists') }}" target="_blank">Staff
+                                         List</a>
                                  </nav>
                              </div>
 
@@ -73,24 +74,44 @@
                              </a>
                              <div class="collapse" id="collapseAgents" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
-                                     <a class="nav-link" href="{{url('/agent/create')}}" target="_blank">Add Agent</a>
-                                     <a class="nav-link" href="{{url('/agent/lists')}}" target="_blank">Agent List</a>
+                                     <a class="nav-link" href="{{ url('/agent/create') }}" target="_blank">Add Agent</a>
+                                     <a class="nav-link" href="{{ url('/agent/lists') }}" target="_blank">Agent List</a>
                                  </nav>
                              </div>
 
                              <!-- Agents Submenu -->
                              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                 data-bs-target="#collapseCustomers" aria-expanded="false" aria-controls="collapseCustomers">
+                                 data-bs-target="#collapseCustomers" aria-expanded="false"
+                                 aria-controls="collapseCustomers">
                                  Customers
                                  <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                              </a>
                              <div class="collapse" id="collapseCustomers" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
-                                     <a class="nav-link" href="{{url('/admin/customer/create')}}" target="_blank">Add Customer</a>
+                                     <a class="nav-link" href="{{ url('/admin/customer/create') }}" target="_blank">Add
+                                         Customer</a>
                                      <a class="nav-link" href="">Agent List</a>
                                  </nav>
                              </div>
 
+                         </nav>
+                     </div>
+
+
+
+
+                     {{-- Package Management Menu --}}
+                    
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                         data-bs-target="#collapsePackage" aria-expanded="false" aria-controls="collapsePackage">
+                         <i class="fas fa-box me-2"></i>Package Management
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                     </a>
+
+                     <div class="collapse" id="collapsePackage" data-bs-parent="#sidenavAccordionUser">
+                         <nav class="sb-sidenav-menu-nested nav">
+                             <a class="nav-link" href="{{ url('/create/package/category') }}" target="_blank">Category</a>
+                             <a class="nav-link" href="" target="_blank">Package</a>
                          </nav>
                      </div>
 
@@ -103,7 +124,7 @@
                      <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                          data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                          <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                         Pages
+                         page
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                      </a>
                      <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
@@ -150,7 +171,7 @@
                      </a>
                  </div>
              </div>
-          
+
          </nav>
      </div>
      <div id="layoutSidenav_content">

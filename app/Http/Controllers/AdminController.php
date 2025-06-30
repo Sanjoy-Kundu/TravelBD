@@ -24,6 +24,7 @@ use App\Mail\StaffDeleteNotification;
 use App\Mail\AdminPermanentDeleteMail;
 use App\Mail\AdminRestoreNotification;
 use App\Mail\AgentPermanentDeleteMail;
+use App\Mail\AgentRestoreNotification;
 use App\Mail\StaffPermanentDeleteMail;
 use App\Mail\StaffRestoreNotification;
 
@@ -1017,6 +1018,50 @@ public function adminListsTrashData()
     }
 
 
+
+
+    /**
+     * =================================
+     * Admin Dashboard Agent restore
+     * =============================
+     */
+    public function agentRestore(Request $request)
+    {
+        try {
+            // Trashed soho khujbo
+            $agent = Agent::withTrashed()->find($request->id);
+
+            // staff not found
+            if (!$agent) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Agent not found.',
+                ]);
+            }
+
+            // staff not delete
+            if (!$agent->trashed()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This agent is already active.',
+                ]);
+            }
+
+            // just restore now
+            $agent->restore();
+
+            Mail::to($agent->email)->send(new AgentRestoreNotification($agent));
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Agent restored successfully.',
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
     /*
     ===============================================
     Customer create page

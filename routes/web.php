@@ -75,6 +75,7 @@ Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 //admin dashboard agent create page
 Route::get("/agent/create", [AgentController::class, "agentCreatePage"]);
+Route::get("/agent/lists",  [AdminController::class, "agentListsPage"]);
 
 
 
@@ -116,7 +117,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
   //admin create agent 
-    Route::post("/admin/create/agent/store", [AdminController::class, "CreateAgentStore"]);
+  Route::get('/all/agents/data', [AdminController::class, "allAgentsData"]);
+  Route::post("/admin/create/agent/store", [AdminController::class, "CreateAgentStore"]);
 
   
 });

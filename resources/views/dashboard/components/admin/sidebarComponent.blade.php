@@ -74,7 +74,7 @@
                              <div class="collapse" id="collapseAgents" data-bs-parent="#sidenavAccordionUser">
                                  <nav class="sb-sidenav-menu-nested nav">
                                      <a class="nav-link" href="{{url('/agent/create')}}" target="_blank">Add Agent</a>
-                                     <a class="nav-link" href="">Agent List</a>
+                                     <a class="nav-link" href="{{url('/agent/lists')}}" target="_blank">Agent List</a>
                                  </nav>
                              </div>
 

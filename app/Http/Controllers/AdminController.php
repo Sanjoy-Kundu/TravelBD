@@ -784,7 +784,7 @@ public function adminListsTrashData()
 
        /**
      * ===============================
-     * Admin create agent
+     * Admin create agent admin dashboard
      * ===============================
      */
     public function CreateAgentStore(Request $request)
@@ -824,6 +824,37 @@ public function adminListsTrashData()
 
 
 
+    
+    /**
+     * ===============================
+     * admin dashboard all agentlist page
+     * ===============================
+     */
+    public function agentListsPage()
+    {
+        try {
+            return view('pages.backend.agent.adminDashboardAgentListsPage');
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
+
+
+    /**
+     * ===============================
+     * admin dashboard all agentlist page
+     * ===============================
+     */
+    public function allAgentsData(){
+              try {
+          
+            $agents = Agent::all();
+            return response()->json(['status' => 'success', 'message' => 'Agent list', 'agent_lists' => $agents]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 
 
 

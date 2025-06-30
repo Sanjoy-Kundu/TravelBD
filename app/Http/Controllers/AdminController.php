@@ -921,8 +921,8 @@ public function adminListsTrashData()
          public function agentViewDetailsModal(Request $request)
     {
         try {
-            //$agentDetails = Staff::with('profile')->where('id', $request->id)->first();
-            $agentDetails = Agent::where('id', $request->id)->first();
+            $agentDetails = Agent::with('profile')->where('id', $request->id)->first();
+            //$agentDetails = Agent::where('id', $request->id)->first();
             if (!$agentDetails) {
                 return response()->json([
                     'status' => 'error',

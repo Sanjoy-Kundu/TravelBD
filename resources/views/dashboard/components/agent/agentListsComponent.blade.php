@@ -17,7 +17,6 @@
                         <th scope="col">Email</th>
                         <th scope="col">Status</th>
                         <th scope="col">Role</th>
-                        <th scope="col">Image</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -106,11 +105,7 @@
                                 ${element.is_verified == 1 ? '<h5 class="badge bg-success">Verified</h5>' : '<h5 class="badge bg-danger">Not Verified</h5>'} 
                             </td>
                             <td><span class="btn btn-primary">${(element.agent_code || '').toUpperCase()}</span></td>
-                            <td>
-                                ${element.profile && element.profile.profile_image
-                                    ? `<img src="/upload/dashboard/images/admin/${element.profile.profile_image}" width="80" height="80" style="object-fit:cover; border-radius:50%;">`
-                                    : `<img src="/upload/dashboard/images/admin/default.png" width="80" height="80" style="object-fit:cover; border-radius:50%;">`}
-                            </td>
+                       
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-warning agent_view_details" data-id="${element.id}" data-bs-toggle="modal" data-bs-target="#viewAgentDetails">View Details</button>
@@ -283,8 +278,8 @@
                             <td><button class="btn btn-primary">${(element.role || '').toUpperCase()}</button></td>
                             <td>
                                 ${element.profile && element.profile.profile_image
-                                    ? `<img src="/upload/dashboard/images/admin/${element.profile.profile_image}" width="80" height="80" style="object-fit:cover; border-radius:50%;">`
-                                    : `<img src="/upload/dashboard/images/admin/default.png" width="80" height="80" style="object-fit:cover; border-radius:50%;">`}
+                                    ? `<img src="/upload/dashboard/images/agent/${element.profile.profile_image}" width="80" height="80" style="object-fit:cover; border-radius:50%;">`
+                                    : `<img src="/upload/dashboard/images/agent/default.png" width="80" height="80" style="object-fit:cover; border-radius:50%;">`}
                             </td>
                             <td>
                                     <button type="button" class="btn btn-primary trash_agent_restore_btn" data-id="${element.id}">RESTORE</button>

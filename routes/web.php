@@ -26,6 +26,19 @@ Route::get("/staff/otp/verify", [StaffController::class, "otpVerifyPage"]);
 
 //login get route for agent
 Route::get("/agent/login", [LoginController::class, "agentLoginPage"])->name("agent.login");
+Route::get("/agent/otp/verify", [AgentController::class, "otpVerifyPage"]);
+
+
+
+//agent login store
+Route::post("/agent/login/store", [AgentController::class, "agent_login_store"])->name("agent.login.store");
+Route::post("/agent/otp/verify/store", [AgentController::class, "agent_otp_verify_store"])->name("agent.otp.verify.store");
+
+
+
+
+//agent dashboard pages
+Route::get("/agent/dashboard", [AgentController::class, "agentDashboard"])->name("agent.dashboard");
 
 
 
@@ -143,5 +156,16 @@ Route::middleware(['auth:sanctum', 'staff'])->group(function () {
     Route::post("/staff/profile/details", [StaffProfileController::class, "staffProfileDetails"]);
     Route::post("/staff/name/update-by-email", [StaffController::class, "staffNameUpdateByEmail"]);
     Route::post("/staff/reset/password",[StaffController::class, "staffResetPassword"]);
+});
+
+
+
+
+
+
+
+//Agent Dashboard
+Route::middleware(['auth:sanctum', 'agent'])->group(function () {
+  Route::get("/auth/agent", [AgentController::class, 'agentDetails']);
 });
 

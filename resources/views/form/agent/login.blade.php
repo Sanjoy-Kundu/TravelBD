@@ -33,7 +33,7 @@
 				<!-- Login Form -->
 				<form class="login100-form">
 					<span class="login100-form-title">
-						<h1 style="color:rgb(16, 148, 220)">Agent LOGIN</h1>
+						<h1 style="color:rgb(16, 148, 220)">AGENT LOGIN</h1>
 					</span>
 
 					<!-- Email or agent Code -->
@@ -109,28 +109,28 @@
 			};
 			console.log(data);
 
-			// try {
-			// 	let res = await axios.post('/agent/login/store', data);
+			 try {
+			 	let res = await axios.post('/agent/login/store', data);
 
-			// 	if (res.data.status === 'message_error') {
-			// 		document.querySelector('.login_email_agent_code_error').innerText = res.data.message;
-			// 	} else if (res.data.status === 'otp_required') {
-			// 		localStorage.setItem('pending_email', res.data.email); // for reset otp 
-			// 		//alert('OTP sent to your email. Please verify to proceed.');
-			// 		window.location.href = '/agent/otp/verify';
-			// 	} else if (res.data.status === 'login_success') {
-			// 		localStorage.setItem('token', res.data.token);
-			// 		alert('Login successful');
-			// 		window.location.href = '/agent/dashboard';
-			// 	}
-			// } catch (error) {
-			// 	if (error.response && error.response.data && error.response.data.message) {
-			// 		alert('Error: ' + error.response.data.message);
-			// 	} else {
-			// 		alert('Something went wrong. Please try again.');
-			// 	}
-			// 	console.error('Login error:', error);
-			// }
+			 	if (res.data.status === 'message_error') {
+			 		document.querySelector('.login_email_agent_code_error').innerText = res.data.message;
+			 	} else if (res.data.status === 'otp_required') {
+			 		localStorage.setItem('pending_email', res.data.email); // for reset otp 
+			 		//alert('OTP sent to your email. Please verify to proceed.');
+			 		window.location.href = '/agent/otp/verify';
+			 	} else if (res.data.status === 'login_success') {
+			 		localStorage.setItem('token', res.data.token);
+			 		alert('Login successful');
+			 		window.location.href = '/agent/dashboard';
+			 	}
+			 } catch (error) {
+			 	if (error.response && error.response.data && error.response.data.message) {
+			 		alert('Error: ' + error.response.data.message);
+			 	} else {
+			 		alert('Something went wrong. Please try again.');
+			 	}
+			 	console.error('Login error:', error);
+			 }
 		}
 	</script>
 </body>

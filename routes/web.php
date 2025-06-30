@@ -1,13 +1,14 @@
 <?php
 
+use App\Models\Staff;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
-use App\Models\Staff;
 
 
 //login get route for admin
@@ -72,7 +73,8 @@ Route::get('/staffs/lists',[AdminController::class, "staffListsPage"]);
 Route::get("/staff/create", [StaffController::class, "staffCreatePage"]);
 
 
-
+//admin dashboard agent create page
+Route::get("/agent/create", [AgentController::class, "agentCreatePage"]);
 
 
 
@@ -112,6 +114,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 
+
+  //admin create agent 
+    Route::post("/admin/create/agent/store", [AdminController::class, "CreateAgentStore"]);
 
   
 });

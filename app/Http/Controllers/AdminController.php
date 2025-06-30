@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Admin;
+use App\Models\Agent;
 use App\Models\Staff;
 use App\Mail\AdminOtp;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\AgentWelcomeMail;
 use App\Mail\StaffWelcomeMail;
 use App\Mail\StaffVerifiedMail;
 use Yajra\DataTables\DataTables;
@@ -764,6 +766,59 @@ public function adminListsTrashData()
         } catch (Exception $ex) {
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /**
+     * ===============================
+     * Admin create agent
+     * ===============================
+     */
+    public function CreateAgentStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:agents',
+        ]);
+
+        // Random values
+        $password = Str::random(8);
+        $agentCode = 'AGENT-' . strtoupper(Str::random(12));
+        $otp = rand(100000, 999999);
+
+        // Agent create
+        $agent = Agent::create([
+            'admin_id' => $request->admin_id, 
+            'name' => Str::upper($request->name),
+            'email' => Str::lower($request->email),
+            'password' => bcrypt($password),
+            'agent_code' => $agentCode,
+            'otp' => $otp,
+            'otp_expires_at' => now()->addMinutes(20), //default null
+            'is_verified' => false,
+            'role' => 'staff',
+        ]);
+
+        // Mail send to staff
+        Mail::to($agent->email)->send(new AgentWelcomeMail($agent, $password));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Agent created and email sent successfully.',
+        ]);
     }
 
 

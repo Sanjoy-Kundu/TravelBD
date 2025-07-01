@@ -167,13 +167,15 @@
         const modalInstance = bootstrap.Modal.getInstance(modalEl);
         modalInstance.hide();
 
-        // এখানে তুমি চাইলে ক্যাটাগরি লিস্ট রিফ্রেশ করাতে পারো
       } else {
-        alert('Failed to create category');
+        console.log("category create page something is wrong");
+        // document.getElementById('package_category_name_error').textContent = ;
+        //console.log(res.data.message[0])
       }
     } catch (error) {
-      console.error('Submission error:', error);
-      alert('An error occurred while submitting the form. Check console.');
+        document.getElementById('package_category_name_error').textContent =  error.response.data.message;
+     // console.error('Submission error:', error.response);
+      //alert('An error occurred while submitting the form. Check console.');
     }
   }
  

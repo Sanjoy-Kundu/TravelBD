@@ -10,6 +10,7 @@ use App\Http\Controllers\AgentProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
+use App\Models\PackageCategory;
 
 // ====================== Admin Auth Routes ======================
 Route::get('/admin/registration', [RegistrationController::class, 'adminRegisterPage']);
@@ -111,6 +112,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/agent/permanent/delete', [AdminController::class, 'agentPermanentDelete']);
     Route::post('/agent/restore', [AdminController::class, 'agentRestore']);
     Route::post('/agent/view/details/modal', [AdminController::class, 'agentViewDetailsModal']);
+
+
+
+    // package category
+    Route::get('/admin/package-category/lists', [PackageCategoryController::class, 'packageCategoryLists']);
+    Route::post("/admin/package-category/store", [PackageCategoryController::class, 'packageCategoryStore']);
 });
 
 

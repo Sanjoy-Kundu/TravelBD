@@ -110,7 +110,7 @@
 
                      <div class="collapse" id="collapsePackage" data-bs-parent="#sidenavAccordionUser">
                          <nav class="sb-sidenav-menu-nested nav">
-                             <a class="nav-link" href="{{ url('/create/package/category') }}" target="_blank">Category</a>
+                             <a class="nav-link" href="{{ url('/create/package/category') }}" target="_blank">Category Lists</a>
                              <a class="nav-link" href="" target="_blank">Package</a>
                          </nav>
                      </div>

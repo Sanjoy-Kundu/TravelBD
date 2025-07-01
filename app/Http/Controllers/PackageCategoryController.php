@@ -194,11 +194,32 @@ class PackageCategoryController extends Controller
 }
 
     /**
-     * Update the specified resource in storage.
+     * category package delete
      */
-    public function update(Request $request, PackageCategory $packageCategory)
+    public function packageCategoryDelete(Request $request)
     {
-        //
+        try{
+        $id = $request->input('id');
+        $category = PackageCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found.'
+            ], 404);
+        }
+
+        // Soft delete
+        $category->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category  Trash successfully.'
+        ]);
+
+        }catch(Exception $e){
+           return response()->json(["status" => "error", "message" => $e->getMessage()]);
+        }
     }
 
     /**

@@ -104,7 +104,7 @@
                         <td>${statusBadge}</td>
                         <td>
                             <button class="btn btn-sm btn-warning package_category_edit_btn" data-id="${category.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger package_category_delete_btn" data-id="${category.id}">Delete</button>
+                            <button class="btn btn-sm btn-danger package_category_delete_btn" data-id="${category.id}">Trash</button>
                         </td>
                     </tr>
                 `;
@@ -112,7 +112,7 @@
                     });
                 }
 
-                // ✅ Move these outside the forEach and try block
+                //  Move these outside the forEach and try block
             } else {
                 tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
             }
@@ -125,18 +125,55 @@
                 '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
         }
 
-        // ✅ Move these outside try-catch
+        //  Move these outside try-catch
         $(document).on('click', '.package_category_edit_btn', async function() {
             let id = $(this).data('id');
             $('#packageCategoryEditModal').modal('show');
             await packageCategoryEditModalFormFillup(id);
         })
 
+        //delete
         $(document).on('click', '.package_category_delete_btn', function() {
             let id = $(this).data('id');
             console.log("Delete button clicked for category with id: " + id);
-        })
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this soft delete!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, soft delete it!',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const token = localStorage.getItem('token'); 
+
+                        const res = await axios.post("/admin/package-category/delete",{id:id}, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (res.data.status === 'success') {
+                            Swal.fire('Deleted!', res.data.message, 'success');
+                            // লিস্ট রিফ্রেশ করো
+                            packageListLoadData();
+                        } else {
+                            Swal.fire('Error!', res.data.message || 'Failed to delete',
+                            'error');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error!', 'Something went wrong!', 'error');
+                    }
+                }
+            });
+        });
+
+
 
     }
-
 </script>

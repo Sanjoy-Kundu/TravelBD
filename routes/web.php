@@ -120,6 +120,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post("/admin/package-category/store", [PackageCategoryController::class, 'packageCategoryStore']);
     Route::post("/admin/package-category/details", [PackageCategoryController::class, 'packageCategoryDetails']);
     Route::post("/admin/package-category/update", [PackageCategoryController::class, 'packageCategoryUpdate']);
+    Route::post("/admin/package-category/delete", [PackageCategoryController::class, 'packageCategoryDelete']);
 });
 
 

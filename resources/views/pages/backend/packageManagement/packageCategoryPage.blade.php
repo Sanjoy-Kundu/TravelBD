@@ -5,4 +5,5 @@
     @include('dashboard.components.packageManagement.packageCategoryComponent')
     @include('dashboard.components.admin.footerComponent')
     @include('dashboard.components.packageManagement.modal.categoryCreateModalComponent')
+    @include('dashboard.components.packageManagement.modal.categoryEditModalComponent')
 @endsection

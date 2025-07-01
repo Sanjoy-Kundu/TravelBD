@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PackageCategory;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class PackageCategoryController extends Controller
 {
@@ -108,12 +110,88 @@ class PackageCategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * packae category details by id
      */
-    public function edit(PackageCategory $packageCategory)
+    public function packageCategoryDetails(Request $request)
     {
-        //
+        try{
+            $id = $request->id;
+            $PackageCategory = PackageCategory::where('id', $id)->first();
+            if(!$PackageCategory){
+                return response()->json(['status' => 'error', 'message' => 'Package Category not found!']);
+            }
+            return response()->json(['status' => 'success', 'PackageCategory' => $PackageCategory]);
+        }catch(Exception $e){
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong!',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
+
+    /**
+     * package category update
+     */
+    public function packageCategoryUpdate(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'id' => 'required|exists:package_categories,id',
+        'name' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255',
+        'description' => 'required|string',
+        'status' => 'required|in:active,inactive',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    try {
+        $category = PackageCategory::findOrFail($request->id);
+
+        $category->name = $request->name;
+        $category->slug = $request->slug ?? $category->slug;
+        $category->description = $request->description;
+        $category->status = $request->status;
+
+        if ($request->hasFile('image')) {
+            // Delete old image using File facade
+            if ($category->image) {
+                $imagePath = public_path('upload/dashboard/images/package-category/' . $category->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('upload/dashboard/images/package-category'), $imageName);
+
+            $category->image = $imageName;
+        }
+
+        $category->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Package category updated successfully!',
+            'PackageCategory' => $category,
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to update package category. Error: ' . $e->getMessage(),
+        ], 500);
+    }
+}
 
     /**
      * Update the specified resource in storage.

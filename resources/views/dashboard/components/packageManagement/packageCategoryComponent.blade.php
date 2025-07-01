@@ -86,33 +86,33 @@
                             '<span class="badge bg-danger">Inactive</span>';
 
                         let tr = `
-                            <tr>
-                                <td>${category.id}</td>
-                                <td>${category.name || ''}</td>
-                                <td>${category.slug || ''}</td>
-                                <td>
-                                    ${
-                                    category.image ? `<img src="/upload/dashboard/images/package-category/${category.image}" alt="Category Image" width="50" height="50">` : 
-                                                     `<img src="/upload/dashboard/images/package-category/default.png" alt="Category Image" width="50" height="50">` 
-                                    }
-                                </td>
+                    <tr>
+                        <td>${category.id}</td>
+                        <td>${category.name || ''}</td>
+                        <td>${category.slug || ''}</td>
+                        <td>
+                            ${
+                            category.image ? `<img src="/upload/dashboard/images/package-category/${category.image}" alt="Category Image" width="50" height="50">` : 
+                                             `<img src="/upload/dashboard/images/package-category/default.png" alt="Category Image" width="50" height="50">` 
+                            }
+                        </td>
 
-                               <td>${
-                                    (category.description ? category.description.split(' ').slice(0,3).join(' ') : '') + 
-                                    (category.description && category.description.split(' ').length > 3 ? '...' : '')}
-                                </td>
-                                <td>${statusBadge}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning edit-category-btn" data-id="${category.id}">Edit</button>
-                                    <button class="btn btn-sm btn-danger delete-category-btn" data-id="${category.id}">Delete</button>
-                                </td>
-                            </tr>
-                        `;
+                        <td>${
+                            (category.description ? category.description.split(' ').slice(0,3).join(' ') : '') + 
+                            (category.description && category.description.split(' ').length > 3 ? '...' : '')}
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning package_category_edit_btn" data-id="${category.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger package_category_delete_btn" data-id="${category.id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
                         tableBody.append(tr);
                     });
-
-                    // Add your edit/delete event listeners here if needed
                 }
+
+                // ✅ Move these outside the forEach and try block
             } else {
                 tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
             }
@@ -124,5 +124,19 @@
             $('#package_category_list_body').append(
                 '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
         }
+
+        // ✅ Move these outside try-catch
+        $(document).on('click', '.package_category_edit_btn', async function() {
+            let id = $(this).data('id');
+            $('#packageCategoryEditModal').modal('show');
+            await packageCategoryEditModalFormFillup(id);
+        })
+
+        $(document).on('click', '.package_category_delete_btn', function() {
+            let id = $(this).data('id');
+            console.log("Delete button clicked for category with id: " + id);
+        })
+
     }
+
 </script>

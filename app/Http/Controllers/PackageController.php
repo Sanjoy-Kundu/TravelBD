@@ -30,9 +30,7 @@ class PackageController extends Controller
 public function packageLists(Request $request)
 {
     try {
-        $packages = Package::with('packageCategory')
-            ->orderBy('id', 'desc')
-            ->get();
+        $packages = Package::with('packageCategory')->get();
 
         return response()->json(['status' => 'success','packages' => $packages]);
     } catch (Exception $ex) {
@@ -65,7 +63,7 @@ public function packageLists(Request $request)
                 'documents_required' => 'nullable|string',
                 'seat_availability' => 'nullable|integer|min:0',
                 'status' => 'required|in:active,inactive',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'image' => 'nullable|image|max:2048',
             ]);
 
             // Create new Package instance
@@ -90,8 +88,8 @@ public function packageLists(Request $request)
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads/dashboard/images/packages'), $imageName);
-                $package->image = 'uploads/dashboard/images/packages' . $imageName;
+                $image->move(public_path('upload/dashboard/images/packages/'), $imageName);
+                $package->image = 'upload/dashboard/images/packages/' . $imageName;
             }
 
             // Save the package

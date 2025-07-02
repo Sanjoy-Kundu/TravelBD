@@ -30,6 +30,6 @@ class Package extends Model
     // ক্যাটাগরি রিলেশন (একটি প্যাকেজ একটি ক্যাটাগরির সাথে সম্পর্কিত)
     public function packageCategory()
     {
-        return $this->belongsTo(PackageCategory::class, 'id');
+        return $this->belongsTo(PackageCategory::class, 'category_id');
     }
 }

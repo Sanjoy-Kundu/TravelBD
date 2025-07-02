@@ -10,7 +10,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="package_category_add_form" enctype="multipart/form-data" novalidate>
+                <form id="package_category_add_form" enctype="multipart/form-data">
                     <!-- Category Select -->
                     <div class="mb-3">
                         <label for="package_category_select" class="form-label">Category <span
@@ -290,7 +290,7 @@
                 document.getElementById('package_image_previewer').style.display = 'none';
 
                 // refresh list
-                //await packageListLoadData();
+                await packageListLoadData();
 
                 // Hide modal
                 const modalEl = document.getElementById('packageCategoryFormModal');
@@ -301,6 +301,7 @@
                 Swal.fire('Oops!', res.data.message, 'warning');
             }
         } catch (error) {
+            console.log(error.response.data)
             Swal.fire('Error!', error.response?.data?.message || 'Something went wrong', 'error');
         }
     }

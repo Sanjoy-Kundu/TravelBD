@@ -128,4 +128,64 @@ public function packageLists(Request $request)
         "package" => $package
     ]);
   }
+
+
+
+
+  /**
+   * Package Trash
+   */
+  public function packageTrash(Request $request){
+    $package = Package::find($request->id);
+    if(!$package){
+        return response()->json(["status" => "error", "message" => "Package not found"], 404);
+    }
+    $package->delete();
+    return response()->json([
+        "status" => "success",
+        "message" => "Package Trash successfully"
+    ]);
+  }
+
+
+  /**
+   * Package Trash list
+   */
+  public function packageTrashLists(){
+    $package = Package::with('packageCategory')->onlyTrashed()->get();
+    return response()->json([
+        "status" => "success",
+        "packages" => $package
+    ]);
+  }
+
+
+  /**
+   * Package Permanet delte
+   */
+public function packagePermanentDelete(Request $request)
+{
+    $package = Package::with('packageCategory')->onlyTrashed()->find($request->id);
+
+    if (!$package) {
+        return response()->json([
+            "status" => "error",
+            "message" => "Package not found"
+        ], 404);
+    }
+
+    // image folder delte
+    if ($package->image && file_exists(public_path($package->image))) {
+        unlink(public_path($package->image));
+    }
+
+    // permanenet delte
+    $package->forceDelete();
+
+    return response()->json([
+        "status" => "success",
+        "message" => "Package permanently deleted successfully"
+    ]);
+}
+
 }

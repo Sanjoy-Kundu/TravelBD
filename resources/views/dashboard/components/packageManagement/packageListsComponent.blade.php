@@ -31,30 +31,35 @@
             </tbody>
         </table>
     </div>
+
+
+    <div class="table-responsive">
+        <h2>Trash Lists</h2>
+        <table class="table table-bordered table-hover text-center align-middle" id="packageTrashListTable">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Category Name</th>
+                    <th>Package Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Currency</th>
+                    <th>Duration</th>
+                    <th>Seat Ability</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="package_trash_list_body">
+
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-    function packagepackagePreviewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('package_package_image_previewer');
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = '#';
-            preview.style.display = 'none';
-        }
-    }
-
-
     // Load package categories list with axios + DataTable
     packageListLoadData();
-
     async function packageListLoadData() {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -109,7 +114,7 @@
                             <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
                             <th>
                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-danger"  data-id='${package.id}'>Trash</button>
+                                    <button type="button" class="btn btn-danger package_trash_btn"  data-id='${package.id}'>Trash</button>
                                     <button type="button" class="btn btn-warning package_view_btn" data-id='${package.id}'>View</button>
                                     <button type="button" class="btn btn-success " data-id='${package.id}'>Edit</button>
                                 </div>
@@ -133,7 +138,7 @@
                 '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
         }
 
-        //modal id = packageView
+        //packageView
         $(document).on('click', '.package_view_btn', async function() {
             let id = $(this).data('id');
             await fillPackageViewModal(id);
@@ -141,6 +146,179 @@
             const modal = new bootstrap.Modal(document.getElementById('packageView'));
             modal.show();
         });
+
+
+        //package trash
+        $(document).on('click', '.package_trash_btn', async function() {
+            let id = $(this).data('id');
+            let token = localStorage.getItem('token');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this soft delete!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6', // Blue
+                cancelButtonColor: '#d33', // Red
+                confirmButtonText: 'Yes, move to trash!',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await axios.post('/admin/package-category/delete', {
+                            id: id
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if (res.data.status === 'success') {
+                            Swal.fire(
+                                'Trashed!',
+                                res.data.message,
+                                'success'
+                            );
+
+                            await packageListLoadData();
+                            await packageTrashListLoadData()
+                        } else {
+                            Swal.fire('Failed!', res.data.message || 'Failed to delete.',
+                                'error');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error!', 'Something went wrong!', 'error');
+                    }
+                }
+            });
+        });
+
+
+
+    }
+
+
+
+
+    packageTrashListLoadData();
+    async function packageTrashListLoadData() {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "/admin/login";
+            return;
+        }
+
+        try {
+            let res = await axios.get("/admin/package-trash/lists", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(res.data.packages)
+            let selector = '#packageTrashListTable';
+
+            if ($.fn.DataTable.isDataTable(selector)) {
+                $(selector).DataTable().clear().destroy();
+            }
+
+            let tableBody = $('#package_trash_list_body');
+            tableBody.empty();
+
+            if (res.data.status === "success") {
+                let package_lists = res.data.packages;
+                //console.log(package_lists)
+
+                if (package_lists.length === 0) {
+                    tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
+                }
+
+                package_lists.forEach((package, index) => {
+                    //console.log(package.image)
+                    //console.log(package.package_category)
+                    let tr = `
+                            <tr>
+                            <th>${index+1}</th>
+                            <th>${package.package_category.name}</th>
+                            <th>${package.title}</th>
+                            <th>
+                                ${
+                                    package.image
+                                    ? `<img src="/${package.image}" alt="package Image" width="150" height="150">`
+                                    : `<img src="/upload/dashboard/images/packages/default.png" alt="default Image" width="50" height="50">`
+                                }
+                            </th>
+                          
+                            <th>${package.price}</th>
+                            <th>${package.currency}</th>
+                            <th>${package.duration}</th>
+                            <th>${package.seat_availability}</th>
+                            <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
+                            <th>
+                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <button type="button" class="btn btn-danger trash_package_permanenet_btn"  data-id='${package.id}'>Permanent Delte</button>
+                                    <button type="button" class="btn btn-info trash_package_restore_btn"  data-id='${package.id}'>Restore</button>
+                                </div>
+                            </th>
+                        </tr>
+                        `
+                    tableBody.append(tr);
+                });
+
+            } else {
+                tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
+                console.log(res.data)
+            }
+
+            $(selector).DataTable();
+
+        } catch (error) {
+            console.error("Package package list load error", error);
+            $('#package_package_list_body').append(
+                '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
+        }
+
+
+        $(document).on('click', '.trash_package_permanenet_btn', async function() {
+            let id = $(this).data('id');
+            let token = localStorage.getItem('token');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This package will be permanently deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete permanently!',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        let res = await axios.post('/admin/package/permanent-delete', {
+                            id: id
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if (res.data.status === 'success') {
+                            Swal.fire('Deleted!', res.data.message, 'success');
+                            await packageTrashListLoadData();
+                        } else {
+                            Swal.fire('Failed!', res.data.message || 'Delete failed.',
+                                'error');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error!', 'Something went wrong.', 'error');
+                    }
+                }
+            });
+        });
+
+
 
     }
 </script>

@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\PackageCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Package extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
        protected $fillable = [
         'category_id',
         'title',

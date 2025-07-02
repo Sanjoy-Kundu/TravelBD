@@ -135,6 +135,10 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post("/admin/package/store", [PackageController::class, 'packageStore']);
     Route::get("/admin/package/lists",[PackageController::class, 'packageLists']);
     Route::post("/admin/package/details", [PackageController::class, 'packageDetails']);
+    Route::post("/admin/package-category/delete",[PackageController::class, 'packageTrash']);
+
+    Route::get("/admin/package-trash/lists", [PackageController::class, 'packageTrashLists']);
+    Route::post("/admin/package/permanent-delete",[PackageController::class, 'packagePermanentDelete']);
 });
 
 

@@ -27,6 +27,29 @@
             </tbody>
         </table>
     </div>
+
+
+
+
+
+    <div class="table-responsive">
+        <h2>Trash Table</h2>
+        <table class="table table-bordered table-hover text-center align-middle" id="packageCategoryTrashTable">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="package_category_trash_list_body">
+
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -87,7 +110,7 @@
 
                         let tr = `
                     <tr>
-                        <td>${category.id}</td>
+                        <td>${index+1}</td>
                         <td>${category.name || ''}</td>
                         <td>${category.slug || ''}</td>
                         <td>
@@ -149,9 +172,11 @@
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const token = localStorage.getItem('token'); 
+                        const token = localStorage.getItem('token');
 
-                        const res = await axios.post("/admin/package-category/delete",{id:id}, {
+                        const res = await axios.post("/admin/package-category/delete", {
+                            id: id
+                        }, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }
@@ -160,10 +185,11 @@
                         if (res.data.status === 'success') {
                             Swal.fire('Deleted!', res.data.message, 'success');
                             // লিস্ট রিফ্রেশ করো
-                            packageListLoadData();
+                            await packageListLoadData();
+                            await packageTrashLitsData()
                         } else {
                             Swal.fire('Error!', res.data.message || 'Failed to delete',
-                            'error');
+                                'error');
                         }
                     } catch (error) {
                         console.error(error);
@@ -176,4 +202,167 @@
 
 
     }
+
+
+    packageTrashLitsData();
+
+    async function packageTrashLitsData() {
+            let token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = "/admin/login";
+                return;
+            }
+
+            try {
+                let res = await axios.get("/admin/package-category-trash/lists", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                let selector = '#packageCategoryTrashTable';
+
+                if ($.fn.DataTable.isDataTable(selector)) {
+                    $(selector).DataTable().clear().destroy();
+                }
+
+                let tableBody = $('#package_category_trash_list_body');
+                tableBody.empty();
+
+                if (res.data.status === "success") {
+                    let trashedCategories = res.data.trashedCategories;
+
+                    if (trashedCategories.length === 0) {
+                        //tableBody.append('<tr><td colspan="6" class="text-center">No trashed categories found</td></tr>');
+                    } 
+                        trashedCategories.forEach((category, index) => {
+                            let statusBadge = category.status === 'active' ?
+                                '<span class="badge bg-success">Active</span>' :
+                                '<span class="badge bg-secondary">Inactive</span>';
+
+                            let tr = `
+                        <tr>
+                            <td>${index+1}</td>
+                            <td>${category.name || ''}</td>
+                            <td>${category.slug || ''}</td>
+                            <td>
+                             ${category.image ? `<img src="/upload/dashboard/images/package-category/${category.image}" alt="Category Image" width="50" height="50">` : 
+                                             `<img src="/upload/dashboard/images/package-category/default.png" alt="Category Image" width="50" height="50">` 
+                            }
+                            </td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success package_category_restore_btn" data-id="${category.id}">Restore</button>
+                                <button class="btn btn-sm btn-danger package_category_force_delete_btn" data-id="${category.id}">Delete Permanently</button>
+                            </td>
+                        </tr>
+                    `;
+                            tableBody.append(tr);
+                        });
+                    
+                } else {
+                    tableBody.append(
+                        '<tr><td colspan="6" class="text-center">Failed to load trashed categories</td></tr>');
+                }
+
+                $(selector).DataTable();
+
+            } catch (error) {
+                console.error("Package category trash list load error", error);
+                $('#package_category_trash_list_body').append(
+                    '<tr><td colspan="6" class="text-center">Error loading data</td></tr>');
+            }
+
+
+
+
+            // Restore button handler
+            $(document).off('click', '.package_category_restore_btn').on('click', '.package_category_restore_btn',
+                async function() {
+                    let id = $(this).data('id');
+                    let token = localStorage.getItem('token');
+
+                    // SweetAlert Confirm Box
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you want to restore this category?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#198754',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, restore it!',
+                        cancelButtonText: 'Cancel'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const res = await axios.post(`/admin/package-category/restore`, {
+                                    id: id
+                                }, {
+                                    headers: {
+                                        Authorization: `Bearer ${token}`
+                                    }
+                                });
+
+                                if (res.data.status === 'success') {
+                                    // Success message
+                                    await Swal.fire('Restored!', res.data.message, 'success');
+                                    await packageTrashLitsData();
+                                    await packageListLoadData();
+                                } else {
+                                    Swal.fire('Failed!', res.data.message || 'Restore failed.',
+                                        'error');
+                                }
+                            } catch (error) {
+                                console.error(error);
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
+                        }
+                    });
+                });
+
+            // Force delete button handler
+            $(document).off('click', '.package_category_force_delete_btn').on('click',
+                '.package_category_force_delete_btn', async function() {
+                    let id = $(this).data('id');
+                    let token = localStorage.getItem('token');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This category will be permanently deleted and cannot be recovered!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d', 
+                        confirmButtonText: 'Yes, delete permanently!',
+                        cancelButtonText: 'Cancel'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const res = await axios.post("/admin/package-category/permanent-delete",{id:id}, {
+                                        headers: {
+                                            Authorization: `Bearer ${token}`
+                                        }
+                                    });
+
+                                if (res.data.status === 'success') {
+                                    await Swal.fire('Deleted!', res.data.message, 'success');
+                                    await packageTrashLitsData(); // Refresh the trash list
+                             
+                                } else {
+                                    Swal.fire('Failed!', res.data.message || 'Delete failed.',
+                                        'error');
+                                }
+                            } catch (error) {
+                                console.error(error);
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
+                        }
+                    });
+                });
+
+}
+
+
+
+            //trash table 
 </script>

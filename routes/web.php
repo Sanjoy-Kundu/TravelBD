@@ -124,6 +124,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post("/admin/package-category/update", [PackageCategoryController::class, 'packageCategoryUpdate']);
     Route::post("/admin/package-category/delete", [PackageCategoryController::class, 'packageCategoryDelete']);
 
+    //package trash category
+    Route::get('/admin/package-category-trash/lists', [PackageCategoryController::class, 'packageCategoryTrashLists']);
+    Route::post('/admin/package-category/restore', [PackageCategoryController::class, 'packageCategoryRestore']);
+    Route::post('/admin/package-category/permanent-delete', [PackageCategoryController::class, 'packageCategoryPermanentDelete']);
+
 
 
     //package

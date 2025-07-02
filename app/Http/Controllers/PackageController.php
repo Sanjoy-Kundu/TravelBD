@@ -191,7 +191,7 @@ public function packagePermanentDelete(Request $request)
 
 
 //package restore
-function packageRestore(Request $request){
+public function packageRestore(Request $request){
     $package = Package::onlyTrashed()->find($request->id);
 
     if (!$package) {
@@ -204,6 +204,82 @@ function packageRestore(Request $request){
         "status" => "success",
         "message" => "Package restored successfully"
     ]);
+}
+
+
+
+
+/**
+ * Package Update
+ */
+public function packageUpdate(Request $request)
+{
+    try {
+        // Validate request data
+        $request->validate([
+            'id' => 'required|exists:packages,id',
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:package_categories,id',
+            'short_description' => 'nullable|string|max:500',
+            'long_description' => 'nullable|string',
+            'price' => 'nullable|numeric',
+            'currency' => 'nullable|string|max:10',
+            'duration' => 'nullable|string|max:100',
+            'inclusions' => 'nullable|string',
+            'exclusions' => 'nullable|string',
+            'visa_processing_time' => 'nullable|string|max:100',
+            'documents_required' => 'nullable|string',
+            'seat_availability' => 'nullable|integer',
+            'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        // Find package by ID
+        $package = Package::find($request->id);
+        if (!$package) {
+            return response()->json(['status' => 'error', 'message' => 'Package not found']);
+        }
+
+        // Update package data
+        $package->title = Str::upper($request->title);
+        $package->category_id = $request->category_id;
+        $package->short_description = Str::upper($request->short_description);
+        $package->long_description = Str::upper($request->long_description);
+        $package->price = $request->price;
+        $package->currency = Str::upper($request->currency);
+        $package->duration = $request->duration;
+        $package->inclusions = Str::upper($request->inclusions);
+        $package->exclusions = Str::upper($request->exclusions);
+        $package->visa_processing_time = $request->visa_processing_time;
+        $package->documents_required = Str::upper($request->documents_required);
+        $package->seat_availability = $request->seat_availability;
+        $package->status = Str::upper($request->status);
+
+        // Handle image upload if present
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($package->image && file_exists(public_path($package->image))) {
+                unlink(public_path($package->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('upload/dashboard/images/packages'), $imageName);
+
+            // Save new image path
+            $package->image = 'upload/dashboard/images/packages/' . $imageName;
+        }
+
+        $package->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Package updated successfully',
+            'package' => $package,
+        ]);
+    } catch (Exception $ex) {
+        return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+    }
 }
 
 }

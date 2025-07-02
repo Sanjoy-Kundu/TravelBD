@@ -6,4 +6,5 @@
     @include('dashboard.components.admin.footerComponent')
     @include('dashboard.components.packageManagement.modal.packageCreateModalComponent')
     @include('dashboard.components.packageManagement.modal.packageViewComponent')
+    @include('dashboard.components.packageManagement.modal.packageUpdateComponent')
 @endsection

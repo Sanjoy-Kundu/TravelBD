@@ -140,6 +140,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get("/admin/package-trash/lists", [PackageController::class, 'packageTrashLists']);
     Route::post("/admin/package/permanent-delete",[PackageController::class, 'packagePermanentDelete']);
     Route::post("/admin/package/restore",[PackageController::class, 'packageRestore']);
+    Route::post("/admin/package/update",[PackageController::class, 'packageUpdate']);
 });
 
 

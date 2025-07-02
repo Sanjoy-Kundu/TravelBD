@@ -116,7 +116,7 @@
                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                     <button type="button" class="btn btn-danger package_trash_btn"  data-id='${package.id}'>Trash</button>
                                     <button type="button" class="btn btn-warning package_view_btn" data-id='${package.id}'>View</button>
-                                    <button type="button" class="btn btn-success " data-id='${package.id}'>Edit</button>
+                                    <button type="button" class="btn btn-success package_edit_btn" data-id='${package.id}'>Edit</button>
                                 </div>
                             </th>
                         </tr>
@@ -144,6 +144,16 @@
             await fillPackageViewModal(id);
             // modal show
             const modal = new bootstrap.Modal(document.getElementById('packageView'));
+            modal.show();
+        });
+
+
+        //package edit
+        $(document).on('click', '.package_edit_btn', async function() {
+            let id = $(this).data('id');
+            await fillPackaUpdateModal(id);
+            // modal show
+            const modal = new bootstrap.Modal(document.getElementById('updatePackageFormModal'));
             modal.show();
         });
 
@@ -230,7 +240,7 @@
                 //console.log(package_lists)
 
                 if (package_lists.length === 0) {
-                    tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
+                    //tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
                 }
 
                 package_lists.forEach((package, index) => {

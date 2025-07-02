@@ -141,6 +141,13 @@
                 document.getElementById('view_category_image').src = category.image ?
                     `/upload/dashboard/images/package-category/${category.image}` :
                     `/upload/dashboard/images/package-category/default.png`;
+
+
+
+
+            document.body.classList.remove('modal-open'); 
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(el => el.remove());
             }
 
         } catch (error) {

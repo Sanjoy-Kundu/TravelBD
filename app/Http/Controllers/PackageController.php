@@ -188,4 +188,22 @@ public function packagePermanentDelete(Request $request)
     ]);
 }
 
+
+
+//package restore
+function packageRestore(Request $request){
+    $package = Package::onlyTrashed()->find($request->id);
+
+    if (!$package) {
+        return response()->json(["status" => "error", "message" => "Package not found"], 404);
+    }
+
+    $package->restore();
+
+    return response()->json([
+        "status" => "success",
+        "message" => "Package restored successfully"
+    ]);
+}
+
 }

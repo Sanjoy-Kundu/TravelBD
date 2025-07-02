@@ -278,7 +278,50 @@
                 '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
         }
 
+        // Restore
+        $(document).on('click', '.trash_package_restore_btn', async function() {
+            let id = $(this).data('id');
+            let token = localStorage.getItem('token');
 
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to restore this package?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, restore it!',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        let res = await axios.post('/admin/package/restore', {
+                            id: id
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if (res.data.status === 'success') {
+                            Swal.fire('Restored!', res.data.message, 'success');
+                            await packageTrashListLoadData();
+                            await packageListLoadData();
+                        } else {
+                            Swal.fire('Failed!', res.data.message || 'Restore failed.',
+                                'error');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire('Error!', 'Something went wrong.', 'error');
+                    }
+                }
+            });
+        });
+
+
+
+        //permanent delete
         $(document).on('click', '.trash_package_permanenet_btn', async function() {
             let id = $(this).data('id');
             let token = localStorage.getItem('token');

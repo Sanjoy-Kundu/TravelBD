@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Package;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PackageCategory extends Model
 {
@@ -16,4 +17,9 @@ class PackageCategory extends Model
         'image',
         'status',
     ];
+        // রিভার্স রিলেশন, একটি ক্যাটাগরিতে অনেক প্যাকেজ থাকতে পারে
+    public function packages()
+    {
+        return $this->hasMany(Package::class, 'category_id');
+    }
 }

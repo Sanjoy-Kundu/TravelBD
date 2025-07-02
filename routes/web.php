@@ -10,6 +10,7 @@ use App\Http\Controllers\AgentProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
+use App\Http\Controllers\PackageController;
 use App\Models\PackageCategory;
 
 // ====================== Admin Auth Routes ======================
@@ -67,6 +68,7 @@ Route::get('/admin/customer/create', [AdminController::class, 'customerCreatePag
 
 //===================== Package Managemant get route======================
 Route::get("/create/package/category", [PackageCategoryController::class, 'createPackageCategoryPage']);
+Route::get("/package/lists", [PackageController::class, 'packageListsPage']);
 
 
 
@@ -121,6 +123,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post("/admin/package-category/details", [PackageCategoryController::class, 'packageCategoryDetails']);
     Route::post("/admin/package-category/update", [PackageCategoryController::class, 'packageCategoryUpdate']);
     Route::post("/admin/package-category/delete", [PackageCategoryController::class, 'packageCategoryDelete']);
+
+
+
+    //package
+    Route::post("/admin/package/store", [PackageController::class, 'packageStore']);
+    Route::get("/admin/package/lists",[PackageController::class, 'packageLists']);
 });
 
 

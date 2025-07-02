@@ -5,4 +5,5 @@
     @include('dashboard.components.packageManagement.packageListsComponent')
     @include('dashboard.components.admin.footerComponent')
     @include('dashboard.components.packageManagement.modal.packageCreateModalComponent')
+    @include('dashboard.components.packageManagement.modal.packageViewComponent')
 @endsection

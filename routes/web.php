@@ -134,6 +134,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     //package
     Route::post("/admin/package/store", [PackageController::class, 'packageStore']);
     Route::get("/admin/package/lists",[PackageController::class, 'packageLists']);
+    Route::post("/admin/package/details", [PackageController::class, 'packageDetails']);
 });
 
 

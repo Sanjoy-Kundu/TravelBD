@@ -114,43 +114,18 @@ public function packageLists(Request $request)
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+  /**
+   * Package View
+   *  
+   * */  
+  public function packageDetails(Request $request){
+    $package = Package::with('packageCategory')->find($request->id);
+    if(!$package){
+        return response()->json(["status" => "error", "message" => "Package not found"], 404);
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Package $package)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Package $package)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Package $package)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Package $package)
-    {
-        //
-    }
+    return response()->json([
+        "status" => "success",
+        "package" => $package
+    ]);
+  }
 }

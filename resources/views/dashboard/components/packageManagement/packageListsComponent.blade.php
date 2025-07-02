@@ -56,40 +56,40 @@
     packageListLoadData();
 
     async function packageListLoadData() {
-            let token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = "/admin/login";
-                return;
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "/admin/login";
+            return;
+        }
+
+        try {
+            let res = await axios.get("/admin/package/lists", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            let selector = '#packageListTable';
+
+            if ($.fn.DataTable.isDataTable(selector)) {
+                $(selector).DataTable().clear().destroy();
             }
 
-            try {
-                let res = await axios.get("/admin/package/lists", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+            let tableBody = $('#package_package_list_body');
+            tableBody.empty();
 
-                let selector = '#packageListTable';
+            if (res.data.status === "success") {
+                let package_lists = res.data.packages;
+                //console.log(package_lists)
 
-                if ($.fn.DataTable.isDataTable(selector)) {
-                    $(selector).DataTable().clear().destroy();
+                if (package_lists.length === 0) {
+                    tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
                 }
 
-                let tableBody = $('#package_package_list_body');
-                tableBody.empty();
-
-                if (res.data.status === "success") {
-                    let package_lists = res.data.packages;
-                    //console.log(package_lists)
-
-                    if (package_lists.length === 0) {
-                        tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
-                    }
-
-                    package_lists.forEach((package, index) => {
-                        //console.log(package.image)
-                        //console.log(package.package_category)
-                        let tr = `
+                package_lists.forEach((package, index) => {
+                    //console.log(package.image)
+                    //console.log(package.package_category)
+                    let tr = `
                             <tr>
                             <th>${index+1}</th>
                             <th>${package.package_category.name}</th>
@@ -109,16 +109,16 @@
                             <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
                             <th>
                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button type="button" class="btn btn-danger">Left</button>
-                                    <button type="button" class="btn btn-warning">Middle</button>
-                                    <button type="button" class="btn btn-success">Right</button>
+                                    <button type="button" class="btn btn-danger"  data-id='${package.id}'>Trash</button>
+                                    <button type="button" class="btn btn-warning package_view_btn" data-id='${package.id}'>View</button>
+                                    <button type="button" class="btn btn-success " data-id='${package.id}'>Edit</button>
                                 </div>
                             </th>
                         </tr>
                         `
-                            
-                        tableBody.append(tr);
-                    });
+
+                    tableBody.append(tr);
+                });
 
             } else {
                 tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
@@ -132,8 +132,15 @@
             $('#package_package_list_body').append(
                 '<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
         }
+
+        //modal id = packageView
+        $(document).on('click', '.package_view_btn', async function() {
+            let id = $(this).data('id');
+            await fillPackageViewModal(id);
+            // modal show
+            const modal = new bootstrap.Modal(document.getElementById('packageView'));
+            modal.show();
+        });
+
     }
-
-
-                            
 </script>

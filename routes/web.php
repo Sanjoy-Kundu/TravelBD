@@ -76,6 +76,8 @@ Route::get("/package/lists", [PackageController::class, 'packageListsPage']);
 
 // ====================== Admin Protected Routes ======================
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    //Admin all data cont
+      Route::get('/admin/dashboard/counts', [AdminController::class, 'dashboardCounts']);
     // Admin list
     Route::get('/admin/lists/all/data', [AdminController::class, 'adminListsData']);
     Route::get('/admin/lists/all/trash/data', [AdminController::class, 'adminListsTrashData']);

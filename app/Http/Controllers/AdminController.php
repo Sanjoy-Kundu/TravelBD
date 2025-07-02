@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Agent;
 use App\Models\Staff;
 use App\Mail\AdminOtp;
+use App\Models\Package;
 use Illuminate\Support\Str;
 use App\Mail\AgentTrashMail;
 use Illuminate\Http\Request;
@@ -44,6 +45,40 @@ class AdminController extends Controller
             return redirect()->back()->with('error', $ex->getMessage());
         }
     }
+
+    /**
+     * Dashboard Count
+     */
+    public function dashboardCounts()
+{
+    return response()->json([
+        'status' => 'success',
+        'data' => [
+            // Active Counts
+            'admins' => Admin::count(),
+            'staffs' => Staff::count(),
+            'agents' => Agent::count(),
+            'packages' => Package::count(),
+
+            // Trash Counts
+            'admins_trash' => Admin::onlyTrashed()->count(),
+            'staffs_trash' => Staff::onlyTrashed()->count(),
+            'agents_trash' => Agent::onlyTrashed()->count(),
+            'packages_trash' => Package::onlyTrashed()->count(),
+
+            // Total (active + trash)
+            'admins_total' => Admin::withTrashed()->count(),
+            'staffs_total' => Staff::withTrashed()->count(),
+            'agents_total' => Agent::withTrashed()->count(),
+            'packages_total' => Package::withTrashed()->count(),
+        ]
+    ]);
+}
+
+
+
+
+
 
     /**
      * admin dashboard page

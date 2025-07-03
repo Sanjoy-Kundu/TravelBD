@@ -7,4 +7,5 @@
     @include('dashboard.components.packageManagement.modal.packageCreateModalComponent')
     @include('dashboard.components.packageManagement.modal.packageViewComponent')
     @include('dashboard.components.packageManagement.modal.packageUpdateComponent')
+    @include('dashboard.components.packageManagement.modal.packageCouponDiscountComponent')
 @endsection

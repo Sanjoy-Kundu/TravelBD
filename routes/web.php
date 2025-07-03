@@ -1,17 +1,18 @@
 <?php
 
+use App\Models\PackageCategory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AgentProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
-use App\Http\Controllers\PackageController;
-use App\Models\PackageCategory;
+use App\Http\Controllers\PackageDiscountController;
 
 // ====================== Admin Auth Routes ======================
 Route::get('/admin/registration', [RegistrationController::class, 'adminRegisterPage']);
@@ -143,6 +144,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post("/admin/package/permanent-delete",[PackageController::class, 'packagePermanentDelete']);
     Route::post("/admin/package/restore",[PackageController::class, 'packageRestore']);
     Route::post("/admin/package/update",[PackageController::class, 'packageUpdate']);
+
+
+
+
+    //package Discout or coupon 
+    Route::post('/admin/package-coupon-discount', [PackageDiscountController::class, 'packageCouponDiscount']);
 });
 
 

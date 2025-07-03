@@ -18,8 +18,8 @@
                     <th>Package Name</th>
                     <th>Image</th>
                     <th>Short Description</th>
-                    <th>Price</th>
-                    <th>Currency</th>
+                    <th>Price (BDT)</th>
+                    <th>Coupne/Discount</th>
                     <th>Duration</th>
                     <th>Seat Ability</th>
                     <th>Status</th>
@@ -108,7 +108,7 @@
                             </th>
                             <th>${package.short_description}</th>
                             <th>${package.price}</th>
-                            <th>${package.currency}</th>
+                            <th><button class="btn btn-warning package_coupon_discount_btn" data-id="${package.id}">Coupon/Discount</button></th>
                             <th>${package.duration}</th>
                             <th>${package.seat_availability}</th>
                             <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
@@ -204,7 +204,15 @@
             });
         });
 
-
+        //package couple discount button 
+        $(document).on('click', '.package_coupon_discount_btn',async function(){
+            let id = $(this).data('id');
+            console.log('cupon button id',id);
+            await packageCouponDiscountForm(id)
+            // modal show
+            const modal = new bootstrap.Modal(document.getElementById('packageCouponDiscountFormModal'));
+            modal.show();
+        })
 
     }
 

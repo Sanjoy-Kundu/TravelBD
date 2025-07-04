@@ -114,8 +114,6 @@ class PackageDiscountController extends Controller
         }
     }
 
-
-
     //coupon discount update
     public function couponDiscountUpdate(Request $request)
     {
@@ -168,9 +166,6 @@ class PackageDiscountController extends Controller
         }
     }
 
-
-
-
     //package coupon delete
     public function packageCouponDelete(Request $request)
     {
@@ -206,4 +201,112 @@ class PackageDiscountController extends Controller
             );
         }
     }
+
+    //package coupon trashlists
+    public function packageCouponTrashList(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|numeric|exists:packages,id',
+            ]);
+
+            $trashCoupons = PackageDiscount::onlyTrashed()->where('package_id', $request->id)->orderBy('id', 'desc')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'trashCoupons' => $trashCoupons,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    // package restore
+    public function packageCouponRestoreList(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|numeric|exists:package_discounts,id',
+            ]);
+
+            $coupon = PackageDiscount::onlyTrashed()->find($request->id);
+
+            if (!$coupon) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Coupon not found in trash.',
+                    ],
+                    404,
+                );
+            }
+
+            $coupon->restore();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Coupon restored successfully.',
+                'coupon' => $coupon,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $ex->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    //permanet delete
+public function packageCouponPermanentDelete(Request $request)
+{
+    try {
+        // Validate the incoming request id
+        $request->validate([
+            'id' => 'required|numeric|exists:package_discounts,id',
+        ]);
+
+        // Find the soft deleted coupon by id
+        $coupon = PackageDiscount::onlyTrashed()->find($request->id);
+
+        if (!$coupon) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Coupon not found in trash.',
+            ], 404);
+        }
+
+        // Permanently delete the coupon
+        $coupon->forceDelete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Coupon deleted permanently.',
+        ]);
+        
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage(),
+        ], 500);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 }

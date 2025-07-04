@@ -158,6 +158,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/admin/package-coupon/delete', [PackageDiscountController::class, 'packageCouponDelete']);
     Route::post('/admin/package-coupon/edit-details', [PackageDiscountController::class, 'detailsCouponDiscountshow']);
     Route::post('/admin/package-coupon/update', [PackageDiscountController::class, 'couponDiscountUpdate']);
+
+
+    Route::post('/admin/package-coupon/trash-list', [PackageDiscountController::class, 'packageCouponTrashList']);
+    Route::post('/admin/package-coupon/restore', [PackageDiscountController::class, 'packageCouponRestoreList']);
+    Route::post('/admin/package-coupon/permanent-delete', [PackageDiscountController::class, 'packageCouponPermanentDelete']);
 });
 
 

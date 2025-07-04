@@ -205,7 +205,6 @@
 
 
     packageTrashLitsData();
-
     async function packageTrashLitsData() {
             let token = localStorage.getItem('token');
             if (!token) {

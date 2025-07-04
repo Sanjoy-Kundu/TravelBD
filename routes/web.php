@@ -156,8 +156,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/package-coupon-list',[PackageDiscountController::class, 'packageCouponList']);
     Route::post('/admin/package-coupon-discount', [PackageDiscountController::class, 'packageCouponDiscount']);
     Route::post('/admin/package-coupon/delete', [PackageDiscountController::class, 'packageCouponDelete']);
-    // Route::post('/admin/package-coupon-show/{id}', [PackageDiscountController::class, 'detailsCouponDiscountshow']);
-    // Route::post('/admin/package-coupon-update', [PackageDiscountController::class, 'couponDiscountUpdate']);
+    Route::post('/admin/package-coupon/edit-details', [PackageDiscountController::class, 'detailsCouponDiscountshow']);
+    Route::post('/admin/package-coupon/update', [PackageDiscountController::class, 'couponDiscountUpdate']);
 });
 
 

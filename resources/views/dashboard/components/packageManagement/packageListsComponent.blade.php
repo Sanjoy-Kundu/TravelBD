@@ -109,8 +109,15 @@
                             <th>${package.short_description}</th>
                             <th>${package.price}</th>
                             <th>
-                                <button class="btn btn-warning add_package_coupon_discount_btn" data-id="${package.id}">Add Coupon</button>
-                                <button class="btn btn-warning package_coupon_list_btn" data-id="${package.id}">Coupon Lists</button>
+                                <div class="btn-group" role="group" aria-label="Coupon Actions">
+                                    <button type="button" class="btn btn-success add_package_coupon_discount_btn" data-id="${package.id}">
+                                        <i class="bi bi-plus-circle"></i> ADD
+                                    </button>
+                                    <button type="button" class="btn btn-primary package_coupon_list_btn" data-id="${package.id}">
+                                        <i class="bi bi-card-list"></i> Lists
+                                    </button>
+                                </div>
+
                             </th>
                             <th>${package.duration}</th>
                             <th>${package.seat_availability}</th>

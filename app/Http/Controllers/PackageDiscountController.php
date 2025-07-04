@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PackageDiscount;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PackageDiscountController extends Controller
 {
@@ -15,9 +16,9 @@ class PackageDiscountController extends Controller
      */
     public function couponDiscountListsPage()
     {
-        try{
+        try {
             return view('pages.backend.couponManagement.couponDiscountPage');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
@@ -82,7 +83,7 @@ class PackageDiscountController extends Controller
      */
     public function packageCouponList(Request $request)
     {
-             try {
+        try {
             $PackageCouponLists = PackageDiscount::with('package')->orderBy('id', 'DESC')->where('package_id', $request->package_id)->get();
             return response()->json(['status' => 'success', 'PackageCouponLits' => $PackageCouponLists]);
         } catch (Exception $e) {
@@ -100,73 +101,109 @@ class PackageDiscountController extends Controller
     /**
      * Display the specified resource.
      */
-// public function detailsCouponDiscountshow($id)
-// {
-//     $coupon = PackageDiscount::find($id);
-//     if (!$coupon) {
-//         return response()->json(['message' => 'Not found'], 404);
-//     }
-//     return response()->json(['coupon' => $coupon]);
-// }
-
-
-// public function couponDiscountUpdate(Request $request)
-// {
-//     $coupon = PackageDiscount::find($request->id);
-//     if (!$coupon) {
-//         return response()->json(['message' => 'Not found'], 404);
-//     }
-
-//     $request->validate([
-//         'discount_mode' => 'required|in:coupon,direct',
-//         'coupon_code' => 'required_if:discount_mode,coupon',
-//         'discount_value' => 'required|numeric|min:1|max:100',
-//         'start_date' => 'required|date',
-//         'end_date' => 'required|date|after_or_equal:start_date',
-//         'status' => 'required|in:active,inactive'
-//     ]);
-
-//     $coupon->update([
-//         'discount_mode' => $request->discount_mode,
-//         'coupon_code' => $request->coupon_code,
-//         'discount_value' => $request->discount_value,
-//         'start_date' => $request->start_date,
-//         'end_date' => $request->end_date,
-//         'status' => $request->status
-//     ]);
-
-//     return response()->json(['status' => 'success', 'message' => 'Coupon updated successfully']);
-// }
-
-
-//package coupon delete
-public function packageCouponDelete(Request $request)
-{
-    try {
-        $id = $request->id;
-
-        $coupon = PackageDiscount::find($id);
-
-        if (!$coupon) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Coupon not found',
-            ], 404);
+    public function detailsCouponDiscountshow(Request $request)
+    {
+        try {
+            $coupon = PackageDiscount::find($request->id);
+            if (!$coupon) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+            return response()->json(['coupon' => $coupon]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong!', 'error' => $e->getMessage()], 500);
         }
-
-        $coupon->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Coupon deleted successfully',
-        ]);
-
-    } catch (Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Something went wrong while deleting the coupon.',
-            'error' => $e->getMessage(), // Debug purpose (can remove in production)
-        ], 500);
     }
-}
+
+
+
+    //coupon discount update
+    public function couponDiscountUpdate(Request $request)
+    {
+        try {
+            $coupon = PackageDiscount::find($request->id);
+
+            if (!$coupon) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Coupon not found',
+                    ],
+                    404,
+                );
+            }
+
+            $validatedData = $request->validate([
+                'discount_mode' => 'required|in:coupon,direct',
+                'coupon_code' => 'required_if:discount_mode,coupon',
+                'discount_value' => 'required|numeric|min:1|max:100',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'status' => 'required|in:active,inactive',
+            ]);
+
+            $coupon->update($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Coupon updated successfully',
+            ]);
+        } catch (ValidationException $ve) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Validation failed',
+                    'errors' => $ve->errors(),
+                ],
+                422,
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong',
+                    //'error' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+
+
+
+    //package coupon delete
+    public function packageCouponDelete(Request $request)
+    {
+        try {
+            $id = $request->id;
+
+            $coupon = PackageDiscount::find($id);
+
+            if (!$coupon) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Coupon not found',
+                    ],
+                    404,
+                );
+            }
+
+            $coupon->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Coupon deleted successfully',
+            ]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong while deleting the coupon.',
+                    'error' => $e->getMessage(), // Debug purpose (can remove in production)
+                ],
+                500,
+            );
+        }
+    }
 }

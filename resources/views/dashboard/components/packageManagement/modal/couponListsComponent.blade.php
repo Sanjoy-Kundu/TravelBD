@@ -65,8 +65,8 @@ async function fillCouponLists(id) {
                 text: 'This package has no coupons.'
             });
 
-            //tableBody.append(`<tr><td colspan="6" class="text-center text-danger">No data found</td></tr>`);
-            //$(selector).DataTable(); // still initialize to avoid DataTable error
+            tableBody.append(`<tr><td colspan="6" class="text-center text-danger">No data found</td></tr>`);
+            $(selector).DataTable(); // still initialize to avoid DataTable error
             return;
         }
 
@@ -113,11 +113,11 @@ async function fillCouponLists(id) {
     }
 
     // Edit
-    // $(document).on('click', '.package_coupon_edit_btn', async function () {
-    //     let id = $(this).data('id');
-    //     $('#packageCouponEditModal').modal('show');
-    //     await packageCouponEditFormFillup(id); // define this separately
-    // });
+    $(document).on('click', '.package_coupon_edit_btn', async function () {
+        let id = $(this).data('id');
+        $('#packageCouponEditModal').modal('show');
+        await packageCouponEditFormFillup(id); // define this separately
+    });
 
     // Delete
      $(document).on('click', '.package_coupon_delete_btn', function () {

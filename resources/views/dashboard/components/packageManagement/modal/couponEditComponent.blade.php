@@ -1,23 +1,22 @@
-<!-- Coupon/Discount Edit Modal -->
-<div class="modal fade" id="packageCouponEditModal" tabindex="-1" aria-labelledby="packageCouponEditModalLabel"
-    aria-hidden="true">
+<!-- Coupon Edit Modal -->
+<div class="modal fade" id="packageCouponEditModal" tabindex="-1" aria-labelledby="packageCouponEditModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-warning text-dark">
                 <h5 class="modal-title" id="packageCouponEditModalLabel">Edit Coupon / Discount</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form id="edit_package_coupon_discount_form" novalidate>
-                    <!-- Hidden Package ID -->
-                    <input type="hidden" id="edit_package_coupon_id">
-                    <input type="hidden" id="edit_package_coupon_package_id">
+                <form id="package_coupon_discount_edit_form" enctype="multipart/form-data" novalidate>
+                    <!-- Hidden Coupon ID & Package ID -->
+                    <input type="hidden" id="edit_coupon_id" name="id">
+                    <input type="hidden" id="edit_package_id" name="package_id">
 
                     <!-- Discount Mode -->
                     <div class="mb-3">
-                        <label class="form-label">Discount Mode <span class="text-danger">*</span></label>
-                        <select id="edit_discount_mode_selector" class="form-select" onchange="toggleDiscountModeFields('edit')" required>
+                        <label for="edit_discount_type_selector" class="form-label">Discount Mode <span class="text-danger">*</span></label>
+                        <select name="discount_mode" id="edit_discount_type_selector" class="form-select" onchange="editDiscountMethodToggle()">
                             <option value="">Select Type</option>
                             <option value="coupon">Coupon Based</option>
                             <option value="direct">Direct Discount</option>
@@ -25,38 +24,38 @@
                         <div class="text-danger mt-1" id="edit_discount_mode_error"></div>
                     </div>
 
-                    <!-- Coupon Code -->
+                    <!-- Coupon Code (Only for coupon mode) -->
                     <div class="mb-3 d-none" id="edit_coupon_code_wrapper">
-                        <label class="form-label">Coupon Code <span class="text-danger">*</span></label>
-                        <input type="text" id="edit_coupon_code" class="form-control" placeholder="e.g., ITALY100">
+                        <label for="edit_coupon_code" class="form-label">Coupon Code <span class="text-danger">*</span></label>
+                        <input type="text" name="coupon_code" id="edit_coupon_code" class="form-control" placeholder="e.g., ITALY100">
                         <div class="text-danger mt-1" id="edit_coupon_code_error"></div>
                     </div>
 
-                    <!-- Discount Value -->
-                    <div class="mb-3">
-                        <label class="form-label">Discount (%) <span class="text-danger">*</span></label>
-                        <input type="number" id="edit_discount_value" class="form-control" min="1" max="100">
+                    <!-- Discount Percentage -->
+                    <div class="mb-3" id="edit_discount_value_wrapper">
+                        <label for="edit_discount_value" class="form-label">Discount Percentage (%) <span class="text-danger">*</span></label>
+                        <input type="number" name="discount_value" id="edit_discount_value" class="form-control" placeholder="Enter percentage e.g., 10" min="1" max="100">
                         <div class="text-danger mt-1" id="edit_discount_value_error"></div>
                     </div>
 
-                    <!-- Dates -->
+                    <!-- Validity -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Start Date <span class="text-danger">*</span></label>
-                            <input type="date" id="edit_start_date" class="form-control">
+                            <label for="edit_start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" name="start_date" id="edit_start_date" class="form-control">
                             <div class="text-danger mt-1" id="edit_start_date_error"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">End Date <span class="text-danger">*</span></label>
-                            <input type="date" id="edit_end_date" class="form-control">
+                            <label for="edit_end_date" class="form-label">End Date <span class="text-danger">*</span></label>
+                            <input type="date" name="end_date" id="edit_end_date" class="form-control">
                             <div class="text-danger mt-1" id="edit_end_date_error"></div>
                         </div>
                     </div>
 
                     <!-- Status -->
                     <div class="mb-3">
-                        <label class="form-label">Status <span class="text-danger">*</span></label>
-                        <select id="edit_coupon_status" class="form-select">
+                        <label for="edit_coupon_status" class="form-label">Status <span class="text-danger">*</span></label>
+                        <select name="status" id="edit_coupon_status" class="form-select">
                             <option value="">Select Status</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
@@ -66,7 +65,7 @@
 
                     <!-- Submit -->
                     <div class="text-end">
-                        <button class="btn btn-success px-4" onclick="couponDiscountUpdate(event)">Update</button>
+                        <button class="btn btn-success px-4" onclick="updateCouponDiscount(event)">Update</button>
                     </div>
                 </form>
             </div>
@@ -74,136 +73,108 @@
     </div>
 </div>
 
+
+
 <script>
+    function editDiscountMethodToggle() {
+    let type = $('#edit_discount_type_selector').val();
 
-function toggleDiscountModeFields(context = '') {
-    let prefix = context === 'edit' ? 'edit_' : '';
-    let mode = document.getElementById(`${prefix}discount_mode_selector`).value;
-    let couponField = document.getElementById(`${prefix}coupon_code_wrapper`);
-
-    if (mode === 'coupon') {
-        couponField.classList.remove('d-none');
+    if (type === 'coupon') {
+        $('#edit_coupon_code_wrapper').removeClass('d-none');
     } else {
-        couponField.classList.add('d-none');
+        $('#edit_coupon_code_wrapper').addClass('d-none');
+        $('#edit_coupon_code').val('');
     }
 }
+
+
 
 async function packageCouponEditFormFillup(id) {
     let token = localStorage.getItem('token');
-    if (!token) return window.location.href = "/admin/login";
-
     try {
-        const res = await axios.post(`/admin/package-coupon-show/}`,{id: id}, {
-            headers: { 'Authorization': `Bearer ${token}` }
+        let res = await axios.post('/admin/package-coupon/edit-details', {id:id }, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
-        const data = res.data.coupon;
+        let data = res.data.coupon;
 
-        // Fill data
-        document.getElementById('edit_package_coupon_id').value = data.id;
-        document.getElementById('edit_package_coupon_package_id').value = data.package_id;
-        document.getElementById('edit_discount_mode_selector').value = data.discount_mode;
-        document.getElementById('edit_discount_value').value = data.discount_value;
-        document.getElementById('edit_start_date').value = data.start_date;
-        document.getElementById('edit_end_date').value = data.end_date;
-        document.getElementById('edit_coupon_status').value = data.status;
+        $('#edit_coupon_id').val(data.id);
+        $('#edit_package_id').val(data.package_id);
+        $('#edit_discount_type_selector').val(data.discount_mode).trigger('change');
+        $('#edit_coupon_code').val(data.coupon_code);
+        $('#edit_discount_value').val(data.discount_value);
+        $('#edit_start_date').val(data.start_date);
+        $('#edit_end_date').val(data.end_date);
+        $('#edit_coupon_status').val(data.status);
 
-        toggleDiscountModeFields('edit');
+        editDiscountMethodToggle(); // coupon_code wrapper show/hide
 
-        if (data.discount_mode === 'coupon') {
-            document.getElementById('edit_coupon_code').value = data.coupon_code;
-        }
-
-        $('#packageCouponEditModal').modal('show');
-
-    } catch (error) {
-        console.error("Edit Load Error:", error);
-        Swal.fire("Error", "Failed to load coupon details.", "error");
+    } catch (err) {
+        console.error("Edit fillup failed", err);
+        Swal.fire('Error', 'Could not load coupon data.', 'error');
     }
 }
 
-async function couponDiscountUpdate(event) {
+
+
+
+
+async function updateCouponDiscount(event){
     event.preventDefault();
-    let token = localStorage.getItem('token');
 
-    // Clear errors
-    const fields = ['discount_mode', 'coupon_code', 'discount_value', 'start_date', 'end_date', 'status'];
-    fields.forEach(f => document.getElementById(`edit_${f}_error`).innerText = '');
-
-    // Get values
-    const id = document.getElementById('edit_package_coupon_id').value;
-    const package_id = document.getElementById('edit_package_coupon_package_id').value;
-    const discount_mode = document.getElementById('edit_discount_mode_selector').value;
-    const coupon_code = document.getElementById('edit_coupon_code').value;
-    const discount_value = document.getElementById('edit_discount_value').value;
-    const start_date = document.getElementById('edit_start_date').value;
-    const end_date = document.getElementById('edit_end_date').value;
-    const status = document.getElementById('edit_coupon_status').value;
-
-    let hasError = false;
-
-    if (!discount_mode) {
-        document.getElementById('edit_discount_mode_error').innerText = "Required";
-        hasError = true;
-    }
-    if (discount_mode === 'coupon' && !coupon_code) {
-        document.getElementById('edit_coupon_code_error').innerText = "Required";
-        hasError = true;
-    }
-    if (!discount_value || discount_value < 1 || discount_value > 100) {
-        document.getElementById('edit_discount_value_error').innerText = "Enter 1–100";
-        hasError = true;
-    }
-    if (!start_date) {
-        document.getElementById('edit_start_date_error').innerText = "Required";
-        hasError = true;
-    }
-    if (!end_date || end_date < start_date) {
-        document.getElementById('edit_end_date_error').innerText = "Invalid end date";
-        hasError = true;
-    }
-    if (!status) {
-        document.getElementById('edit_status_error').innerText = "Required";
-        hasError = true;
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = "/admin/login";
+        return;
     }
 
-    if (hasError) return;
 
+    document.querySelectorAll('#package_coupon_discount_edit_form .text-danger').forEach(el => el.textContent = '');
+
+  
     const data = {
-        id,
-        package_id,
-        discount_mode,
-        coupon_code: discount_mode === 'coupon' ? coupon_code : null,
-        discount_value,
-        start_date,
-        end_date,
-        status
+        id: document.getElementById('edit_coupon_id').value,
+        package_id: document.getElementById('edit_package_id').value,
+        discount_mode: document.getElementById('edit_discount_type_selector').value,
+        coupon_code: document.getElementById('edit_coupon_code').value,
+        discount_value: document.getElementById('edit_discount_value').value,
+        start_date: document.getElementById('edit_start_date').value,
+        end_date: document.getElementById('edit_end_date').value,
+        status: document.getElementById('edit_coupon_status').value
     };
 
     try {
-        const res = await axios.post('/admin/package-coupon-update', data, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+        const res = await axios.post('/admin/package-coupon/update', data, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
-        if (res.data.status === 'success') {
-            Swal.fire("Success", res.data.message, "success");
-            $('#packageCouponEditModal').modal('hide');
-            await fillCouponLists(package_id); // Refresh list
+        if(res.data.status === 'success'){
+            Swal.fire('Updated!', res.data.message, 'success');
+
+            // modal off
+            const modalEl = document.getElementById('packageCouponEditModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+
+            // coupon refresh
+            await fillCouponLists(data.package_id);
+
         } else {
-            Swal.fire("Failed", res.data.message || "Update failed.", "error");
+            Swal.fire('Failed!', res.data.message || 'Update failed.', 'error');
         }
-    } catch (err) {
-        if (err.response?.data?.errors) {
-            const errors = err.response.data.errors;
-            for (const key in errors) {
-                const el = document.getElementById(`edit_${key}_error`);
-                if (el) el.innerText = errors[key][0];
+
+    } catch(error) {
+        console.error('Update error:', error);
+
+        // erro backend
+        if(error.response && error.response.status === 422){
+            const errors = error.response.data.errors;
+            for(const key in errors){
+                const errorEl = document.getElementById(`edit_${key}_error`);
+                if(errorEl) errorEl.textContent = errors[key][0];
             }
         } else {
-            console.error("Update Error:", err);
-            Swal.fire("Error", "Something went wrong", "error");
+            Swal.fire('Error!', 'Something went wrong.', 'error');
         }
     }
 }

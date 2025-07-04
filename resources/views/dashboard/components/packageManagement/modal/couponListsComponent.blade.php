@@ -58,15 +58,16 @@ async function fillCouponLists(id) {
 
         let lists = res.data.PackageCouponLits;
 
-        if (!lists || lists.length === 0) {
-            Swal.fire({
-                icon: 'info',
-                title: 'No Coupons Found',
-                text: 'This package has no coupons.'
-            });
+        if (lists.length === 0) {
+            // Swal.fire({
+            //     icon: 'info',
+            //     title: 'No Coupons Found',
+            //     text: 'This package has no coupons.'
+            // });
 
             tableBody.append(`<tr><td colspan="6" class="text-center text-danger">No data found</td></tr>`);
-            $(selector).DataTable(); // still initialize to avoid DataTable error
+            // $(selector).DataTable(); // still initialize to avoid DataTable error
+            // return;
             return;
         }
 

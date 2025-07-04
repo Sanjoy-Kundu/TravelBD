@@ -100,32 +100,42 @@ class PackageDiscountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PackageDiscount $packageDiscount)
-    {
-        //
+public function detailsCouponDiscountshow($id)
+{
+    $coupon = PackageDiscount::find($id);
+    if (!$coupon) {
+        return response()->json(['message' => 'Not found'], 404);
+    }
+    return response()->json(['coupon' => $coupon]);
+}
+
+
+public function couponDiscountUpdate(Request $request)
+{
+    $coupon = PackageDiscount::find($request->id);
+    if (!$coupon) {
+        return response()->json(['message' => 'Not found'], 404);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PackageDiscount $packageDiscount)
-    {
-        //
-    }
+    $request->validate([
+        'discount_mode' => 'required|in:coupon,direct',
+        'coupon_code' => 'required_if:discount_mode,coupon',
+        'discount_value' => 'required|numeric|min:1|max:100',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'status' => 'required|in:active,inactive'
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PackageDiscount $packageDiscount)
-    {
-        //
-    }
+    $coupon->update([
+        'discount_mode' => $request->discount_mode,
+        'coupon_code' => $request->coupon_code,
+        'discount_value' => $request->discount_value,
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date,
+        'status' => $request->status
+    ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PackageDiscount $packageDiscount)
-    {
-        //
-    }
+    return response()->json(['status' => 'success', 'message' => 'Coupon updated successfully']);
+}
+
 }

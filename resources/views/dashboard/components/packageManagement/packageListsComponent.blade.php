@@ -109,7 +109,7 @@
                             <th>${package.short_description}</th>
                             <th>${package.price}</th>
                             <th>
-                                <button class="btn btn-warning package_coupon_discount_btn" data-id="${package.id}">Add Coupon</button>
+                                <button class="btn btn-warning add_package_coupon_discount_btn" data-id="${package.id}">Add Coupon</button>
                                 <button class="btn btn-warning package_coupon_list_btn" data-id="${package.id}">Coupon Lists</button>
                             </th>
                             <th>${package.duration}</th>
@@ -160,10 +160,24 @@
             modal.show();
         });
 
-        // package coupon view package_coupon_list_btn
-         $(document).on('click', '.package_coupon_list_btn', async function() {
+
+        //package couple discount button 
+        // Modal open on button click
+        $(document).on('click', '.add_package_coupon_discount_btn', async function() {
             let id = $(this).data('id');
-           await fillCouponLists(id);
+            await packageCouponDiscountForm(id);
+
+            const modalEl = document.getElementById('packageCouponDiscountFormModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        });
+
+
+
+        // package coupon view package_coupon_list_btn
+        $(document).on('click', '.package_coupon_list_btn', async function() {
+            let id = $(this).data('id');
+            await fillCouponLists(id);
             //modal show
             const modal = new bootstrap.Modal(document.getElementById('couponListModal'));
             modal.show();
@@ -216,15 +230,6 @@
             });
         });
 
-        //package couple discount button 
-        $(document).on('click', '.package_coupon_discount_btn',async function(){
-            let id = $(this).data('id');
-            console.log('cupon button id',id);
-            await packageCouponDiscountForm(id)
-            // modal show
-            const modal = new bootstrap.Modal(document.getElementById('packageCouponDiscountFormModal'));
-            modal.show();
-        })
 
     }
 

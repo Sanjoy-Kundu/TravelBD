@@ -5,7 +5,8 @@
         <div class="modal-content shadow">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="packageCouponDiscountModalLabel">Add Coupon / Discount</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -15,9 +16,9 @@
 
                     <!-- Discount Mode -->
                     <div class="mb-3">
-                        <label for="discount_type_selector" class="form-label">Discount Mode <span class="text-danger">*</span></label>
-                        <select name="discount_mode" id="discount_type_selector" class="form-select"
-                            onchange="toggleDiscountModeFields()" required>
+                        <label for="discount_type_selector" class="form-label">Discount Mode <span
+                                class="text-danger">*</span></label>
+                        <select name="discount_mode" id="discount_type_selector" class="form-select" onchange="discountMethodToggle()">
                             <option value="">Select Type</option>
                             <option value="coupon">Coupon Based</option>
                             <option value="direct">Direct Discount</option>
@@ -27,7 +28,8 @@
 
                     <!-- Coupon Code (Only for coupon mode) -->
                     <div class="mb-3 d-none" id="coupon_code_wrapper">
-                        <label for="coupon_code" class="form-label">Coupon Code <span class="text-danger">*</span></label>
+                        <label for="coupon_code" class="form-label">Coupon Code <span
+                                class="text-danger">*</span></label>
                         <input type="text" name="coupon_code" id="coupon_code" class="form-control"
                             placeholder="e.g., ITALY100">
                         <div class="text-danger mt-1" id="coupon_code_error"></div>
@@ -35,7 +37,8 @@
 
                     <!-- Discount Percentage (Always required) -->
                     <div class="mb-3" id="discount_value_wrapper">
-                        <label for="discount_value" class="form-label">Discount Percentage(%)<span class="text-danger">*</span></label>
+                        <label for="discount_value" class="form-label">Discount Percentage(%)<span
+                                class="text-danger">*</span></label>
                         <input type="number" name="discount_value" id="discount_value" class="form-control"
                             placeholder="Enter percentage e.g., 10" min="1" max="100">
                         <div class="text-danger mt-1" id="discount_value_error"></div>
@@ -44,7 +47,8 @@
                     <!-- Validity Dates -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
+                            <label for="start_date" class="form-label">Start Date <span
+                                    class="text-danger">*</span></label>
                             <input type="date" name="start_date" id="start_date" class="form-control">
                             <div class="text-danger mt-1" id="start_date_error"></div>
                         </div>
@@ -83,23 +87,28 @@
     }
 
     function packageCouponDiscountForm(id) {
-        document.getElementById('package_coupon_discount_upload_form').reset();
+        // document.getElementById('package_coupon_discount_upload_form').reset();
         document.getElementById('package_couponDiscount_id').value = id;
-        toggleDiscountModeFields(); // reset visible fields
+        // toggleDiscountModeFields(); // reset visible fields
     }
 
-    function toggleDiscountModeFields() {
-        let mode = document.getElementById('discount_type_selector').value;
-        let couponField = document.getElementById('coupon_code_wrapper');
+    function discountMethodToggle() {
+        let discountType = document.getElementById('discount_type_selector').value;
+        let couponCodeWrapper = document.getElementById('coupon_code_wrapper');
 
-        if (mode === 'coupon') {
-            couponField.classList.remove('d-none');
+        if (discountType === 'coupon') {
+            couponCodeWrapper.classList.remove('d-none');
         } else {
-            couponField.classList.add('d-none');
+            couponCodeWrapper.classList.add('d-none');
+            // Optional: coupon code input ফিল্ড খালি করো যদি direct discount হয়
+            document.getElementById('coupon_code').value = '';
         }
     }
 
-    async function couponDiscoutCreate(event) {
+
+
+
+        async function couponDiscoutCreate(event) {
         event.preventDefault();
 
         // Clear errors

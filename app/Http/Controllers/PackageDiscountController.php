@@ -13,9 +13,13 @@ class PackageDiscountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function couponDiscountListsPage()
     {
-        //
+        try{
+            return view('pages.backend.couponManagement.couponDiscountPage');
+        }catch(Exception $e){
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -74,11 +78,23 @@ class PackageDiscountController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Package discount  coupon lists
      */
-    public function store(Request $request)
+    public function packageCouponList(Request $request)
     {
-        //
+             try {
+            $PackageCouponLists = PackageDiscount::with('package')->orderBy('id', 'DESC')->where('package_id', $request->package_id)->get();
+            return response()->json(['status' => 'success', 'PackageCouponLits' => $PackageCouponLists]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong!',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**

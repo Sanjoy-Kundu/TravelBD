@@ -112,6 +112,7 @@
                          <nav class="sb-sidenav-menu-nested nav">
                              <a class="nav-link" href="{{ url('/create/package/category') }}" target="_blank">Category Lists</a>
                              <a class="nav-link" href="{{url('/package/lists')}}" target="_blank">Package Lists</a>
+                             <a class="nav-link" href="{{url('/coupon/lists')}}" target="_blank">Coupon Lists</a>
                          </nav>
                      </div>
 

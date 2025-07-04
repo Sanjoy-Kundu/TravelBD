@@ -72,6 +72,10 @@ Route::get("/create/package/category", [PackageCategoryController::class, 'creat
 Route::get("/package/lists", [PackageController::class, 'packageListsPage']);
 
 
+//===================== Package Coupon get route======================
+Route::get('/coupon/lists', [PackageDiscountController::class, 'couponDiscountListsPage']);
+
+
 
 
 
@@ -149,6 +153,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
     //package Discout or coupon 
+    Route::post('/package-coupon-list',[PackageDiscountController::class, 'packageCouponList']);
     Route::post('/admin/package-coupon-discount', [PackageDiscountController::class, 'packageCouponDiscount']);
 });
 

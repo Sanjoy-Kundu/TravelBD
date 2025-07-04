@@ -108,7 +108,10 @@
                             </th>
                             <th>${package.short_description}</th>
                             <th>${package.price}</th>
-                            <th><button class="btn btn-warning package_coupon_discount_btn" data-id="${package.id}">Coupon/Discount</button></th>
+                            <th>
+                                <button class="btn btn-warning package_coupon_discount_btn" data-id="${package.id}">Add Coupon</button>
+                                <button class="btn btn-warning package_coupon_list_btn" data-id="${package.id}">Coupon Lists</button>
+                            </th>
                             <th>${package.duration}</th>
                             <th>${package.seat_availability}</th>
                             <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
@@ -154,6 +157,15 @@
             await fillPackaUpdateModal(id);
             // modal show
             const modal = new bootstrap.Modal(document.getElementById('updatePackageFormModal'));
+            modal.show();
+        });
+
+        // package coupon view package_coupon_list_btn
+         $(document).on('click', '.package_coupon_list_btn', async function() {
+            let id = $(this).data('id');
+           await fillCouponLists(id);
+            //modal show
+            const modal = new bootstrap.Modal(document.getElementById('couponListModal'));
             modal.show();
         });
 

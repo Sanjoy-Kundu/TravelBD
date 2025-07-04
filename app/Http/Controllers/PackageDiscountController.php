@@ -100,42 +100,73 @@ class PackageDiscountController extends Controller
     /**
      * Display the specified resource.
      */
-public function detailsCouponDiscountshow($id)
+// public function detailsCouponDiscountshow($id)
+// {
+//     $coupon = PackageDiscount::find($id);
+//     if (!$coupon) {
+//         return response()->json(['message' => 'Not found'], 404);
+//     }
+//     return response()->json(['coupon' => $coupon]);
+// }
+
+
+// public function couponDiscountUpdate(Request $request)
+// {
+//     $coupon = PackageDiscount::find($request->id);
+//     if (!$coupon) {
+//         return response()->json(['message' => 'Not found'], 404);
+//     }
+
+//     $request->validate([
+//         'discount_mode' => 'required|in:coupon,direct',
+//         'coupon_code' => 'required_if:discount_mode,coupon',
+//         'discount_value' => 'required|numeric|min:1|max:100',
+//         'start_date' => 'required|date',
+//         'end_date' => 'required|date|after_or_equal:start_date',
+//         'status' => 'required|in:active,inactive'
+//     ]);
+
+//     $coupon->update([
+//         'discount_mode' => $request->discount_mode,
+//         'coupon_code' => $request->coupon_code,
+//         'discount_value' => $request->discount_value,
+//         'start_date' => $request->start_date,
+//         'end_date' => $request->end_date,
+//         'status' => $request->status
+//     ]);
+
+//     return response()->json(['status' => 'success', 'message' => 'Coupon updated successfully']);
+// }
+
+
+//package coupon delete
+public function packageCouponDelete(Request $request)
 {
-    $coupon = PackageDiscount::find($id);
-    if (!$coupon) {
-        return response()->json(['message' => 'Not found'], 404);
+    try {
+        $id = $request->id;
+
+        $coupon = PackageDiscount::find($id);
+
+        if (!$coupon) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Coupon not found',
+            ], 404);
+        }
+
+        $coupon->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Coupon deleted successfully',
+        ]);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Something went wrong while deleting the coupon.',
+            'error' => $e->getMessage(), // Debug purpose (can remove in production)
+        ], 500);
     }
-    return response()->json(['coupon' => $coupon]);
 }
-
-
-public function couponDiscountUpdate(Request $request)
-{
-    $coupon = PackageDiscount::find($request->id);
-    if (!$coupon) {
-        return response()->json(['message' => 'Not found'], 404);
-    }
-
-    $request->validate([
-        'discount_mode' => 'required|in:coupon,direct',
-        'coupon_code' => 'required_if:discount_mode,coupon',
-        'discount_value' => 'required|numeric|min:1|max:100',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after_or_equal:start_date',
-        'status' => 'required|in:active,inactive'
-    ]);
-
-    $coupon->update([
-        'discount_mode' => $request->discount_mode,
-        'coupon_code' => $request->coupon_code,
-        'discount_value' => $request->discount_value,
-        'start_date' => $request->start_date,
-        'end_date' => $request->end_date,
-        'status' => $request->status
-    ]);
-
-    return response()->json(['status' => 'success', 'message' => 'Coupon updated successfully']);
-}
-
 }

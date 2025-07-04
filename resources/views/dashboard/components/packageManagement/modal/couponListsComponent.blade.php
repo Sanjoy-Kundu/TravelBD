@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="couponListModal" tabindex="-1" aria-labelledby="couponListModalLabel" aria-hidden="true">
+<div class="modal fade" id="couponListModal" data-package-id="" tabindex="-1" aria-labelledby="couponListModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -34,6 +34,7 @@
 <script>
 async function fillCouponLists(id) {
     console.log(id);
+    $('#couponListModal').attr('data-package-id', id); //set package id to modal
     let token = localStorage.getItem('token');
     if (!token) {
         window.location.href = "/admin/login";
@@ -119,42 +120,44 @@ async function fillCouponLists(id) {
     // });
 
     // Delete
-    // $(document).on('click', '.package_coupon_delete_btn', function () {
-    //     let id = $(this).data('id');
+     $(document).on('click', '.package_coupon_delete_btn', function () {
+         let id = $(this).data('id');
+         let package_id = $('#couponListModal').data('package-id');
+        console.log(id);
+         Swal.fire({
+             title: 'Are you sure?',
+             text: "This will soft delete the coupon.",
+             icon: 'warning',
+             showCancelButton: true,
+             confirmButtonColor: '#dc3545',
+             cancelButtonColor: '#6c757d',
+             confirmButtonText: 'Yes, delete it!',
+             cancelButtonText: 'Cancel'
+         }).then(async (result) => {
+             if (result.isConfirmed) {
+                 try {
+                     let res = await axios.post('/admin/package-coupon/delete', {
+                         id: id
+                     }, {
+                         headers: {
+                             Authorization: `Bearer ${token}`
+                         }
+                     });
 
-    //     Swal.fire({
-    //         title: 'Are you sure?',
-    //         text: "This will soft delete the coupon.",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#dc3545',
-    //         cancelButtonColor: '#6c757d',
-    //         confirmButtonText: 'Yes, delete it!',
-    //         cancelButtonText: 'Cancel'
-    //     }).then(async (result) => {
-    //         if (result.isConfirmed) {
-    //             try {
-    //                 let res = await axios.post('/admin/package-coupon/delete', {
-    //                     id: id
-    //                 }, {
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`
-    //                     }
-    //                 });
+                     if (res.data.status === 'success') {
+                         Swal.fire('Deleted!', res.data.message, 'success');
+                         //await fillCouponLists(id); // refresh list after delete
+                         await fillCouponLists(package_id);
+                     } else {
+                         Swal.fire('Failed!', res.data.message || 'Delete failed.', 'error');
+                     }
 
-    //                 if (res.data.status === 'success') {
-    //                     Swal.fire('Deleted!', res.data.message, 'success');
-    //                     await fillCouponLists(id); // refresh list after delete
-    //                 } else {
-    //                     Swal.fire('Failed!', res.data.message || 'Delete failed.', 'error');
-    //                 }
-
-    //             } catch (error) {
-    //                 console.error(error);
-    //                 Swal.fire('Error!', 'Something went wrong.', 'error');
-    //             }
-    //         }
-    //     });
-    // });
+                 } catch (error) {
+                     console.error(error);
+                     Swal.fire('Error!', 'Something went wrong.', 'error');
+                 }
+             }
+         });
+     });
 }
 </script>

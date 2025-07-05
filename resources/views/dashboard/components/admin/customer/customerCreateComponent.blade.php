@@ -15,7 +15,8 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label>Admin Id</label>
-                        <input type="number" class="form-control" name="admin_id" placeholder="Admin id">
+                        <input type="number" class="form-control" name="admin_id" id="customer_create_by_admin_id"
+                            placeholder="Admin id" readonly>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -26,6 +27,10 @@
                         <label>Email</label>
                         <input type="email" class="form-control" name="email"
                             placeholder="e.g. rubelsarder@gmail.com">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label>Upload Image</label>
+                        <input type="file" class="form-control" name="image">
                     </div>
 
                     <div class="col-12 mb-3">
@@ -41,15 +46,77 @@
                         <input type="number" class="form-control" name="age" placeholder="e.g. 28">
                     </div>
                     <div class="col-12 mb-3">
-                        <label>Purpose</label>
-                        <select class="form-control" name="purpose">
+                        <label>Purpose / Categories</label>
+                        <select class="form-control" name="purpose"
+                            id="create_customer_componoent_package_category_dropdown">
                             <option value="">Select Purpose</option>
-                            <option value="Work Permit">Work Permit</option>
-                            <option value="Tourist">Tourist</option>
-                            <option value="Business">Business</option>
-                            <option value="Student Visa">Student Visa</option>
+
                         </select>
                     </div>
+
+                    <div class="col-12 mb-3">
+                        <label>Available Packages</label>
+                        <select class="form-control" name="package_id" id="customer_create_component_available_packages_dropdown">
+                            <option value="">Choose Category First</option>
+                        </select>
+                    </div>
+                    {{-- purpose wise package  start --}}
+                    <!-- Purpose Wise Package - Card Style -->
+                    <div class="col-12 mb-4">
+                        <div class="card border-info shadow-sm">
+                            <div class="card-header bg-info text-white fw-bold">
+                                <i class="fas fa-box-open me-2"></i>Purpose Wise Package Details
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label>Package Price</label>
+                                        <input type="number" class="form-control" name="price"
+                                            placeholder="e.g. 450000">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Package Duration</label>
+                                        <input type="text" class="form-control" name="duration"
+                                            placeholder="e.g. 6 Months">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Inclusions</label>
+                                        <input type="text" class="form-control" name="inclusions"
+                                            placeholder="Visa, Ticket, Insurance">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Exclusions</label>
+                                        <input type="text" class="form-control" name="exclusions"
+                                            placeholder="Personal Expenses">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Visa Processing Time</label>
+                                        <input type="text" class="form-control" name="visa_processing_time"
+                                            placeholder="e.g. 15 Days">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Documents Required</label>
+                                        <input type="text" class="form-control" name="documents_required"
+                                            placeholder="Passport, Photo, etc.">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Seat Availability</label>
+                                        <input type="text" class="form-control" name="seat_availability"
+                                            placeholder="e.g. 20 Seats Left">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- purpose wise package end --}}
+
                     <div class="col-12 mb-3">
                         <label>Country</label>
                         <input type="text" class="form-control" name="country" placeholder="e.g. Malaysia-MAS">
@@ -65,7 +132,8 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Sales Commission</label>
-                        <input type="text" class="form-control" name="sales_commission" placeholder="e.g. 20,000">
+                        <input type="text" class="form-control" name="sales_commission"
+                            placeholder="e.g. 20,000">
                     </div>
                     <div class="col-12 mb-3">
                         <label>MRP</label>
@@ -85,7 +153,8 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Passenger Price</label>
-                        <input type="text" class="form-control" name="passenger_price" placeholder="e.g. 4,80,000">
+                        <input type="text" class="form-control" name="passenger_price"
+                            placeholder="e.g. 4,80,000">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Date</label>
@@ -198,6 +267,42 @@
 
 
 <script>
+    //set admin id 
+    getUserInfo();
+    async function getUserInfo() {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "/admin/login";
+        }
+        try {
+            let res = await axios.get("/user/details/admin", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            console.log(res.data)
+
+            if (res.data.status == "success") {
+                console.log(res.data.data)
+                document.getElementById("customer_create_by_admin_id").value = res.data.data.id;
+            }
+        } catch (error) {
+            // middleware error check 
+            if (error.response && error.response.status === 401) {
+                alert(error.response.data.message); // "Unauthorized"
+                //  Token invalid → redirect to login
+                localStorage.removeItem('token');
+                window.location.href = "/admin/login";
+            } else {
+                alert("Something went wrong!");
+                console.error("Unexpected error:", error);
+            }
+        }
+    }
+
+
+    //account filed form
     function admintoggleAccountField() {
         let method = document.getElementById('payment_method').value;
         let accountField = document.getElementById('account_number_group');
@@ -209,9 +314,96 @@
         }
     }
 
-    // Token-based login check
+
+
+    //set category 
+    getadminCategoryLists()
+    async function getadminCategoryLists() {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "/admin/login";
+        }
+        try {
+
+            const res = await axios.get('/admin/package-category/lists', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (res.data.status === 'success') {
+                let categories = res.data.PackageCategories;
+                let select = document.getElementById('create_customer_componoent_package_category_dropdown');
+                select.innerHTML = '<option value="">Select Category</option>';
+                categories.forEach(category => {
+                    select.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            }
+
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
+
+
+    //package show by categories 
+// Package show by categories 
+document.getElementById('create_customer_componoent_package_category_dropdown')
+.addEventListener('change', async function() {
     let token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = "/staff/login";
+        window.location.href = "/admin/login";
     }
+
+    let category_id = this.value;
+    console.log(category_id);
+
+    try {
+        const res = await axios.post(`/admin/package/lists/by/category`, { category_id: category_id }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (res.data.status === 'success') {
+            let packages = res.data.packageListByCategory;
+            console.log(packages);
+
+          
+            let select = document.getElementById('customer_create_component_available_packages_dropdown');
+            select.innerHTML = '<option value="">Select Package</option>';
+            
+            packages.forEach(package => {
+                //console.log(pkg);
+                select.innerHTML += `<option value="${package.id}">${package.title}</option>`;
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching packages:", error);
+    }
+});
+
+
+
+//show package details by id
+document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change', async function () {
+    let id = this.value; //packages table id
+    //console.log(package_id);
+    let token = localStorage.getItem('token');
+
+    try{
+        let res = await axios.post('/admin/package/lists/details/by/catgory', {id: id},{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        let packageDetails = res.data.packageDetails[0]
+        console.log(packageDetails);
+    }catch(error){
+        console.error("Error fetching packages:", error);
+    }
+
+})
+
+
 </script>

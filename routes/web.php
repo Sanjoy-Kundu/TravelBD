@@ -7,6 +7,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AgentProfileController;
 use App\Http\Controllers\RegistrationController;
@@ -163,6 +164,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/admin/package-coupon/trash-list', [PackageDiscountController::class, 'packageCouponTrashList']);
     Route::post('/admin/package-coupon/restore', [PackageDiscountController::class, 'packageCouponRestoreList']);
     Route::post('/admin/package-coupon/permanent-delete', [PackageDiscountController::class, 'packageCouponPermanentDelete']);
+
+
+
+    //admin added customer 
+   Route::post('/admin/package/lists/by/category', [CustomerController::class, 'packageListByCategory']);
+   Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetailsByCategory']);
 });
 
 

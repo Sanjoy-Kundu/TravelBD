@@ -101,7 +101,7 @@
 
 
                      {{-- Package Management Menu --}}
-                    
+
                      <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                          data-bs-target="#collapsePackage" aria-expanded="false" aria-controls="collapsePackage">
                          <i class="fas fa-box me-2"></i>Package Management
@@ -110,11 +110,30 @@
 
                      <div class="collapse" id="collapsePackage" data-bs-parent="#sidenavAccordionUser">
                          <nav class="sb-sidenav-menu-nested nav">
-                             <a class="nav-link" href="{{ url('/create/package/category') }}" target="_blank">Category Lists</a>
-                             <a class="nav-link" href="{{url('/package/lists')}}" target="_blank">Package Lists</a>
-                             <a class="nav-link" href="{{url('/coupon/lists')}}" target="_blank">Coupon Lists</a>
+                             <a class="nav-link" href="{{ url('/create/package/category') }}"
+                                 target="_blank">Category Lists</a>
+                             <a class="nav-link" href="{{ url('/package/lists') }}" target="_blank">Package Lists</a>
+                             {{-- <a class="nav-link" href="{{url('/coupon/lists')}}" target="_blank">Coupon Lists</a> --}}
                          </nav>
                      </div>
+
+
+
+                     {{-- Customer Management Menu --}}
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                         data-bs-target="#collapseCustomer" aria-expanded="false" aria-controls="collapseCustomer">
+                         <i class="fas fa-users me-2"></i>Customer Management
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                     </a>
+
+                     <div class="collapse" id="collapseCustomer" data-bs-parent="#sidenavAccordionUser">
+                         <nav class="sb-sidenav-menu-nested nav">
+                             <a class="nav-link" href="" target="_blank">Add Customer</a>
+                             <a class="nav-link" href="" target="_blank">Admin Customer Lists</a>
+                             {{-- <a class="nav-link" href="{{ url('/customer/history') }}" target="_blank">Customer History</a> --}}
+                         </nav>
+                     </div>
+
 
 
 

@@ -38,7 +38,7 @@ class CustomerController extends Controller
     {
          try{
             $id = $request->id;
-            $packageDetails = Package::where('id', $id)->get();
+            $packageDetails = Package::with('discounts')->where('id', $id)->first();
             return response()->json(['status' => 'success','packageDetails' => $packageDetails], 200);
         }catch(Exception $ex){
             return response()->json(['error' => $ex->getMessage()], 500);

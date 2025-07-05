@@ -56,7 +56,8 @@
 
                     <div class="col-12 mb-3">
                         <label>Available Packages</label>
-                        <select class="form-control" name="package_id" id="customer_create_component_available_packages_dropdown">
+                        <select class="form-control" name="package_id"
+                            id="customer_create_component_available_packages_dropdown">
                             <option value="">Choose Category First</option>
                         </select>
                     </div>
@@ -110,6 +111,12 @@
                                         <input type="text" class="form-control" name="seat_availability"
                                             placeholder="e.g. 20 Seats Left">
                                     </div>
+
+                                  <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
+                                  
+
+                                
+
                                 </div>
                             </div>
                         </div>
@@ -269,7 +276,7 @@
 <script>
     //set admin id 
     getUserInfo();
-    async function getUserInfo() {
+    async function getUserInfo() { 
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = "/admin/login";
@@ -347,63 +354,114 @@
 
 
     //package show by categories 
-// Package show by categories 
-document.getElementById('create_customer_componoent_package_category_dropdown')
-.addEventListener('change', async function() {
-    let token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = "/admin/login";
-    }
+    // Package show by categories 
+    document.getElementById('create_customer_componoent_package_category_dropdown')
+        .addEventListener('change', async function() {
+            let token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = "/admin/login";
+            }
 
-    let category_id = this.value;
-    console.log(category_id);
+            let category_id = this.value;
+            console.log(category_id);
 
-    try {
-        const res = await axios.post(`/admin/package/lists/by/category`, { category_id: category_id }, {
-            headers: {
-                Authorization: `Bearer ${token}`
+            try {
+                const res = await axios.post(`/admin/package/lists/by/category`, {
+                    category_id: category_id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (res.data.status === 'success') {
+                    let packages = res.data.packageListByCategory;
+                    console.log(packages);
+
+
+                    let select = document.getElementById(
+                        'customer_create_component_available_packages_dropdown');
+                    select.innerHTML = '<option value="">Select Package</option>';
+
+                    packages.forEach(package => {
+                        //console.log(pkg);
+                        select.innerHTML += `<option value="${package.id}">${package.title}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching packages:", error);
             }
         });
 
-        if (res.data.status === 'success') {
-            let packages = res.data.packageListByCategory;
-            console.log(packages);
-
-          
-            let select = document.getElementById('customer_create_component_available_packages_dropdown');
-            select.innerHTML = '<option value="">Select Package</option>';
-            
-            packages.forEach(package => {
-                //console.log(pkg);
-                select.innerHTML += `<option value="${package.id}">${package.title}</option>`;
-            });
-        }
-    } catch (error) {
-        console.error("Error fetching packages:", error);
-    }
-});
 
 
+    //show package details by id
+    document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change',
+    async function() {
+            let id = this.value; //packages table id
+            //console.log(package_id);
+            let token = localStorage.getItem('token');
 
-//show package details by id
-document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change', async function () {
-    let id = this.value; //packages table id
-    //console.log(package_id);
-    let token = localStorage.getItem('token');
+            try {
+                let res = await axios.post('/admin/package/lists/details/by/catgory', {
+                    id: id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                let packageDetails = res.data.packageDetails;
 
-    try{
-        let res = await axios.post('/admin/package/lists/details/by/catgory', {id: id},{
-            headers: {
-                Authorization: `Bearer ${token}`
+
+                document.querySelector('input[name="price"]').value = packageDetails.price ?? '';
+                document.querySelector('input[name="duration"]').value = packageDetails.duration ?? '';
+                document.querySelector('input[name="inclusions"]').value = packageDetails.inclusions ?? '';
+                document.querySelector('input[name="exclusions"]').value = packageDetails.exclusions ?? '';
+                document.querySelector('input[name="visa_processing_time"]').value = packageDetails
+                    .visa_processing_time ?? '';
+                document.querySelector('input[name="documents_required"]').value = packageDetails
+                    .documents_required ?? '';
+                document.querySelector('input[name="seat_availability"]').value = packageDetails
+                    .seat_availability ?? '';
+
+                // Handle Discounts
+                let discounts = packageDetails.discounts || [];
+                let couponSection = document.getElementById('dynamic_coupon_section');
+                couponSection.innerHTML = ''; // Clear previous content
+
+                if (discounts.length > 0) {
+                    discounts.forEach((discount, index) => {
+                        couponSection.innerHTML += `
+                    <div class="row border p-2 mb-2 rounded bg-light">
+                        <div class="col-md-4 mb-2">
+                            <label>Coupon ${index + 1}</label>
+                            <input type="text" class="form-control" value="${discount.coupon_code ?? ''}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Validity</label>
+                            <input type="text" class="form-control" value="${discount.start_date ?? ''} to ${discount.end_date ?? ''}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Discount</label>
+                            <input type="text" class="form-control" value="${discount.discount_value ?? 'N/A'}" readonly>
+                        </div>
+                    </div>
+                `;
+                    });
+                } else {
+                    // No discount object — fallback (only discount amount)
+                    couponSection.innerHTML = `
+                <div class="row border p-2 mb-2 rounded bg-light">
+                    <div class="col-md-12 mb-2">
+                        <label>Discount</label>
+                        <input type="text" class="form-control" value="${packageDetails.discount ?? ''}" readonly>
+                    </div>
+                </div>
+            `;
+                }
+            } catch (error) {
+                console.error("Error fetching packages:", error);
             }
+
         })
-        let packageDetails = res.data.packageDetails[0]
-        console.log(packageDetails);
-    }catch(error){
-        console.error("Error fetching packages:", error);
-    }
-
-})
-
-
 </script>

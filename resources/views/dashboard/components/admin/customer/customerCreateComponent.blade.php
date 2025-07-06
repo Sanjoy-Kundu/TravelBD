@@ -72,50 +72,55 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label>Package Price</label>
-                                        <input type="number" class="form-control" name="price"
-                                            placeholder="e.g. 450000">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="price"
+                                                id="admin_package_price_field" placeholder="e.g. 450000">
+                                            <button type="button" class="btn btn-warning"
+                                                onclick="customerCreateUpdatePackagePrice(event)">Update</button>
+                                        </div>
+                                        <span class="text-danger" id="admin_package_price_error"></span>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Package Duration</label>
                                         <input type="text" class="form-control" name="duration"
-                                            placeholder="e.g. 6 Months">
+                                            placeholder="e.g. 6 Months" readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Inclusions</label>
                                         <input type="text" class="form-control" name="inclusions"
-                                            placeholder="Visa, Ticket, Insurance">
+                                            placeholder="Visa, Ticket, Insurance" readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Exclusions</label>
                                         <input type="text" class="form-control" name="exclusions"
-                                            placeholder="Personal Expenses">
+                                            placeholder="Personal Expenses" readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Visa Processing Time</label>
                                         <input type="text" class="form-control" name="visa_processing_time"
-                                            placeholder="e.g. 15 Days">
+                                            placeholder="e.g. 15 Days" readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Documents Required</label>
                                         <input type="text" class="form-control" name="documents_required"
-                                            placeholder="Passport, Photo, etc.">
+                                            placeholder="Passport, Photo, etc." readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Seat Availability</label>
                                         <input type="text" class="form-control" name="seat_availability"
-                                            placeholder="e.g. 20 Seats Left">
+                                            placeholder="e.g. 20 Seats Left" readonly>
                                     </div>
 
-                                  <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
-                                  
+                                    <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
 
-                                
+
+
 
                                 </div>
                             </div>
@@ -276,7 +281,7 @@
 <script>
     //set admin id 
     getUserInfo();
-    async function getUserInfo() { 
+    async function getUserInfo() {
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = "/admin/login";
@@ -353,7 +358,6 @@
 
 
 
-    //package show by categories 
     // Package show by categories 
     document.getElementById('create_customer_componoent_package_category_dropdown')
         .addEventListener('change', async function() {
@@ -395,12 +399,18 @@
 
 
 
-    //show package details by id
+   
+   
+        //show package details by id
     document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change',
-    async function() {
+        async function() {
             let id = this.value; //packages table id
             //console.log(package_id);
             let token = localStorage.getItem('token');
+            //rest inner html data 
+            document.getElementById('admin_package_price_error').innerHTML = '';
+
+
 
             try {
                 let res = await axios.post('/admin/package/lists/details/by/catgory', {
@@ -417,12 +427,9 @@
                 document.querySelector('input[name="duration"]').value = packageDetails.duration ?? '';
                 document.querySelector('input[name="inclusions"]').value = packageDetails.inclusions ?? '';
                 document.querySelector('input[name="exclusions"]').value = packageDetails.exclusions ?? '';
-                document.querySelector('input[name="visa_processing_time"]').value = packageDetails
-                    .visa_processing_time ?? '';
-                document.querySelector('input[name="documents_required"]').value = packageDetails
-                    .documents_required ?? '';
-                document.querySelector('input[name="seat_availability"]').value = packageDetails
-                    .seat_availability ?? '';
+                document.querySelector('input[name="visa_processing_time"]').value = packageDetails.visa_processing_time ?? '';
+                document.querySelector('input[name="documents_required"]').value = packageDetails.documents_required ?? '';
+                document.querySelector('input[name="seat_availability"]').value = packageDetails.seat_availability ?? '';
 
                 // Handle Discounts
                 let discounts = packageDetails.discounts || [];
@@ -464,4 +471,51 @@
             }
 
         })
+
+    
+    
+    
+    
+    
+    
+    
+        //package price update
+    async function customerCreateUpdatePackagePrice(event) {
+        event.preventDefault();
+        let token = localStorage.getItem('token');
+        if (!token) {
+            return alert("Unauthorized. Please login again.");
+        }
+
+        let id = document.getElementById("customer_create_component_available_packages_dropdown").value;
+        let new_price = document.getElementById("admin_package_price_field").value;
+
+        console.log(id, new_price);
+        if (!id) return alert("Please select a package first.");
+        if (!new_price || isNaN(new_price)) return alert("Enter a valid price.");
+
+        //console.log(new_price);
+
+        try {
+            let res = await axios.post("/admin/package/price/update", {
+                id: id,
+                price: new_price
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.data.status === "success") {
+                document.getElementById('admin_package_price_error').innerHTML = res.data.message;
+            } else {
+                console.log("Update failed. " + res.data.message);
+            }
+        } catch (error) {
+            //console.error(error.response.data.message);
+            document.getElementById('admin_package_price_error').innerHTML = error.response.data.message;
+            
+        }
+    }
 </script>

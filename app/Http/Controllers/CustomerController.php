@@ -46,11 +46,28 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Customer page package pirce update
      */
-    public function show(Customer $customer)
+    public function packagePriceUpdateCustomer(Request $request)
     {
-        //
+        try{
+            $id = $request->id;
+            $price = $request->price;
+            $findPackage = Package::where('id', $id)->first();
+            if(!$findPackage){
+                return response()->json(['status' => 'error', 'message'=> 'Package not found'], 500);
+            }
+            if($findPackage->price == $price){
+                return response()->json(['status' => 'error', 'message'=> 'Please Update price'], 500);
+            }
+            $findPackage->price = $price;
+            $findPackage->save();
+            return response()->json(['status' => 'success','message' => 'Package price updated successfully'], 200);
+             
+
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message'=> $ex->getMessage()], 500);
+        }
     }
 
     /**

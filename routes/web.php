@@ -170,6 +170,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     //admin added customer 
    Route::post('/admin/package/lists/by/category', [CustomerController::class, 'packageListByCategory']);
    Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetailsByCategory']);
+   Route::post('/admin/package/price/update', [CustomerController::class, 'packagePriceUpdateCustomer']);
 });
 
 

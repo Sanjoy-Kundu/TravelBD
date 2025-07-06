@@ -21,29 +21,29 @@
 
                     <div class="col-12 mb-3">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER">
+                        <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER" id="name">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Email</label>
                         <input type="email" class="form-control" name="email"
-                            placeholder="e.g. rubelsarder@gmail.com">
+                            placeholder="e.g. rubelsarder@gmail.com" id="email">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Upload Image</label>
-                        <input type="file" class="form-control" name="image">
+                        <input type="file" class="form-control" name="image" id="image">
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Phone</label>
-                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000">
+                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000" id="phone">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
-                        <input type="text" class="form-control" name="passport_no" placeholder="e.g. B00588828">
+                        <input type="text" class="form-control" name="passport_no" placeholder="e.g. B00588828" id="passport_no">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Age</label>
-                        <input type="number" class="form-control" name="age" placeholder="e.g. 28">
+                        <input type="number" class="form-control" name="age" placeholder="e.g. 28" id="age">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Purpose / Categories</label>
@@ -63,7 +63,7 @@
                     </div>
                     {{-- purpose wise package  start --}}
                     <!-- Purpose Wise Package - Card Style -->
-                    <div class="col-12 mb-4">
+                    <div class="col-12 mb-4 d-none" id="purpose_wise_package_section">
                         <div class="card border-info shadow-sm">
                             <div class="card-header bg-info text-white fw-bold">
                                 <i class="fas fa-box-open me-2"></i>Purpose Wise Package Details
@@ -84,44 +84,41 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Package Duration</label>
                                         <input type="text" class="form-control" name="duration"
-                                            placeholder="e.g. 6 Months" readonly>
+                                            placeholder="e.g. 6 Months" readonly id="duration">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Inclusions</label>
                                         <input type="text" class="form-control" name="inclusions"
-                                            placeholder="Visa, Ticket, Insurance" readonly>
+                                            placeholder="Visa, Ticket, Insurance" readonly id="inclusions">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Exclusions</label>
                                         <input type="text" class="form-control" name="exclusions"
-                                            placeholder="Personal Expenses" readonly>
+                                            placeholder="Personal Expenses" readonly id="exclusions">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Visa Processing Time</label>
                                         <input type="text" class="form-control" name="visa_processing_time"
-                                            placeholder="e.g. 15 Days" readonly>
+                                            placeholder="e.g. 15 Days" readonly id="visa_processing_time">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Documents Required</label>
                                         <input type="text" class="form-control" name="documents_required"
-                                            placeholder="Passport, Photo, etc." readonly>
+                                            placeholder="Passport, Photo, etc." readonly id="documents_required">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Seat Availability</label>
                                         <input type="text" class="form-control" name="seat_availability"
-                                            placeholder="e.g. 20 Seats Left" readonly>
+                                            placeholder="e.g. 20 Seats Left" readonly id="seat_availability">
                                     </div>
 
                                     <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
-
-
-
-
+                                    {{-- coupon or discount --}}
                                 </div>
                             </div>
                         </div>
@@ -131,62 +128,62 @@
 
                     <div class="col-12 mb-3">
                         <label>Country</label>
-                        <input type="text" class="form-control" name="country" placeholder="e.g. Malaysia-MAS">
+                        <input type="text" class="form-control" name="country" placeholder="e.g. Malaysia-MAS" id="country">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Company Name</label>
                         <input type="text" class="form-control" name="company_name"
-                            placeholder="e.g. RAMLY FOOD PROCESSING">
+                            placeholder="e.g. RAMLY FOOD PROCESSING" id="company_name">
                     </div>
                     <div class="col-12 mb-3">
                         <label>PIC</label>
-                        <input type="text" class="form-control" name="pic" placeholder="e.g. PIC001">
+                        <input type="text" class="form-control" name="pic" placeholder="e.g. PIC001" id="pic">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Sales Commission</label>
                         <input type="text" class="form-control" name="sales_commission"
-                            placeholder="e.g. 20,000">
+                            placeholder="e.g. 20,000" id="sales_commission">
                     </div>
                     <div class="col-12 mb-3">
-                        <label>MRP</label>
-                        <input type="text" class="form-control" name="mrp" placeholder="e.g. 4,80,000">
+                        <label>MRP(only admin)</label>
+                        <input type="text" class="form-control" name="mrp" placeholder="e.g. 4,80,000" id="mrp">
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 d-none">
                         <label>Agent Name</label>
                         <input type="text" class="form-control" name="agent_name" placeholder="e.g. RAJU-MAS">
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 d-none">
                         <label>Agent Code</label>
                         <input type="text" class="form-control" name="agent_code" placeholder="e.g. NJ-AG-01">
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 d-none">
                         <label>Agent Price</label>
                         <input type="text" class="form-control" name="agent_price" placeholder="e.g. 4,50,000">
                     </div>
                     <div class="col-12 mb-3">
-                        <label>Passenger Price</label>
+                        <label>Passenger Price (only admin)</label>
                         <input type="text" class="form-control" name="passenger_price"
-                            placeholder="e.g. 4,80,000">
+                            placeholder="e.g. 4,80,000" id="passenger_price">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Date</label>
-                        <input type="date" class="form-control" name="medical_date">
+                        <input type="date" class="form-control" name="medical_date" id="medical_date">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Center</label>
                         <input type="text" class="form-control" name="medical_center"
-                            placeholder="e.g. Green Life Medical">
+                            placeholder="e.g. Green Life Medical" id="medical_center">
                     </div>
                     <div class="col-12 mb-3">
                         <label>Medical Result</label>
                         <input type="text" class="form-control" name="medical_result"
-                            placeholder="e.g. FIT / UNFIT">
+                            placeholder="e.g. FIT / UNFIT" id="medical_result">
                     </div>
 
                     <!-- Step Status -->
                     <div class="col-12 mb-3">
                         <label>Visa Online</label>
-                        <select class="form-control" name="visa_online">
+                        <select class="form-control" name="visa_online" id="visa_online">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -194,7 +191,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Calling</label>
-                        <select class="form-control" name="calling">
+                        <select class="form-control" name="calling" id="calling">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -202,7 +199,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Training</label>
-                        <select class="form-control" name="training">
+                        <select class="form-control" name="training" id="training">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -210,7 +207,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>E-Vissa</label>
-                        <select class="form-control" name="e_vissa">
+                        <select class="form-control" name="e_vissa" id="e_vissa">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -218,7 +215,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>BMET</label>
-                        <select class="form-control" name="bmet">
+                        <select class="form-control" name="bmet" id="bmet">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -226,7 +223,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Fly</label>
-                        <select class="form-control" name="fly">
+                        <select class="form-control" name="fly" id="fly">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -234,7 +231,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label>Payment</label>
-                        <select class="form-control" name="payment">
+                        <select class="form-control" name="payment" id="payment">
                             <option value="">Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -256,12 +253,12 @@
                     <div class="col-12 mb-3 d-none" id="account_number_group">
                         <label>Account Number</label>
                         <input type="text" class="form-control" name="account_number"
-                            placeholder="e.g. 1234567890">
+                            placeholder="e.g. 1234567890" id="account_number">
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Approval</label>
-                        <select class="form-control" name="approval">
+                        <select class="form-control" name="approval" id="approval">
                             <option value="">Select approval</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
@@ -270,7 +267,7 @@
                 </div>
 
                 <div class="text-end">
-                    <button class="btn btn-primary px-4">Submit</button>
+                    <button class="btn btn-primary px-4" onclick="customerInsert(event)">Submit</button>
                 </div>
             </form>
         </div>
@@ -410,7 +407,7 @@
             //rest inner html data 
             document.getElementById('admin_package_price_error').innerHTML = '';
 
-
+            document.getElementById('purpose_wise_package_section').classList.remove('d-none');
 
             try {
                 let res = await axios.post('/admin/package/lists/details/by/catgory', {
@@ -518,4 +515,93 @@
             
         }
     }
+
+
+
+
+
+
+
+
+    //submit customer
+    async function customerInsert(event) {
+    event.preventDefault();
+
+    let formData = new FormData();
+
+    //get image
+    let imageFile = document.getElementById('image').files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    formData.append('admin_id', document.getElementById('customer_create_by_admin_id').value);
+    formData.append('name', document.getElementById('name').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('phone', document.getElementById('phone').value);
+    formData.append('passport_no', document.getElementById('passport_no').value);
+    formData.append('age', document.getElementById('age').value);
+    formData.append('purpose', document.getElementById('create_customer_componoent_package_category_dropdown').value);
+    formData.append('package_id', document.getElementById('customer_create_component_available_packages_dropdown').value);
+    
+  
+    formData.append('price', document.getElementById('admin_package_price_field').value);
+    formData.append('duration', document.getElementById('duration').value);
+    formData.append('inclusions', document.getElementById('inclusions').value);
+    formData.append('visa_processing_time', document.getElementById('visa_processing_time').value);
+    formData.append('documents_required', document.getElementById('documents_required').value);
+    formData.append('country', document.getElementById('country').value);
+    formData.append('company_name', document.getElementById('company_name').value);
+    formData.append('pic', document.getElementById('pic').value);
+    formData.append('sales_commission', document.getElementById('sales_commission').value);
+    formData.append('mrp', document.getElementById('mrp').value);
+    formData.append('passenger_price', document.getElementById('passenger_price').value);
+    formData.append('medical_date', document.getElementById('medical_date').value);
+    formData.append('medical_center', document.getElementById('medical_center').value);
+    formData.append('medical_result', document.getElementById('medical_result').value);
+    formData.append('visa_online', document.getElementById('visa_online').value);
+    formData.append('calling', document.getElementById('calling').value);
+    formData.append('training', document.getElementById('training').value);
+    formData.append('e_vissa', document.getElementById('e_vissa').value);
+    formData.append('bmet', document.getElementById('bmet').value);
+    formData.append('fly', document.getElementById('fly').value);
+    formData.append('payment_method', document.getElementById('payment_method').value);
+    formData.append('account_number', document.getElementById('account_number').value);
+    formData.append('account_number', document.getElementById('account_number').value);
+    formData.append('approval', document.getElementById('approval').value);
+
+    for (let [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+}
+    
+
+    // token check
+    // let token = localStorage.getItem('token');
+    // if (!token) {
+    //     alert("Unauthorized. Please login again.");
+    //     window.location.href = "/admin/login";
+    //     return;
+    // }
+
+    // try {
+    //     const response = await axios.post('/admin/customer/create', formData, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //             'Content-Type': 'multipart/form-data' // এটা দিলে Axios নিজেই হ্যান্ডেল করবে
+    //         }
+    //     });
+
+    //     if (response.data.status === 'success') {
+    //         alert('Customer created successfully!');
+    //         document.getElementById('admin_customer_form').reset();
+    //         document.getElementById('admin_id').value = 101; // admin id পুনরায় সেট করা যেতে পারে
+    //         document.getElementById('purpose_wise_package_section').classList.add('d-none');
+    //     } else {
+    //         alert('Failed to create customer: ' + (response.data.message || 'Unknown error'));
+    //     }
+    // } catch (error) {
+    //     alert('Error: ' + (error.response?.data?.message || error.message));
+    //     console.error(error);
+    // }
+}
 </script>

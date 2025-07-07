@@ -71,11 +71,15 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     *apply coupon
      */
-    public function edit(Customer $customer)
+    public function packageApplyCoupon(Request $request)
     {
-        //
+        try{
+            
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message'=> $ex->getMessage()], 500);
+        }
     }
 
     /**

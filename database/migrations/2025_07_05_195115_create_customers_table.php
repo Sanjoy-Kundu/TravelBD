@@ -26,6 +26,10 @@ return new class extends Migration
         $table->string('phone', 20);
         $table->string('passport_no', 50);
         $table->unsignedInteger('age')->nullable();
+        $table->enum('gender', ['male', 'female', 'other'])->nullable();
+        $table->date('date_of_birth')->nullable();
+        $table->string('nid_number')->nullable();
+
 
         $table->string('purpose')->nullable();
         $table->decimal('price', 12, 2)->nullable();
@@ -71,6 +75,7 @@ return new class extends Migration
         $table->string('account_number')->nullable();
 
         $table->enum('approval', ['Pending', 'Complete'])->default('Pending');
+        $table->ipAddress('created_by_ip')->nullable();
 
         $table->timestamps();
 

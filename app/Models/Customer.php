@@ -13,7 +13,7 @@ class Customer extends Model
     protected $fillable = [
         'admin_id', 'agent_id', 'staff_id',
         'package_id', 'package_category_id',
-        'name', 'email', 'image', 'phone', 'passport_no', 'age',
+        'name', 'email', 'image', 'phone', 'passport_no', 'age', 'gender','date_of_birth','nid_number',
         'purpose', 'price', 'duration', 'inclusions', 'exclusions',
         'visa_processing_time', 'documents_required', 'seat_availability',
         'country', 'company_name', 'pic',
@@ -23,7 +23,7 @@ class Customer extends Model
         'medical_date', 'medical_center', 'medical_result',
         'visa_online', 'calling', 'training', 'e_vissa', 'bmet', 'fly', 'payment',
         'payment_method', 'account_number',
-        'approval',
+        'approval','created_by_ip'
     ];
 
     // 👉 Relationships

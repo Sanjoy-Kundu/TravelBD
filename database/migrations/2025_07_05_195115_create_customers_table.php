@@ -32,38 +32,41 @@ return new class extends Migration
 
 
         
-        $table->decimal('price', 12, 2)->nullable();
-        $table->string('duration')->nullable();
+        $table->decimal('price', 18, 2)->nullable(); //selected package price
+        $table->string('duration')->nullable(); //selected package duration
 
-        $table->text('inclusions')->nullable();
-        $table->text('exclusions')->nullable();
+        $table->text('inclusions')->nullable(); //selected package inclusions
+        $table->text('exclusions')->nullable(); //selected package exclusions
 
-        $table->string('visa_processing_time')->nullable();
-        $table->text('documents_required')->nullable();
-        $table->string('seat_availability')->nullable();
+        $table->string('visa_processing_time')->nullable(); //selected package visa processing time
+        $table->text('documents_required')->nullable(); //selected package documents required
+        $table->string('seat_availability')->nullable(); //selected package seat availability
+
         $table->string('coupon_code')->nullable();
-        $table->string('coupon_use_discounted_price')->nullable();
-        $table->string('package_discount')->nullable();
+        $table->decimal('coupon_discount',18,2)->nullable();
+        $table->decimal('coupon_use_discounted_price',18,2)->nullable(); // if coupon use then discounted price
+      
 
-        $table->string('package_only_discount')->nullable();
-        $table->string('package_only_dicounted_price')->nullable();
+        $table->decimal('package_discount',17,2)->nullable()->comment('Package Discount Percentage'); //first time package when upload if discount
+        $table->decimal('package_discounted_price',18,2)->nullable(); //pacage discounted price
 
         $table->string('country')->nullable();
         $table->string('company_name')->nullable();
         $table->string('pic')->nullable();
 
-        $table->decimal('sales_commission', 12, 2)->nullable();
-        $table->decimal('mrp', 12, 2)->nullable();
+        $table->decimal('sales_commission', 18, 2)->nullable();
+        $table->decimal('mrp', 18, 2)->nullable();
 
         $table->string('agent_name')->nullable();
         $table->string('agent_code')->nullable();
-        $table->decimal('agent_price', 12, 2)->nullable();
-        $table->decimal('passenger_price', 12, 2)->nullable();
+        $table->decimal('agent_price', 18, 2)->nullable();
+
+        $table->decimal('passenger_price', 18, 2)->nullable(); //finally passenger or customer that account pay
 
         $table->string('staff_name')->nullable();
         $table->string('staff_code')->nullable();
-        $table->decimal('staff_price', 12, 2)->nullable();
-        //$table->decimal('passenger_price', 12, 2)->nullable();
+        $table->decimal('staff_price', 18, 2)->nullable();
+ 
 
         $table->date('medical_date')->nullable();
         $table->string('medical_center')->nullable();

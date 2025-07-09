@@ -139,94 +139,123 @@ class CustomerController extends Controller
     /**
      *Customer created by admin
      */
-    public function customerCreateByAdmin(Request $request)
-    {
-        try {
-            // ✅ Validation
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:customers,email',
-                'phone' => 'required|string|max:20',
-                'passportNo' => 'required|string|max:50',
-                'packageId' => 'required|exists:packages,id',
-                'package_category_id' => 'nullable|exists:package_categories,id',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-                // Add other validations if needed
-            ]);
+public function customerCreateByAdmin(Request $request)
+{
+    try {
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:customers,email',
+            'phone' => 'required|string|max:20',
+            'passport_no' => 'required|string|max:50',
+            'package_id' => 'required|exists:packages,id',
+            'package_category_id' => 'nullable|exists:package_categories,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json(
-                    [
-                        'status' => 'error',
-                        'message' => 'Validation failed!',
-                        'errors' => $validator->errors(),
-                    ],
-                    422,
-                );
-            }
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed!',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
-        
-         $imagePath = null;
+              $imagePath = null;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $customer_image_Name = Str::random(20) . '.' . $image->getClientOriginalExtension();
                 $imagePath = $image->move(public_path('upload/dashboard/images/customers'), $customer_image_Name);
             }
 
-        
-            $customer = Customer::create([
-                'admin_id' => $request->admin_id,
-                'name' => Str::upper($request->name),
-                'email' => Str::lower($request->email),
-                'phone' => $request->phone,
-                'passport_no' => $request->passportNo,
-                'age' => $request->age,
-                'date_of_birth' => $request->date_of_birth,
-                'gender' => Str::upper($request->gender),
-                'nid_number' => $request->nid_number,
-                'package_category_id' => $request->package_category_id,
-                'package_id' => $request->packageId,
-                'country' => Str::upper($request->country),
-                'company_name' => Str::upper($request->company_name),
-                'pic' => $request->pic,
-                'sales_commission' => $request->sales_commission,
-                'mrp' => $request->mrp,
-                'passenger_price' => $request->customer_price,
-                'medical_date' => $request->medical_date,
-                'medical_center' => Str::upper($request->medical_center),
-                'medical_result' => Str::upper($request->medical_result),
-                'visa_online' => $request->visa_online,
-                'calling' => $request->calling,
-                'training' => $request->training,
-                'e_vissa' => $request->e_vissa,
-                'bmet' => $request->bmet,
-                'fly' => $request->fly,
-                'payment' => $request->payment,
-                'payment_method' => $request->payment_method,
-                'account_number' => $request->account_number,
-                'approval' => $request->approval,
-                'image' => $imagePath,
-                'created_by_ip' => $request->ip(), 
-            ]);
 
-            return response()->json(
-                [
-                    'status' => 'success',
-                    'message' => 'Customer created successfully!',
-                    'data' => $customer,
-                ],
-                200,
-            );
-        } catch (Exception $ex) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => $ex->getMessage(),
-                ],
-                500,
-            );
+
+
+        $package = Package::with('discounts')->find($request->package_id);
+
+        if (!$package) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Package not found'
+            ], 404);
         }
+
+        // direct discount 
+        $directDiscount = $package->discounts->firstWhere('discount_mode', 'direct');
+
+        $discountPercentage = $directDiscount->discount_value ?? 0;
+        $price = $package->price ?? 0;
+        $discountedPrice = $price - ($price * $discountPercentage / 100);
+
+        // Create customer
+        $customer = Customer::create([
+            'admin_id' => $request->admin_id,
+            'name' => Str::upper($request->name),
+            'email' => Str::lower($request->email),
+            'phone' => $request->phone,
+            'passport_no' => $request->passport_no,
+            'age' => $request->age,
+            'date_of_birth' => $request->date_of_birth,
+            'gender' => Str::upper($request->gender),
+            'nid_number' => $request->nid_number,
+            'package_id' => $request->package_id,
+            'package_category_id' => $request->package_category_id,
+
+            // From package
+            'price' => $price,
+            'duration' => $package->duration,
+            'inclusions' => $package->inclusions,
+            'exclusions' => $package->exclusions,
+            'visa_processing_time' => $package->visa_processing_time,
+            'documents_required' => $package->documents_required,
+            'seat_availability' => $package->seat_availability,
+            'package_discount' => $discountPercentage,
+            'package_discounted_price' => $discountedPrice,
+
+            // Coupon
+            'coupon_code' => Str::upper($request->coupon_code),
+            'coupon_discount' => $request->coupon_discount ?? null,
+            'coupon_use_discounted_price' => $request->coupon_use_discounted_price,
+
+            // Others
+            'country' => Str::upper($request->country),
+            'company_name' => Str::upper($request->company_name),
+            'pic' => $request->pic,
+            'sales_commission' => $request->sales_commission,
+            'mrp' => $request->mrp,
+            'passenger_price' => $request->passenger_price,
+
+            'medical_date' => $request->medical_date,
+            'medical_center' => Str::upper($request->medical_center),
+            'medical_result' => Str::upper($request->medical_result),
+
+            'visa_online' => $request->visa_online,
+            'calling' => $request->calling,
+            'training' => $request->training,
+            'e_vissa' => $request->e_vissa,
+            'bmet' => $request->bmet,
+            'fly' => $request->fly,
+            'payment' => $request->payment,
+            'payment_method' => $request->payment_method,
+            'account_number' => $request->account_number,
+            'approval' => $request->approval,
+            'image' => $imagePath,
+            'created_by_ip' => $request->ip(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Customer created successfully!',
+            'data' => $customer,
+        ], 200);
+
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Remove the specified resource from storage.

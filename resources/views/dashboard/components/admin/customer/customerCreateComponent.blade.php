@@ -23,14 +23,16 @@
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER"
                             id="customer_name">
-                        <span class="custoner_name_error" style="color:red" id="customer_name_error"></span>
+                        <span class="customer_name_error" style="color:red" id="customer_name_error"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Email</label>
                         <input type="email" class="form-control" name="email"
                             placeholder="e.g. rubelsarder@gmail.com" id="customer_email">
-                        <span class="custoner_email_error" style="color:red" id="customer_email_error"></span>
+                        <span class="customer_email_error" style="color:red" id="customer_email_error"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Upload Image</label>
                         <input type="file" class="form-control" name="image" id="customer_image">
@@ -42,6 +44,7 @@
                             id="customer_phone">
                         <span class="customer_phone_error" style="color:red" id="customer_phone_error"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
                         <input type="text" class="form-control" name="passport_no" placeholder="e.g. B00588828"
@@ -49,6 +52,7 @@
                         <span class="customer_passport_no_error" style="color:red"
                             id="customer_passport_no_error"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Age</label>
                         <input type="number" class="form-control" name="age" placeholder="e.g. 28"
@@ -76,17 +80,15 @@
 
                     <div class="col-12 mb-3">
                         <label>NID Number</label>
-                        <input type="number" class="form-control" name="nid_number" placeholder="e.g. 28"
+                        <input type="text" class="form-control" name="nid_number" placeholder="e.g. 1234567890"
                             id="customer_nid_number">
                         <span class="customer_nid_number_error" style="color:red" id="customer_nid_number_error"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Purpose / Categories</label>
-                        <select class="form-control" name="package_category_id"
-                            id="create_customer_componoent_package_category_dropdown">
+                        <select class="form-control" name="package_category_id" id="package_categories_dropdown">
                             <option value="">Select Purpose</option>
-
                         </select>
                         <span class="customer_purpose_error" style="color:red" id="customer_purpose_error"></span>
                     </div>
@@ -99,8 +101,9 @@
                         </select>
                         <span class="customer_package_error" style="color:red" id="customer_package_error"></span>
                     </div>
-                    {{-- purpose wise package  start --}}
-                    <!-- Purpose Wise Package - Card Style -->
+
+                    <!-- purpose wise package section -->
+
                     <div class="col-12 mb-4 d-none" id="purpose_wise_package_section">
                         <div class="card border-info shadow-sm">
                             <div class="card-header bg-info text-white fw-bold">
@@ -191,88 +194,98 @@
                         </div>
                     </div>
 
-                    {{-- purpose wise package end --}}
-
                     <div class="col-12 mb-3">
                         <label>Country</label>
-                        <input type="text" class="form-control" name="country" placeholder="e.g. Malaysia-MAS"
-                            id="customer_country">
-                        <span class="customer_error text-danger" id="customer_country_error_message"
-                            style="color:red"></span>
+                        <input type="text" class="form-control" name="country" id="customer_country"
+                            placeholder="e.g. Malaysia-MAS">
+                        <span class="customer_country_error" style="color:red"
+                            id="customer_country_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Company Name</label>
-                        <input type="text" class="form-control" name="company_name"
-                            placeholder="e.g. RAMLY FOOD PROCESSING" id="customer_company_name">
-                        <span class="customer_error text-danger" id="customer_company_name_error_message"
-                            style="color:red"></span>
+                        <input type="text" class="form-control" name="company_name" id="customer_company_name"
+                            placeholder="e.g. RAMLY FOOD PROCESSING">
+                        <span class="customer_company_name_error" style="color:red"
+                            id="customer_company_name_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>PIC</label>
-                        <input type="text" class="form-control" name="pic" placeholder="e.g. PIC001"
-                            id="customer_pic">
-                        <span class="customer_pic_error" id="customer_pic_error_message" style="color:red"></span>
+                        <input type="text" class="form-control" name="pic" id="customer_pic"
+                            placeholder="e.g. PIC001">
+                        <span class="customer_pic_error" style="color:red" id="customer_pic_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Sales Commission</label>
-                        <input type="text" class="form-control" name="sales_commission" placeholder="e.g. 20,000"
-                            id="customer_sales_commission">
-                        <span class="customer_sales_commission_error" id="customer_sales_commission_error_message"
-                            style="color:red"></span>
+                        <input type="number" class="form-control" name="sales_commission"
+                            id="customer_sales_commission" placeholder="e.g. 20,000">
+                        <span class="customer_sales_commission_error" style="color:red"
+                            id="customer_sales_commission_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
-                        <label>MRP(only admin)</label>
-                        <input type="text" class="form-control" name="mrp" placeholder="e.g. 4,80,000"
-                            id="customer_mrp">
-                        <span class="customer_mrp_error" id="customer_mrp_error_message" style="color:red"></span>
+                        <label>MRP (only admin)</label>
+                        <input type="number" class="form-control" name="mrp" id="customer_mrp"
+                            placeholder="e.g. 480000">
+                        <span class="customer_mrp_error" style="color:red" id="customer_mrp_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3 d-none">
                         <label>Agent Name</label>
                         <input type="text" class="form-control" name="agent_name" placeholder="e.g. RAJU-MAS">
-                        <span class="customer_agent_name_error" id="customer_agent_name_error_message"
-                            style="color:red"></span>
+                        <span class="customer_agent_name_error" style="color:red"
+                            id="customer_agent_name_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3 d-none">
                         <label>Agent Code</label>
                         <input type="text" class="form-control" name="agent_code" placeholder="e.g. NJ-AG-01">
-                        <span class="customer_agent_code_error" id="customer_agent_code_error_message"
-                            style="color:red"></span>
+                        <span class="customer_agent_code_error" style="color:red"
+                            id="customer_agent_code_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3 d-none">
                         <label>Agent Price</label>
-                        <input type="text" class="form-control" name="agent_price" placeholder="e.g. 4,50,000">
-                        <span class="customer_agent_price_error" id="customer_agent_price_error_message"
-                            style="color:red"></span>
+                        <input type="text" class="form-control" name="agent_price" placeholder="e.g. 450000">
+                        <span class="customer_agent_price_error" style="color:red"
+                            id="customer_agent_price_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Passenger Price (only admin)</label>
-                        <input type="text" class="form-control" name="passenger_price"
-                            placeholder="e.g. 4,80,000" id="customer_passenger_price">
-                        <span class="customer_passenger_price_error" id="customer_passenger_price_error_message"
-                            style="color:red"></span>
+                        <input type="number" class="form-control" name="passenger_price"
+                            id="customer_passenger_price" placeholder="e.g. 480000">
+                        <span class="customer_passenger_price_error" style="color:red"
+                            id="customer_passenger_price_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Medical Date</label>
                         <input type="date" class="form-control" name="medical_date" id="customer_medical_date">
-                        <span class="customer_medical_date_error" id="customer_medical_date_error_message"
-                            style="color:red"></span>
+                        <span class="customer_medical_date_error" style="color:red"
+                            id="customer_medical_date_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Medical Center</label>
                         <input type="text" class="form-control" name="medical_center"
-                            placeholder="e.g. Green Life Medical" id="customer_medical_center">
-                        <span class="customer_medical_center_error" id="customer_medical_center_error_message"
-                            style="color:red"></span>
+                            id="customer_medical_center" placeholder="e.g. Green Life Medical">
+                        <span class="customer_medical_center_error" style="color:red"
+                            id="customer_medical_center_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Medical Result</label>
                         <input type="text" class="form-control" name="medical_result"
-                            placeholder="e.g. FIT / UNFIT" id="customer_medical_result">
-                        <span class="customer_medical_result_error" id="customer_medical_result_error_message"
-                            style="color:red"></span>
+                            id="customer_medical_result" placeholder="e.g. FIT / UNFIT">
+                        <span class="customer_medical_result_error" style="color:red"
+                            id="customer_medical_result_error_message"></span>
                     </div>
 
-                    <!-- Step Status -->
+                    <!-- Status Fields -->
+
                     <div class="col-12 mb-3">
                         <label>Visa Online</label>
                         <select class="form-control" name="visa_online" id="customer_visa_online">
@@ -280,9 +293,10 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_visa_online_error" id="customer_visa_online_error_message"
-                            style="color:red"></span>
+                        <span class="customer_visa_online_error" style="color:red"
+                            id="customer_visa_online_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Calling</label>
                         <select class="form-control" name="calling" id="customer_calling">
@@ -290,9 +304,10 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_calling_error" id="customer_calling_error_message"
-                            style="color:red"></span>
+                        <span class="customer_calling_error" style="color:red"
+                            id="customer_calling_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Training</label>
                         <select class="form-control" name="training" id="customer_training">
@@ -300,9 +315,10 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_training_error" id="customer_training_error_message"
-                            style="color:red"></span>
+                        <span class="customer_training_error" style="color:red"
+                            id="customer_training_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>E-Vissa</label>
                         <select class="form-control" name="e_vissa" id="customer_e_vissa">
@@ -310,9 +326,10 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_e_vissa_error" id="customer_e_vissa_error_message"
-                            style="color:red"></span>
+                        <span class="customer_e_vissa_error" style="color:red"
+                            id="customer_e_vissa_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>BMET</label>
                         <select class="form-control" name="bmet" id="customer_bmet">
@@ -320,8 +337,9 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_bmet_error" id="customer_bmet_error_message" style="color:red"></span>
+                        <span class="customer_bmet_error" style="color:red" id="customer_bmet_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Fly</label>
                         <select class="form-control" name="fly" id="customer_fly">
@@ -329,8 +347,9 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_fly_error" id="customer_fly_error_message" style="color:red"></span>
+                        <span class="customer_fly_error" style="color:red" id="customer_fly_error_message"></span>
                     </div>
+
                     <div class="col-12 mb-3">
                         <label>Payment</label>
                         <select class="form-control" name="payment" id="customer_payment">
@@ -338,11 +357,12 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_payment_error" id="customer_payment_error_message"
-                            style="color:red"></span>
+                        <span class="customer_payment_error" style="color:red"
+                            id="customer_payment_error_message"></span>
                     </div>
 
-                    <!-- Payment Summary -->
+                    <!-- Payment Method -->
+
                     <div class="col-12 mb-3">
                         <label>Method of Payment</label>
                         <select class="form-control" name="payment_method" id="customer_payment_method"
@@ -352,16 +372,16 @@
                             <option value="bank">Bank</option>
                             <option value="wallet">Wallet</option>
                         </select>
-                        <span class="customer_payment_method_error" id="customer_payment_method_error_message"
-                            style="color:red"></span>
+                        <span class="customer_payment_method_error" style="color:red"
+                            id="customer_payment_method_error_message"></span>
                     </div>
 
                     <div class="col-12 mb-3 d-none" id="customer_account_number_group">
                         <label>Account Number</label>
                         <input type="text" class="form-control" name="account_number"
-                            placeholder="e.g. 1234567890" id="customer_account_number">
-                        <span class="customer_account_number_error" id="customer_account_number_error_message"
-                            style="color:red"></span>
+                            id="customer_account_number" placeholder="e.g. 1234567890">
+                        <span class="customer_account_number_error" style="color:red"
+                            id="customer_account_number_error_message"></span>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -371,8 +391,8 @@
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <span class="customer_approval_error" id="customer_approval_error_message"
-                            style="color:red"></span>
+                        <span class="customer_approval_error" style="color:red"
+                            id="customer_approval_error_message"></span>
                     </div>
                 </div>
 
@@ -380,6 +400,7 @@
                     <button class="btn btn-primary px-4" onclick="customerCreate(event)">Submit</button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -423,66 +444,84 @@
 
     //account filed form
     function admintoggleAccountField() {
-        let method = document.getElementById('customer_payment_method').value;
-        let accountField = document.getElementById('customer_account_number_group');
-        let inputField = document.getElementById('customer_account_number');
-        if (method === 'bank') {
+        const method = document.getElementById('customer_payment_method').value;
+        const accountField = document.getElementById('customer_account_number_group');
+        const inputField = document.getElementById('customer_account_number');
+
+        const placeholders = {
+            bank: 'Sonali Bank-009874748, Janata Bank-009874748, Pubali Bank-009874748',
+            wallet: 'Nagad-017874748, Bkash-018874748, Rocket-019874748',
+            default: 'default.......'
+        };
+
+        if (method === 'bank' || method === 'wallet') {
             accountField.classList.remove('d-none');
-            inputField.placeholder = 'Sonali Bank-009874748, Janata Bank-009874748, Pubali Bank-009874748';
-        } else if (method === 'wallet') {
-            accountField.classList.remove('d-none');
-            inputField.placeholder = 'Nagad-017874748, Bkash-018874748, Rocket-019874748';
+            inputField.placeholder = placeholders[method];
         } else {
             accountField.classList.add('d-none');
-            inputField.placeholder = 'default.......';
+            inputField.placeholder = placeholders.default;
         }
     }
 
 
 
-    //set category 
-    getadminCategoryLists()
-    async function getadminCategoryLists() {
-        let token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = "/admin/login";
-        }
-        try {
 
+    //set category 
+    async function getadminCategoryLists() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return window.location.href = "/admin/login";
+        }
+
+        try {
             const res = await axios.get('/admin/package-category/lists', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             if (res.data.status === 'success') {
-                let categories = res.data.PackageCategories;
-                let select = document.getElementById('create_customer_componoent_package_category_dropdown');
+                console.log(res.data);
+                const categories = res.data.PackageCategories;
+                const select = document.getElementById('package_categories_dropdown');
+
+                // Clear and insert first default option
                 select.innerHTML = '<option value="">Select Category</option>';
-                categories.forEach(category => {
-                    select.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+
+                // Add each category
+                categories.forEach(({
+                    id,
+                    name
+                }) => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = name;
+                    select.appendChild(option);
                 });
             }
 
         } catch (error) {
-            console.log('error', error)
+            console.error('Error loading categories:', error);
         }
     }
 
+    getadminCategoryLists();
 
 
-    // Package show by categories 
-    document.getElementById('create_customer_componoent_package_category_dropdown')
+
+
+    // Show Packages Based on Selected Category
+    document.getElementById('package_categories_dropdown')
         .addEventListener('change', async function() {
-            let token = localStorage.getItem('token');
+            const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = "/admin/login";
+                return window.location.href = "/admin/login";
             }
 
-            let category_id = this.value;
-            console.log(category_id);
+            const category_id = this.value;
 
             try {
-                const res = await axios.post(`/admin/package/lists/by/category`, {
+                const res = await axios.post('/admin/package/lists/by/category', {
                     category_id: category_id
                 }, {
                     headers: {
@@ -491,21 +530,20 @@
                 });
 
                 if (res.data.status === 'success') {
-                    let packages = res.data.packageListByCategory;
-                    console.log(packages);
+                    const packages = res.data.packageListByCategory;
+                    const select = document.getElementById('customer_create_component_available_packages_dropdown');
 
-
-                    let select = document.getElementById(
-                        'customer_create_component_available_packages_dropdown');
-                    select.innerHTML = '<option value="">Select Package</option>';
-
-                    packages.forEach(package => {
-                        //console.log(pkg);
-                        select.innerHTML += `<option value="${package.id}">${package.title}</option>`;
+                    // Efficient way to add options
+                    let optionsHTML = '<option value="">Select Package</option>';
+                    packages.forEach(pkg => {
+                        optionsHTML += `<option value="${pkg.id}">${pkg.title}</option>`;
                     });
+                    select.innerHTML = optionsHTML;
                 }
+
             } catch (error) {
-                console.error("Error fetching packages:", error);
+                console.error("Error fetching packages:", error.response?.data || error.message);
+                alert("Package list load try again");
             }
         });
 
@@ -515,127 +553,110 @@
 
 
 
+document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change', async function () {
+    const id = this.value; // package id
+    const token = localStorage.getItem('token');
 
+    document.getElementById('admin_package_price_error').innerHTML = '';
+    document.getElementById('purpose_wise_package_section').classList.remove('d-none');
 
-    //show package details by id
-    document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change',
-        async function() {
-            let id = this.value; //packages table id
-            //console.log(package_id);
-            let token = localStorage.getItem('token');
-            //rest inner html data 
-            document.getElementById('admin_package_price_error').innerHTML = '';
+    try {
+        const res = await axios.post('/admin/package/lists/details/by/catgory', { id }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-            document.getElementById('purpose_wise_package_section').classList.remove('d-none');
+        if (res.data.status !== 'success') {
+            throw new Error(res.data.message || 'Failed to fetch package details');
+        }
 
-            try {
-                let res = await axios.post('/admin/package/lists/details/by/catgory', {
-                    id: id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                let packageDetails = res.data.packageDetails;
-                let currentPrice = packageDetails.price;
+        const packageDetails = res.data.packageDetails || {};
+        const currentPrice = packageDetails.price ?? 0;
 
+        // Set values by id
+        document.getElementById('admin_package_price_field').value = packageDetails.price ?? '';
+        document.getElementById('package_duration').value = packageDetails.duration ?? '';
+        document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
+        document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
+        document.getElementById('package_visa_processing_time').value = packageDetails.visa_processing_time ?? '';
+        document.getElementById('package_documents_required').value = packageDetails.documents_required ?? '';
+        document.getElementById('package_seat_availability').value = packageDetails.seat_availability ?? '';
 
-                document.querySelector('input[name="price"]').value = packageDetails.price ?? '';
-                document.querySelector('input[name="duration"]').value = packageDetails.duration ?? '';
-                document.querySelector('input[name="inclusions"]').value = packageDetails.inclusions ?? '';
-                document.querySelector('input[name="exclusions"]').value = packageDetails.exclusions ?? '';
-                document.querySelector('input[name="visa_processing_time"]').value = packageDetails
-                    .visa_processing_time ?? '';
-                document.querySelector('input[name="documents_required"]').value = packageDetails
-                    .documents_required ?? '';
-                document.querySelector('input[name="seat_availability"]').value = packageDetails
-                    .seat_availability ?? '';
+        // Coupon and discounts
+        const discounts = packageDetails.discounts || [];
+        const couponSection = document.getElementById('dynamic_coupon_section');
+        couponSection.innerHTML = '';
 
-                // Handle Discounts
-                let discounts = packageDetails.discounts || [];
-                let couponSection = document.getElementById('dynamic_coupon_section');
-                couponSection.innerHTML = ''; // Clear previous content
+        const today = new Date().toISOString().slice(0, 10);
+        const validCoupons = discounts.filter(discount => discount.start_date <= today && discount.end_date >= today);
+        const hasCoupon = validCoupons.some(discount => discount.coupon_code);
+        toggleCouponSections(hasCoupon);
 
+        if (validCoupons.length > 0) {
+            validCoupons.forEach((discount, index) => {
+                const isOnlyDiscount = !discount.coupon_code;
+                const discountedPrice = currentPrice - (currentPrice * (discount.discount_value ?? 0) / 100);
 
-                let today = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
-                let validCoupons = discounts.filter(discount => {
-                    return discount.start_date <= today && discount.end_date >= today;
-                });
-
-
-                let hasCoupon = validCoupons.some(discount => discount.coupon_code);
-                toggleCouponSections(hasCoupon); // Show/hide coupon input section
-
-                //  Display all valid coupons
-                if (validCoupons.length > 0) {
-                    validCoupons.forEach((discount, index) => {
-                        const isOnlyDiscount = !discount.coupon_code;
-
-                        couponSection.innerHTML += `
-                            <div class="row border p-2 mb-2 rounded bg-light">
-                                <div class="col-md-3 mb-2">
-                                    <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
-                                    <input type="text" class="form-control" value="${isOnlyDiscount ? 'Only Discount' : discount.coupon_code}" readonly>
-                                </div>
-                                <div class="col-md-2 mb-2">
-                                    <label>Validity</label>
-                                    <input type="text" class="form-control" value="${discount.start_date ?? ''} to ${discount.end_date ?? ''}" readonly>
-                                </div>
-                                <div class="col-md-2 mb-2">
-                                    <label>Discount</label>
-                                    <input type="text" class="form-control" id="package_discount" name="package_discount" value="${discount.discount_value ?? 'N/A'}%" readonly>
-                                </div>
-                                <div class="col-md-2 mb-2">
-                                    <label>Current Price</label>
-                                    <input type="text" class="form-control" value="${currentPrice}" readonly>
-                                </div>
-                                <div class="col-md-2 mb-2">
-                                    <label>Discounted Price</label>
-                                    <input type="text" class="form-control" value="${currentPrice - (currentPrice * discount.discount_value / 100)}" readonly>
-                                </div>
-                            </div> `;
-                        });
-                 } else if (packageDetails?.discount) {
-                                    // ✅ Only discount exists, no coupon code
-                        toggleCouponSections(false);
-                        couponSection.innerHTML = `
-                        <div class="row border p-2 mb-2 rounded bg-light">
-                            <div class="col-md-3 mb-2">
-                                <label>Discount</label>
-                                <input type="text" class="form-control" value="Only Discount" readonly>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <label>Discount %</label>
-                                <input type="text" class="form-control" value="${packageDetails.discount}%" readonly name="package_only_discount" id="package_only_discount">
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <label>Current Price</label>
-                                <input type="text" class="form-control" value="${currentPrice}" readonly>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <label>Discounted Price</label>
-                                <input type="text" class="form-control" value="${currentPrice - (currentPrice * packageDetails.discount / 100)}" readonly name="package_only_dicounted_price" id="package_only_dicounted_price">
-                            </div>
+                couponSection.innerHTML += `
+                    <div class="row border p-2 mb-2 rounded bg-light">
+                        <div class="col-md-3 mb-2">
+                            <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
+                            <input type="text" class="form-control" value="${isOnlyDiscount ? 'Only Discount' : discount.coupon_code}" readonly>
                         </div>
-                    `;
-                                } else {
-                                    // ❌ No coupon, no discount
-                                    toggleCouponSections(false);
-                                    couponSection.innerHTML = `
-                        <div class="row border p-2 mb-2 rounded bg-light">
-                            <div class="col-md-12 mb-2">
-                                <label>No Discount Available</label>
-                                <input type="text" class="form-control" value="N/A" readonly>
-                            </div>
-                        </div>`;
-                                }
-
-            } catch (error) {
-                console.error("Error fetching packages:", error);
-            }
-
-        })
-
+                        <div class="col-md-2 mb-2">
+                            <label>Validity</label>
+                            <input type="text" class="form-control" value="${discount.start_date ?? ''} to ${discount.end_date ?? ''}" readonly>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label>Discount</label>
+                            <input type="text" class="form-control" value="${discount.discount_value ?? 'N/A'}%" readonly>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label>Current Price</label>
+                            <input type="text" class="form-control" value="${currentPrice}" readonly>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label>Discounted Price</label>
+                            <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
+                        </div>
+                    </div>`;
+            });
+        } else if (packageDetails.discount) {
+            const discountedPrice = currentPrice - (currentPrice * packageDetails.discount / 100);
+            toggleCouponSections(false);
+            couponSection.innerHTML = `
+                <div class="row border p-2 mb-2 rounded bg-light">
+                    <div class="col-md-3 mb-2">
+                        <label>Discount</label>
+                        <input type="text" class="form-control" value="Only Discount" readonly>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label>Discount %</label>
+                        <input type="text" class="form-control" value="${packageDetails.discount}%" readonly>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label>Current Price</label>
+                        <input type="text" class="form-control" value="${currentPrice}" readonly>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label>Discounted Price</label>
+                        <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
+                    </div>
+                </div>`;
+        } else {
+            toggleCouponSections(false);
+            couponSection.innerHTML = `
+                <div class="row border p-2 mb-2 rounded bg-light">
+                    <div class="col-md-12 mb-2">
+                        <label>No Discount Available</label>
+                        <input type="text" class="form-control" value="N/A" readonly>
+                    </div>
+                </div>`;
+        }
+    } catch (error) {
+        console.error("Error fetching packages:", error);
+        alert("Failed to load package details. Please try again.");
+    }
+});
 
 
 
@@ -644,94 +665,138 @@
 
 
     //package price update
-    async function customerCreateUpdatePackagePrice(event) {
-        event.preventDefault();
-        let token = localStorage.getItem('token');
-        if (!token) {
-            return alert("Unauthorized. Please login again.");
-        }
+async function customerCreateUpdatePackagePrice(event) {
+    event.preventDefault();
 
-        let id = document.getElementById("customer_create_component_available_packages_dropdown").value;
-        let new_price = document.getElementById("admin_package_price_field").value;
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Unauthorized. Please login again.");
+        return window.location.href = "/admin/login";
+    }
 
-        console.log(id, new_price);
-        if (!id) return alert("Please select a package first.");
-        if (!new_price || isNaN(new_price)) return alert("Enter a valid price.");
+    const id = document.getElementById("customer_create_component_available_packages_dropdown").value;
+    const new_price = document.getElementById("admin_package_price_field").value.trim();
 
-        //console.log(new_price);
+    if (!id) {
+        alert("Please select a package first.");
+        return;
+    }
 
-        try {
-            let res = await axios.post("/admin/package/price/update", {
-                id: id,
-                price: new_price
-            }, {
+    if (!new_price || isNaN(new_price) || Number(new_price) <= 0) {
+        alert("Enter a valid positive price.");
+        return;
+    }
+
+    try {
+        const res = await axios.post("/admin/package/price/update", 
+            { id, price: Number(new_price) },
+            {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
+            }
+        );
+
+        if (res.data.status === "success") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: res.data.message,
+                timer: 2000,
+                showConfirmButton: false
             });
 
-            if (res.data.status === "success") {
-                document.getElementById('admin_package_price_error').innerHTML = res.data.message;
-            } else {
-                console.log("Update failed. " + res.data.message);
-            }
-        } catch (error) {
-            //console.error(error.response.data.message);
-            document.getElementById('admin_package_price_error').innerHTML = error.response.data.message;
-
+            //ui update
+            document.getElementById('admin_package_price_field').value = new_price;
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Update failed',
+                text: res.data.message
+            });
         }
+    } catch (error) {
+        const msg = error?.response?.data?.message || "An error occurred. Please try again.";
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: msg
+        });
+        console.error("Update error:", error);
     }
+}
+
     //APPLY COUPON SECTION
 
 
     //  Apply Coupon Code Function
-    async function applyCouponCode() {
-        let token = localStorage.getItem('token');
-        let coupon_code = document.getElementById('coupon_code_input').value;
-        let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value;
+async function applyCouponCode() {
+    const token = localStorage.getItem('token');
+    const couponSuccess = document.getElementById('coupon_success_message');
+    const couponError = document.getElementById('coupon_error_message');
+    const couponInput = document.getElementById('coupon_code_input');
+    const packageSelect = document.getElementById('customer_create_component_available_packages_dropdown');
 
-        // Clear previous messages
-        document.getElementById('coupon_success_message').innerText = '';
-        document.getElementById('coupon_error_message').innerText = '';
+    couponSuccess.innerText = '';
+    couponError.innerText = '';
 
-        if (!coupon_code) {
-            document.getElementById('coupon_error_message').innerText = "Please enter a coupon code.";
-            return;
-        }
+    if (!token) {
+        alert("Unauthorized. Please login.");
+        return window.location.href = "/admin/login";
+    }
 
-        if (!package_id) {
-            document.getElementById('coupon_error_message').innerText = "Please select a package first.";
-            return;
-        }
+    const coupon_code = couponInput.value.trim();
+    const package_id = packageSelect.value;
 
-        try {
-            const response = await axios.post("/admin/package/apply-coupon", {
-                coupon_code: coupon_code,
-                package_id: package_id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+    if (!coupon_code) {
+        couponError.innerText = "Please enter a coupon code.";
+        return;
+    }
+
+    if (!package_id) {
+        couponError.innerText = "Please select a package first.";
+        return;
+    }
+
+    try {
+        const response = await axios.post("/admin/package/apply-coupon", {
+            coupon_code,
+            package_id
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (response.data.status === 'success') {
+            const discount_amount = response.data.discounted_price;
+            document.getElementById('coupon_use_new_price').value = discount_amount;
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Coupon Applied!',
+                text: `${response.data.message}: ${discount_amount} Tk`,
+                timer: 2000,
+                showConfirmButton: false
             });
 
-            if (response.data.status === 'success') {
-                console.log(response.data);
-                const discount_amount = response.data.discounted_price;
-                document.getElementById('coupon_use_new_price').value = discount_amount;
-                // document.getElementById('admin_package_price_field').value = new_price;
-                document.getElementById('coupon_success_message').innerText =
-                    `${response.data.message}: ${discount_amount} Tk`;
-                toggleCouponSections(true);
-            } else {
-                document.getElementById('coupon_error_message').innerText = response.data.message ||
-                    'Invalid coupon';
-            }
-        } catch (error) {
-            document.getElementById('coupon_error_message').innerText = error.response?.data?.message ||
-                'Something went wrong!';
+            toggleCouponSections(true);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: response.data.message || 'Invalid coupon'
+            });
         }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.response?.data?.message || 'Something went wrong!'
+        });
     }
+}
 
 
 
@@ -760,343 +825,284 @@
 
 
     //submit customer
-    async function customerCreate(event) {
-        let token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/admin/login';
-        }
-        event.preventDefault();
+async function customerCreate(event) {
+    event.preventDefault();
 
-        // Clear all previous error messages
-        document.getElementById('customer_name_error').innerText = '';
-        document.getElementById('customer_email_error').innerText = '';
-        document.getElementById('customer_phone_error').innerText = '';
-        document.getElementById('customer_passport_no_error').innerText = '';
-        document.getElementById('customer_age_error').innerText = '';
-        document.getElementById('customer_date_of_birth_error').innerText = '';
-        document.getElementById('customer_gender_error').innerText = '';
-        document.getElementById('customer_nid_number_error').innerText = '';
-
-        document.getElementById('customer_purpose_error').innerText = '';
-        document.getElementById('customer_package_error').innerText = '';
-
-        document.getElementById('customer_country_error_message').innerText = '';
-        document.getElementById('customer_company_name_error_message').innerText = '';
-        document.getElementById('customer_pic_error_message').innerText = '';
-
-        document.getElementById('customer_sales_commission_error_message').innerText = '';
-        document.getElementById('customer_mrp_error_message').innerText = '';
-        document.getElementById('customer_passenger_price_error_message').innerText = '';
-        document.getElementById('customer_medical_date_error_message').innerText = '';
-        document.getElementById('customer_medical_center_error_message').innerText = '';
-        document.getElementById('customer_medical_result_error_message').innerText = '';
-
-
-        document.getElementById('customer_visa_online_error_message').innerText = '';
-        document.getElementById('customer_calling_error_message').innerText = '';
-        document.getElementById('customer_training_error_message').innerText = '';
-        document.getElementById('customer_e_vissa_error_message').innerText = '';
-        document.getElementById('customer_bmet_error_message').innerText = '';
-        document.getElementById('customer_fly_error_message').innerText = '';
-        document.getElementById('customer_payment_error_message').innerText = '';
-        document.getElementById('customer_payment_method_error_message').innerText = '';
-        document.getElementById('customer_account_number_error_message').innerText = '';
-        document.getElementById('customer_approval_error_message').innerText = '';
-
-        // Form validation
-        let isValid = false;
-        let admin_id = document.getElementById('customer_create_by_admin_id').value.trim();
-        let name = document.getElementById('customer_name').value.trim();
-        let email = document.getElementById('customer_email').value.trim();
-        let phone = document.getElementById('customer_phone').value.trim();
-        let passportNo = document.getElementById('customer_passport_no').value.trim();
-        let age = document.getElementById('customer_age').value.trim();
-        let date_of_birth = document.getElementById('customer_date_of_birth').value.trim();
-        let gender = document.getElementById('customer_gender').value.trim();
-        let customer_nid = document.getElementById('customer_nid_number').value.trim();
-        let package_category_id = document.getElementById('create_customer_componoent_package_category_dropdown')
-            .value.trim();
-        let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value
-            .trim();
-
-        let country = document.getElementById('customer_country').value.trim();
-        let company_name = document.getElementById('customer_company_name').value.trim();
-        let pic = document.getElementById('customer_pic').value.trim();
-        let sales_commission = document.getElementById('customer_sales_commission').value.trim();
-        let mrp = document.getElementById('customer_mrp').value.trim();
-        let customer_price = document.getElementById('customer_passenger_price').value.trim();
-        let medical_date = document.getElementById('customer_medical_date').value.trim();
-        let medical_center = document.getElementById('customer_medical_center').value.trim();
-        let medical_result = document.getElementById('customer_medical_result').value.trim();
-        let visa_online = document.getElementById('customer_visa_online').value.trim();
-        let calling = document.getElementById('customer_calling').value.trim();
-        let training = document.getElementById('customer_training').value.trim();
-        let e_vissa = document.getElementById('customer_e_vissa').value.trim();
-        let bmet = document.getElementById('customer_bmet').value.trim();
-        let fly = document.getElementById('customer_fly').value.trim();
-        let payment = document.getElementById('customer_payment').value.trim();
-        let payment_method = document.getElementById('customer_payment_method').value.trim();
-        let account_number = document.getElementById('customer_account_number').value.trim();
-        let approval_status = document.getElementById('approval').value.trim();
-        //undefiend solve
-        // let package_only_discount = null;
-        // let package_only_dicounted_price = null;
-        // setTimeout(() => {
-        //     package_only_discount = document.getElementById('package_only_discount')?.value;
-        //     package_only_dicounted_price = document.getElementById('package_only_dicounted_price')?.value;  
-        // }, 100);
-        
-
-        let package_price = document.getElementById('admin_package_price_field').value.trim();
-        let package_duration = document.getElementById('package_duration').value.trim();
-        let package_inclusions = document.getElementById('package_inclusions').value.trim();
-        let package_exclusions = document.getElementById('package_exclusions').value.trim();
-        let package_visa_processing_time = document.getElementById('package_visa_processing_time').value.trim();
-        let package_documents_required = document.getElementById('package_documents_required').value.trim();
-        let package_seat_availability = document.getElementById('package_seat_availability').value.trim();
-
-        let coupon_code = document.getElementById('coupon_code_input')?.value; //when use coupon
-        let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value; //when use coupon
-        let package_discount = document.getElementById('package_discount')?.value; //when use no coupon
-        let error = false;
-
-        if (!name) {
-            document.getElementById('customer_name_error').innerText = 'Name is required';
-            error = true;
-        }
-        if (!email) {
-            document.getElementById('customer_email_error').innerText = 'Email is required';
-            error = true;
-        }
-        if (!phone) {
-            document.getElementById('customer_phone_error').innerText = 'Phone number is required';
-            error = true;
-        }
-        if (!passportNo) {
-            document.getElementById('customer_passport_no_error').innerText = 'Passport number is required';
-            error = true;
-        }
-        if (!age) {
-            document.getElementById('customer_age_error').innerText = 'Age is required';
-            error = true;
-        }
-
-        if (!date_of_birth) {
-            document.getElementById('customer_date_of_birth_error').innerText = 'Date field is requried';
-            error = true;
-        }
-        if (!gender) {
-            document.getElementById('customer_gender_error').innerText = 'Gender is required';
-            error = true;
-        }
-        if (!customer_nid) {
-            document.getElementById('customer_nid_number_error').innerText = 'NID number is required';
-            error = true;
-        }
-
-        if (!package_category_id) {
-            document.getElementById('customer_purpose_error').innerText = 'Choose one Category';
-            error = true;
-        }
-        if (!package_id) {
-            document.getElementById('customer_package_error').innerText = 'Package selection is required';
-            error = true;
-        }
-
-        if (!country) {
-            document.getElementById('customer_country_error_message').innerText = 'Country is required';
-            error = true;
-        }
-
-        if (!company_name) {
-            document.getElementById('customer_company_name_error_message').innerText = 'Country is required';
-            error = true;
-        }
-
-        if (!pic) {
-            document.getElementById('customer_pic_error_message').innerText = 'Pic is required';
-            error = true;
-        }
-
-        if (!sales_commission) {
-            document.getElementById('customer_sales_commission_error_message').innerText =
-                'Sales Comission is error';
-            error = true;
-        }
-
-        if (!mrp) {
-            document.getElementById('customer_mrp_error_message').innerText = 'MRP is error';
-            error = true;
-        }
-        //passenger price only admin
-        if (!customer_price) {
-            document.getElementById('customer_passenger_price_error_message').innerText =
-                'Passenger Price is error';
-            error = true;
-        }
-        if (!medical_date) {
-            document.getElementById('customer_medical_date_error_message').innerText = 'Medical Date is required';
-            error = true;
-        }
-        if (!medical_center) {
-            document.getElementById('customer_medical_center_error_message').innerText =
-                'Medical Center is required';
-            error = true;
-        }
-        if (!medical_result) {
-            document.getElementById('customer_medical_result_error_message').innerText =
-                'Medical Result is required';
-            error = true;
-        }
-        if (!visa_online) {
-            document.getElementById('customer_visa_online_error_message').innerText = 'Visa Online is required';
-            error = true;
-        }
-        if (!calling) {
-            document.getElementById('customer_calling_error_message').innerText = 'Calling is required';
-            error = true;
-        }
-
-        if (!training) {
-            document.getElementById('customer_training_error_message').innerText = 'Training is required';
-            error = true;
-        }
-
-        if (!e_vissa) {
-            document.getElementById('customer_e_vissa_error_message').innerText = 'E Vissa is required';
-            error = true;
-        }
-
-        if (!bmet) {
-            document.getElementById('customer_bmet_error_message').innerText = 'BMET is required';
-            error = true;
-        }
-
-        if (!fly) {
-            document.getElementById('customer_fly_error_message').innerText = 'Fly is required';
-            error = true;
-        }
-        if (!payment) {
-            document.getElementById('customer_payment_error_message').innerText = 'Payment is required';
-            error = true;
-        }
-        // console.log('Selected payment method:', payment_method);
-        if (payment_method == "") {
-            document.getElementById('customer_payment_method_error_message').innerText = 'Please Choose one';
-            error = true;
-        }
-        if (payment_method === 'bank' || payment_method === 'wallet') {
-            if (!account_number) {
-                document.getElementById('customer_account_number_error_message').innerText =
-                    'Account Number is required for bank/wallet payment.';
-                error = true;
-            }
-        }
-        if (!approval_status) {
-            document.getElementById('customer_approval_error_message').innerText = 'Approval is required';
-            error = true;
-        }
-
-        if (error) return;
-
-
-        // // Form data prepare
-        let formData = new FormData();
-
-        let customerImageFile = document.getElementById('customer_image')?.files?.[0];
-        if (customerImageFile) {
-            formData.append('image', customerImageFile);
-        }
-        let data = {
-            admin_id: admin_id,
-            package_id: package_id,
-            package_category_id: package_category_id,
-            name: name,
-            email: email,
-            phone: phone,
-            passport_no: passportNo,
-            age: age,
-            gender: gender,
-            date_of_birth: date_of_birth,
-            nid_number: customer_nid,
-            price: package_price,
-            duration: package_duration,
-            inclusions: package_inclusions,
-            exclusions: package_exclusions,
-            visa_processing_time: package_visa_processing_time,
-            documents_required: package_documents_required,
-            seat_availability: package_seat_availability,
-            coupon_code: coupon_code,
-            coupon_use_discounted_price: coupon_use_discounted_price,
-            package_discount: package_discount,
-            package_only_discount: document.getElementById('package_only_discount')?.value ?? null,
-            package_only_dicounted_price: document.getElementById('package_only_dicounted_price')?.value ?? null,
-            country: country,
-            company_name: company_name,
-            pic: pic,
-            sales_commission: sales_commission,
-            mrp: mrp,
-            passenger_price: customer_price,
-            medical_date: medical_date,
-            medical_center: medical_center,
-            medical_result: medical_result,
-            visa_online: visa_online,
-            calling: calling,
-            training: training,
-            e_vissa: e_vissa,
-            bmet: bmet,
-            fly: fly,
-            payment: payment,
-            payment_method: payment_method,
-            account_number: account_number,
-            approval: approval_status,
-        }
-        console.log(data);
-
-
-
-        // for(let key in data){
-        //     //console.log(key);
-        //     if(data[key] !== undefined && data[key] !== null){
-        //         formData.append(key, data[key]);
-        //     }
-        // }
-        // console.log("data is",data);
-        // for(let [key,value] of formData.entries()){
-        //     console.log(`${key} = ${value}`)
-        // }
-
-        // // Optional: Disable button during submit
-        // const submitBtn = document.querySelector('.btn.btn-primary');
-        // submitBtn.disabled = true;
-        // submitBtn.innerText = 'Submitting...';
-
-
-        // try {
-        //     const response = await axios.post('/admin/customer/create', formData, {
-        //         headers: {
-        //             Authorization: `Bearer ${token}`,
-        //             'Content-Type': 'multipart/form-data'
-
-        //         }
-        //     });
-
-        //     if (response.data.status === 'success') {
-        //         Swal.fire(response.data.message, '', 'success');
-        //         //alert('✅ Customer created successfully!');
-        //         document.getElementById('admin_customer_form').reset();
-        //         document.getElementById('purpose_wise_package_section').classList.add('d-none');
-        //     } else {
-        //         console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
-        //     }
-        // } catch (error) {
-        //     alert('❌ Error: ' + (error.response?.data?.message || error.message));
-        //     console.error(error);
-        // }
-        //  finally {
-        //     // Enable button again
-        //     submitBtn.disabled = false;
-        //     submitBtn.innerText = 'Submit';
-        // }
+    let token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/admin/login';
+        return;
     }
+
+    // Clear all previous error messages
+    const errorFields = [
+        'customer_name_error',
+        'customer_email_error',
+        'customer_phone_error',
+        'customer_passport_no_error',
+        'customer_age_error',
+        'customer_date_of_birth_error',
+        'customer_gender_error',
+        'customer_nid_number_error',
+        'customer_purpose_error',
+        'customer_package_error',
+        'customer_country_error_message',
+        'customer_company_name_error_message',
+        'customer_pic_error_message',
+        'customer_sales_commission_error_message',
+        'customer_mrp_error_message',
+        'customer_passenger_price_error_message',
+        'customer_medical_date_error_message',
+        'customer_medical_center_error_message',
+        'customer_medical_result_error_message',
+        'customer_visa_online_error_message',
+        'customer_calling_error_message',
+        'customer_training_error_message',
+        'customer_e_vissa_error_message',
+        'customer_bmet_error_message',
+        'customer_fly_error_message',
+        'customer_payment_error_message',
+        'customer_payment_method_error_message',
+        'customer_account_number_error_message',
+        'customer_approval_error_message',
+    ];
+
+    errorFields.forEach(id => {
+        document.getElementById(id).innerText = '';
+    });
+
+    // Fetch all values
+    let admin_id = document.getElementById('customer_create_by_admin_id').value.trim();
+    let name = document.getElementById('customer_name').value.trim();
+    let email = document.getElementById('customer_email').value.trim();
+    let phone = document.getElementById('customer_phone').value.trim();
+    let passportNo = document.getElementById('customer_passport_no').value.trim();
+    let age = document.getElementById('customer_age').value.trim();
+    let date_of_birth = document.getElementById('customer_date_of_birth').value.trim();
+    let gender = document.getElementById('customer_gender').value.trim();
+    let customer_nid = document.getElementById('customer_nid_number').value.trim();
+    // Corrected package_category_id id here:
+    let package_category_id = document.getElementById('package_categories_dropdown').value.trim();
+    let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value.trim();
+
+    let country = document.getElementById('customer_country').value.trim();
+    let company_name = document.getElementById('customer_company_name').value.trim();
+    let pic = document.getElementById('customer_pic').value.trim();
+    let sales_commission = document.getElementById('customer_sales_commission').value.trim();
+    let mrp = document.getElementById('customer_mrp').value.trim();
+    let customer_price = document.getElementById('customer_passenger_price').value.trim();
+    let medical_date = document.getElementById('customer_medical_date').value.trim();
+    let medical_center = document.getElementById('customer_medical_center').value.trim();
+    let medical_result = document.getElementById('customer_medical_result').value.trim();
+    let visa_online = document.getElementById('customer_visa_online').value.trim();
+    let calling = document.getElementById('customer_calling').value.trim();
+    let training = document.getElementById('customer_training').value.trim();
+    let e_vissa = document.getElementById('customer_e_vissa').value.trim();
+    let bmet = document.getElementById('customer_bmet').value.trim();
+    let fly = document.getElementById('customer_fly').value.trim();
+    let payment = document.getElementById('customer_payment').value.trim();
+    let payment_method = document.getElementById('customer_payment_method').value.trim();
+    let account_number = document.getElementById('customer_account_number').value.trim();
+    let approval_status = document.getElementById('approval').value.trim();
+
+    let coupon_code = document.getElementById('coupon_code_input')?.value; 
+    let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value;
+    let package_discount = document.getElementById('package_discount')?.value;
+
+    let error = false;
+
+    // Validation
+    if (!name) {
+        document.getElementById('customer_name_error').innerText = 'Name is required';
+        error = true;
+    }
+    if (!email) {
+        document.getElementById('customer_email_error').innerText = 'Email is required';
+        error = true;
+    }
+    if (!phone) {
+        document.getElementById('customer_phone_error').innerText = 'Phone number is required';
+        error = true;
+    }
+    if (!passportNo) {
+        document.getElementById('customer_passport_no_error').innerText = 'Passport number is required';
+        error = true;
+    }
+    if (!age) {
+        document.getElementById('customer_age_error').innerText = 'Age is required';
+        error = true;
+    }
+    if (!date_of_birth) {
+        document.getElementById('customer_date_of_birth_error').innerText = 'Date field is required';
+        error = true;
+    }
+    if (!gender) {
+        document.getElementById('customer_gender_error').innerText = 'Gender is required';
+        error = true;
+    }
+    if (!customer_nid) {
+        document.getElementById('customer_nid_number_error').innerText = 'NID number is required';
+        error = true;
+    }
+    if (!package_category_id) {
+        document.getElementById('customer_purpose_error').innerText = 'Choose one Category';
+        error = true;
+    }
+    if (!package_id) {
+        document.getElementById('customer_package_error').innerText = 'Package selection is required';
+        error = true;
+    }
+    if (!country) {
+        document.getElementById('customer_country_error_message').innerText = 'Country is required';
+        error = true;
+    }
+    if (!company_name) {
+        document.getElementById('customer_company_name_error_message').innerText = 'Company Name is required';
+        error = true;
+    }
+    if (!pic) {
+        document.getElementById('customer_pic_error_message').innerText = 'PIC is required';
+        error = true;
+    }
+    if (!sales_commission) {
+        document.getElementById('customer_sales_commission_error_message').innerText = 'Sales Commission is required';
+        error = true;
+    }
+    if (!mrp) {
+        document.getElementById('customer_mrp_error_message').innerText = 'MRP is required';
+        error = true;
+    }
+    if (!customer_price) {
+        document.getElementById('customer_passenger_price_error_message').innerText = 'Passenger Price is required';
+        error = true;
+    }
+    if (!medical_date) {
+        document.getElementById('customer_medical_date_error_message').innerText = 'Medical Date is required';
+        error = true;
+    }
+    if (!medical_center) {
+        document.getElementById('customer_medical_center_error_message').innerText = 'Medical Center is required';
+        error = true;
+    }
+    if (!medical_result) {
+        document.getElementById('customer_medical_result_error_message').innerText = 'Medical Result is required';
+        error = true;
+    }
+    if (!visa_online) {
+        document.getElementById('customer_visa_online_error_message').innerText = 'Visa Online status is required';
+        error = true;
+    }
+    if (!calling) {
+        document.getElementById('customer_calling_error_message').innerText = 'Calling status is required';
+        error = true;
+    }
+    if (!training) {
+        document.getElementById('customer_training_error_message').innerText = 'Training status is required';
+        error = true;
+    }
+    if (!e_vissa) {
+        document.getElementById('customer_e_vissa_error_message').innerText = 'E Vissa status is required';
+        error = true;
+    }
+    if (!bmet) {
+        document.getElementById('customer_bmet_error_message').innerText = 'BMET status is required';
+        error = true;
+    }
+    if (!fly) {
+        document.getElementById('customer_fly_error_message').innerText = 'Fly status is required';
+        error = true;
+    }
+    if (!payment) {
+        document.getElementById('customer_payment_error_message').innerText = 'Payment status is required';
+        error = true;
+    }
+    if (payment_method === "") {
+        document.getElementById('customer_payment_method_error_message').innerText = 'Please choose a payment method';
+        error = true;
+    }
+    if (payment_method === 'bank' || payment_method === 'wallet') {
+        if (!account_number) {
+            document.getElementById('customer_account_number_error_message').innerText = 'Account Number is required for bank/wallet payment.';
+            error = true;
+        }
+    }
+    if (!approval_status) {
+        document.getElementById('customer_approval_error_message').innerText = 'Approval status is required';
+        error = true;
+    }
+
+    if (error) return; // stop if validation error
+
+    // Prepare FormData for submission
+    let formData = new FormData();
+
+    let customerImageFile = document.getElementById('customer_image')?.files?.[0];
+    if (customerImageFile) {
+        formData.append('image', customerImageFile);
+    }
+
+    const data = {
+        admin_id,
+        package_id,
+        package_category_id,
+        name,
+        email,
+        phone,
+        passport_no: passportNo,
+        age,
+        gender,
+        date_of_birth,
+        nid_number: customer_nid,
+        coupon_code,
+        coupon_use_discounted_price,
+        country,
+        company_name,
+        pic,
+        sales_commission,
+        mrp,
+        passenger_price: customer_price,
+        medical_date,
+        medical_center,
+        medical_result,
+        visa_online,
+        calling,
+        training,
+        e_vissa,
+        bmet,
+        fly,
+        payment,
+        payment_method,
+        account_number,
+        approval: approval_status,
+    };
+
+    // Append all data keys to formData
+    for (let key in data) {
+        if (data[key] !== undefined && data[key] !== null) {
+            formData.append(key, data[key]);
+        }
+    }
+
+    try {
+        const response = await axios.post('/admin/customer/create', formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        if (response.data.status === 'success') {
+            Swal.fire(response.data.message, '', 'success');
+            //document.getElementById('admin_customer_form').reset();
+            document.getElementById('purpose_wise_package_section').classList.add('d-none');
+        } else {
+            console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('❌ Error: ' + (error.response?.data?.message || error.message));
+        console.error(error);
+    }
+}
+
+
 </script>

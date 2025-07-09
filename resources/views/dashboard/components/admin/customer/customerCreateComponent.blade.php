@@ -58,9 +58,9 @@
 
                     <div class="col-12 mb-3">
                         <label>Date Of Birth</label>
-                        <input type="date" class="form-control" name="date_of_birth"
-                            id="customer_date_of_birth">
-                        <span class="customer_date_of_birth_error" style="color:red" id="customer_date_of_birth_error"></span>
+                        <input type="date" class="form-control" name="date_of_birth" id="customer_date_of_birth">
+                        <span class="customer_date_of_birth_error" style="color:red"
+                            id="customer_date_of_birth_error"></span>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -122,37 +122,38 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Package Duration</label>
                                         <input type="text" class="form-control" name="duration"
-                                            placeholder="e.g. 6 Months" readonly id="duration">
+                                            placeholder="e.g. 6 Months" readonly id="package_duration">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Inclusions</label>
                                         <input type="text" class="form-control" name="inclusions"
-                                            placeholder="Visa, Ticket, Insurance" readonly id="inclusions">
+                                            placeholder="Visa, Ticket, Insurance" readonly id="package_inclusions">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Exclusions</label>
                                         <input type="text" class="form-control" name="exclusions"
-                                            placeholder="Personal Expenses" readonly id="exclusions">
+                                            placeholder="Personal Expenses" readonly id="package_exclusions">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Visa Processing Time</label>
                                         <input type="text" class="form-control" name="visa_processing_time"
-                                            placeholder="e.g. 15 Days" readonly id="visa_processing_time">
+                                            placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Documents Required</label>
                                         <input type="text" class="form-control" name="documents_required"
-                                            placeholder="Passport, Photo, etc." readonly id="documents_required">
+                                            placeholder="Passport, Photo, etc." readonly
+                                            id="package_documents_required">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Seat Availability</label>
                                         <input type="text" class="form-control" name="seat_availability"
-                                            placeholder="e.g. 20 Seats Left" readonly id="seat_availability">
+                                            placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
                                     </div>
 
                                     <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
@@ -161,7 +162,7 @@
                                         <label>Write Your Coupon Code</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="coupon_code_input"
-                                                placeholder="Enter coupon code">
+                                                placeholder="Enter coupon code" name="coupon_code">
                                             <button type="button" class="btn btn-warning"
                                                 onclick="applyCouponCode()">Apply Your Coupon Code</button>
                                         </div>
@@ -175,7 +176,8 @@
                                         <label>Now Your New Price</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="coupon_use_new_price"
-                                                placeholder="Enter coupon code" readonly>
+                                                placeholder="Enter coupon code" readonly
+                                                name="coupon_use_discounted_price">
 
                                         </div>
                                         <span class="text-success" id="coupon_success_message"
@@ -567,11 +569,13 @@
                 //  Display all valid coupons
                 if (validCoupons.length > 0) {
                     validCoupons.forEach((discount, index) => {
+                        const isOnlyDiscount = !discount.coupon_code;
+
                         couponSection.innerHTML += `
                             <div class="row border p-2 mb-2 rounded bg-light">
                                 <div class="col-md-3 mb-2">
-                                    <label>${discount.coupon_code ? 'Coupon ' + (index + 1) : 'Discount % ' + (index + 1)}</label>
-                                    <input type="text" class="form-control" value="${discount.coupon_code ?? 'Only Discount'}" readonly>
+                                    <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
+                                    <input type="text" class="form-control" value="${isOnlyDiscount ? 'Only Discount' : discount.coupon_code}" readonly>
                                 </div>
                                 <div class="col-md-2 mb-2">
                                     <label>Validity</label>
@@ -579,7 +583,7 @@
                                 </div>
                                 <div class="col-md-2 mb-2">
                                     <label>Discount</label>
-                                    <input type="text" class="form-control" id="coupon_discounted_price" value="${discount.discount_value ?? 'N/A'}%" readonly>
+                                    <input type="text" class="form-control" id="package_discount" name="package_discount" value="${discount.discount_value ?? 'N/A'}%" readonly>
                                 </div>
                                 <div class="col-md-2 mb-2">
                                     <label>Current Price</label>
@@ -589,20 +593,42 @@
                                     <label>Discounted Price</label>
                                     <input type="text" class="form-control" value="${currentPrice - (currentPrice * discount.discount_value / 100)}" readonly>
                                 </div>
+                            </div> `;
+                        });
+                 } else if (packageDetails?.discount) {
+                                    // ✅ Only discount exists, no coupon code
+                        toggleCouponSections(false);
+                        couponSection.innerHTML = `
+                        <div class="row border p-2 mb-2 rounded bg-light">
+                            <div class="col-md-3 mb-2">
+                                <label>Discount</label>
+                                <input type="text" class="form-control" value="Only Discount" readonly>
                             </div>
-                        `;
-                    });
-                } else {
-                    // No valid coupon — fallback UI
-                    toggleCouponSections(false); // Make sure input section stays hidden
-                    couponSection.innerHTML = `
-                    <div class="row border p-2 mb-2 rounded bg-light">
-                        <div class="col-md-12 mb-2">
-                            <label>Discount</label>
-                            <input type="text" class="form-control" value="${packageDetails.discount ?? 'No Discount'}" readonly>
+                            <div class="col-md-2 mb-2">
+                                <label>Discount %</label>
+                                <input type="text" class="form-control" value="${packageDetails.discount}%" readonly name="package_only_discount" id="package_only_discount">
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label>Current Price</label>
+                                <input type="text" class="form-control" value="${currentPrice}" readonly>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label>Discounted Price</label>
+                                <input type="text" class="form-control" value="${currentPrice - (currentPrice * packageDetails.discount / 100)}" readonly name="package_only_dicounted_price" id="package_only_dicounted_price">
+                            </div>
                         </div>
-                    </div>`;
-                }
+                    `;
+                                } else {
+                                    // ❌ No coupon, no discount
+                                    toggleCouponSections(false);
+                                    couponSection.innerHTML = `
+                        <div class="row border p-2 mb-2 rounded bg-light">
+                            <div class="col-md-12 mb-2">
+                                <label>No Discount Available</label>
+                                <input type="text" class="form-control" value="N/A" readonly>
+                            </div>
+                        </div>`;
+                                }
 
             } catch (error) {
                 console.error("Error fetching packages:", error);
@@ -736,7 +762,7 @@
     //submit customer
     async function customerCreate(event) {
         let token = localStorage.getItem('token');
-        if(!token){
+        if (!token) {
             window.location.href = '/admin/login';
         }
         event.preventDefault();
@@ -788,9 +814,10 @@
         let date_of_birth = document.getElementById('customer_date_of_birth').value.trim();
         let gender = document.getElementById('customer_gender').value.trim();
         let customer_nid = document.getElementById('customer_nid_number').value.trim();
-        let package_category_id = document.getElementById('create_customer_componoent_package_category_dropdown').value.trim();
-        let packageId = document.getElementById('customer_create_component_available_packages_dropdown').value
-        .trim();
+        let package_category_id = document.getElementById('create_customer_componoent_package_category_dropdown')
+            .value.trim();
+        let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value
+            .trim();
 
         let country = document.getElementById('customer_country').value.trim();
         let company_name = document.getElementById('customer_company_name').value.trim();
@@ -810,9 +837,27 @@
         let payment = document.getElementById('customer_payment').value.trim();
         let payment_method = document.getElementById('customer_payment_method').value.trim();
         let account_number = document.getElementById('customer_account_number').value.trim();
-        let approval = document.getElementById('approval').value.trim();
-        let couponCode = document.getElementById('coupon_code_input')?.value; //when use coupon
-        let discountedPrice = document.getElementById('coupon_use_new_price')?.value; //when use coupon
+        let approval_status = document.getElementById('approval').value.trim();
+        //undefiend solve
+        // let package_only_discount = null;
+        // let package_only_dicounted_price = null;
+        // setTimeout(() => {
+        //     package_only_discount = document.getElementById('package_only_discount')?.value;
+        //     package_only_dicounted_price = document.getElementById('package_only_dicounted_price')?.value;  
+        // }, 100);
+        
+
+        let package_price = document.getElementById('admin_package_price_field').value.trim();
+        let package_duration = document.getElementById('package_duration').value.trim();
+        let package_inclusions = document.getElementById('package_inclusions').value.trim();
+        let package_exclusions = document.getElementById('package_exclusions').value.trim();
+        let package_visa_processing_time = document.getElementById('package_visa_processing_time').value.trim();
+        let package_documents_required = document.getElementById('package_documents_required').value.trim();
+        let package_seat_availability = document.getElementById('package_seat_availability').value.trim();
+
+        let coupon_code = document.getElementById('coupon_code_input')?.value; //when use coupon
+        let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value; //when use coupon
+        let package_discount = document.getElementById('package_discount')?.value; //when use no coupon
         let error = false;
 
         if (!name) {
@@ -853,7 +898,7 @@
             document.getElementById('customer_purpose_error').innerText = 'Choose one Category';
             error = true;
         }
-        if (!packageId) {
+        if (!package_id) {
             document.getElementById('customer_package_error').innerText = 'Package selection is required';
             error = true;
         }
@@ -886,7 +931,7 @@
         //passenger price only admin
         if (!customer_price) {
             document.getElementById('customer_passenger_price_error_message').innerText =
-            'Passenger Price is error';
+                'Passenger Price is error';
             error = true;
         }
         if (!medical_date) {
@@ -947,12 +992,13 @@
                 error = true;
             }
         }
-        if (!approval) {
+        if (!approval_status) {
             document.getElementById('customer_approval_error_message').innerText = 'Approval is required';
             error = true;
         }
 
         if (error) return;
+
 
         // // Form data prepare
         let formData = new FormData();
@@ -963,22 +1009,34 @@
         }
         let data = {
             admin_id: admin_id,
+            package_id: package_id,
+            package_category_id: package_category_id,
             name: name,
             email: email,
-            phone: email,
-            passportNo: passportNo,
+            phone: phone,
+            passport_no: passportNo,
             age: age,
-            date_of_birth:date_of_birth,
             gender: gender,
-            nid_number:customer_nid,
-            package_category_id: package_category_id,
-            packageId: packageId,
+            date_of_birth: date_of_birth,
+            nid_number: customer_nid,
+            price: package_price,
+            duration: package_duration,
+            inclusions: package_inclusions,
+            exclusions: package_exclusions,
+            visa_processing_time: package_visa_processing_time,
+            documents_required: package_documents_required,
+            seat_availability: package_seat_availability,
+            coupon_code: coupon_code,
+            coupon_use_discounted_price: coupon_use_discounted_price,
+            package_discount: package_discount,
+            package_only_discount: document.getElementById('package_only_discount')?.value ?? null,
+            package_only_dicounted_price: document.getElementById('package_only_dicounted_price')?.value ?? null,
             country: country,
             company_name: company_name,
             pic: pic,
             sales_commission: sales_commission,
             mrp: mrp,
-            customer_price: customer_price,
+            passenger_price: customer_price,
             medical_date: medical_date,
             medical_center: medical_center,
             medical_result: medical_result,
@@ -991,10 +1049,12 @@
             payment: payment,
             payment_method: payment_method,
             account_number: account_number,
-            approval: approval,
-            couponCode: couponCode,
-            discountedPrice: discountedPrice,
+            approval: approval_status,
         }
+        console.log(data);
+
+
+
         // for(let key in data){
         //     //console.log(key);
         //     if(data[key] !== undefined && data[key] !== null){
@@ -1005,34 +1065,34 @@
         // for(let [key,value] of formData.entries()){
         //     console.log(`${key} = ${value}`)
         // }
-       
+
         // // Optional: Disable button during submit
         // const submitBtn = document.querySelector('.btn.btn-primary');
         // submitBtn.disabled = true;
         // submitBtn.innerText = 'Submitting...';
 
 
-        try {
-            const response = await axios.post('/admin/customer/create', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                    
-                }
-            });
+        // try {
+        //     const response = await axios.post('/admin/customer/create', formData, {
+        //         headers: {
+        //             Authorization: `Bearer ${token}`,
+        //             'Content-Type': 'multipart/form-data'
 
-            if (response.data.status === 'success') {
-                Swal.fire(response.data.message, '', 'success');
-                //alert('✅ Customer created successfully!');
-                document.getElementById('admin_customer_form').reset();
-                document.getElementById('purpose_wise_package_section').classList.add('d-none');
-            } else {
-                console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
-            }
-        } catch (error) {
-            alert('❌ Error: ' + (error.response?.data?.message || error.message));
-            console.error(error);
-        }
+        //         }
+        //     });
+
+        //     if (response.data.status === 'success') {
+        //         Swal.fire(response.data.message, '', 'success');
+        //         //alert('✅ Customer created successfully!');
+        //         document.getElementById('admin_customer_form').reset();
+        //         document.getElementById('purpose_wise_package_section').classList.add('d-none');
+        //     } else {
+        //         console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
+        //     }
+        // } catch (error) {
+        //     alert('❌ Error: ' + (error.response?.data?.message || error.message));
+        //     console.error(error);
+        // }
         //  finally {
         //     // Enable button again
         //     submitBtn.disabled = false;

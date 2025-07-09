@@ -31,7 +31,7 @@ return new class extends Migration
         $table->string('nid_number')->nullable();
 
 
-        $table->string('purpose')->nullable();
+        
         $table->decimal('price', 12, 2)->nullable();
         $table->string('duration')->nullable();
 
@@ -41,6 +41,12 @@ return new class extends Migration
         $table->string('visa_processing_time')->nullable();
         $table->text('documents_required')->nullable();
         $table->string('seat_availability')->nullable();
+        $table->string('coupon_code')->nullable();
+        $table->string('coupon_use_discounted_price')->nullable();
+        $table->string('package_discount')->nullable();
+
+        $table->string('package_only_discount')->nullable();
+        $table->string('package_only_dicounted_price')->nullable();
 
         $table->string('country')->nullable();
         $table->string('company_name')->nullable();

@@ -15,7 +15,7 @@ class Customer extends Model
         'package_id', 'package_category_id',
         'name', 'email', 'image', 'phone', 'passport_no', 'age', 'gender','date_of_birth','nid_number',
         'purpose', 'price', 'duration', 'inclusions', 'exclusions',
-        'visa_processing_time', 'documents_required', 'seat_availability',
+        'visa_processing_time', 'documents_required', 'seat_availability','coupon_code','coupon_use_discounted_price','package_discount','package_only_discount','package_only_dicounted_price',
         'country', 'company_name', 'pic',
         'sales_commission', 'mrp',
         'agent_name', 'agent_code', 'agent_price', 'passenger_price',

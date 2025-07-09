@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WellComeCustomerMail;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Package;
@@ -9,6 +10,7 @@ use App\Models\Customer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PackageDiscount;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
@@ -259,6 +261,11 @@ public function customerCreateByAdmin(Request $request)
             'image' => $imagePath,
             'created_by_ip' => $request->ip(),
         ]);
+
+        //sending mail
+        Mail::to($customer->email)->send(new WellComeCustomerMail($customer));
+
+
 
         return response()->json([
             'status' => 'success',

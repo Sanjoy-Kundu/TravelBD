@@ -180,12 +180,27 @@ public function customerCreateByAdmin(Request $request)
             ], 404);
         }
 
+
         // direct discount 
         $directDiscount = $package->discounts->firstWhere('discount_mode', 'direct');
 
         $discountPercentage = $directDiscount->discount_value ?? 0;
         $price = $package->price ?? 0;
         $discountedPrice = $price - ($price * $discountPercentage / 100);
+
+            if ($package->seat_availability == 0) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Seat Not Available'
+                ], 400);
+            }
+
+            if ($request->customer_slot > $package->seat_availability) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid Seat Request. Only ' . $package->seat_availability . ' seat(s) available.'
+                ], 400);
+            }
 
         // Create customer
         $customer = Customer::create([
@@ -211,6 +226,7 @@ public function customerCreateByAdmin(Request $request)
             'seat_availability' => $package->seat_availability,
             'package_discount' => $discountPercentage,
             'package_discounted_price' => $discountedPrice,
+            'package_total_seat' => $package->seat_availability,
 
             // Coupon
             'coupon_code' => Str::upper($request->coupon_code),
@@ -239,6 +255,7 @@ public function customerCreateByAdmin(Request $request)
             'payment_method' => $request->payment_method,
             'account_number' => $request->account_number,
             'approval' => $request->approval,
+            'customer_slot'=> $request->customer_slot,
             'image' => $imagePath,
             'created_by_ip' => $request->ip(),
         ]);

@@ -41,6 +41,7 @@ return new class extends Migration
         $table->string('visa_processing_time')->nullable(); //selected package visa processing time
         $table->text('documents_required')->nullable(); //selected package documents required
         $table->string('seat_availability')->nullable(); //selected package seat availability
+        $table->decimal('customer_slot');
 
         $table->string('coupon_code')->nullable();
         $table->decimal('coupon_discount',18,2)->nullable();

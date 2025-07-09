@@ -14,7 +14,7 @@ protected $fillable = [
     'admin_id', 'agent_id', 'staff_id',
     'package_id', 'package_category_id',
     'name', 'email', 'image', 'phone', 'passport_no', 'age', 'gender', 'date_of_birth', 'nid_number',
-    'price', 'duration', 'inclusions', 'exclusions',
+    'price', 'duration', 'inclusions', 'exclusions','customer_slot',
     'visa_processing_time', 'documents_required', 'seat_availability',
     'coupon_code', 'coupon_discount', 'coupon_use_discounted_price',
     'package_discount', 'package_discounted_price',

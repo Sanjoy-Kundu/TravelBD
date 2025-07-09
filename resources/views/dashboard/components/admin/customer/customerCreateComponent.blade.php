@@ -44,6 +44,7 @@
                             id="customer_phone">
                         <span class="customer_phone_error" style="color:red" id="customer_phone_error"></span>
                     </div>
+               
 
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
@@ -395,6 +396,12 @@
                             id="customer_approval_error_message"></span>
                     </div>
                 </div>
+                     <div class="col-12 mb-3">
+                        <label>Customer Slot</label>
+                        <input type="number" class="form-control" name="customer_slot" 
+                            id="customer_slot" placeholder="Enter your slot">
+                        <span class="customer_slot_error" style="color:red" id="customer_slot_error_message"></span>
+                    </div>
 
                 <div class="text-end">
                     <button class="btn btn-primary px-4" onclick="customerCreate(event)">Submit</button>
@@ -426,6 +433,12 @@
             if (res.data.status == "success") {
                 console.log(res.data.data)
                 document.getElementById("customer_create_by_admin_id").value = res.data.data.id;
+            }else{
+               Swal.fire({
+                    icon: 'error',
+                    title: 'Seat Error',
+                    text: res.data.message,
+                });
             }
         } catch (error) {
             // middleware error check 
@@ -865,6 +878,7 @@ async function customerCreate(event) {
         'customer_payment_method_error_message',
         'customer_account_number_error_message',
         'customer_approval_error_message',
+        'customer_slot_error_message'
     ];
 
     errorFields.forEach(id => {
@@ -908,6 +922,7 @@ async function customerCreate(event) {
     let coupon_code = document.getElementById('coupon_code_input')?.value; 
     let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value;
     let package_discount = document.getElementById('package_discount')?.value;
+    let customer_slot = document.getElementById('customer_slot').value.trim();
 
     let error = false;
 
@@ -1030,6 +1045,10 @@ async function customerCreate(event) {
         document.getElementById('customer_approval_error_message').innerText = 'Approval status is required';
         error = true;
     }
+    if (!customer_slot) {
+        document.getElementById('customer_slot_error_message').innerText = 'Customer slot is required';
+        error = true;
+    }
 
     if (error) return; // stop if validation error
 
@@ -1074,6 +1093,7 @@ async function customerCreate(event) {
         payment_method,
         account_number,
         approval: approval_status,
+        customer_slot:customer_slot
     };
 
     // Append all data keys to formData
@@ -1099,8 +1119,15 @@ async function customerCreate(event) {
             console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
         }
     } catch (error) {
-        alert('❌ Error: ' + (error.response?.data?.message || error.message));
-        console.error(error);
+    if (error.response && error.response.status === 422) {
+        // Just show first validation error
+        const errors = error.response.data.errors;
+        const firstError = Object.values(errors)[0][0];
+
+        Swal.fire('❌ Error', firstError, 'error');
+    } else {
+        Swal.fire('❌ Error', error.response?.data?.message || error.message, 'error');
+    }
     }
 }
 

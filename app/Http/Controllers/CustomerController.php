@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PackageDiscount;
 use App\Mail\WellComeCustomerMail;
+use App\Mail\CustomerDetailsChange;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -386,7 +387,6 @@ class CustomerController extends Controller
 public function customerUpdate(Request $request)
 {
     try {
-        // Validate request
         $request->validate([
             'id' => 'required|exists:customers,id',
             'name' => 'required|string|max:255',
@@ -400,24 +400,24 @@ public function customerUpdate(Request $request)
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Find customer
         $customer = Customer::findOrFail($request->id);
 
-        // Handle image upload if available
+        // Store old DOB before updating
+        $oldDob = $customer->date_of_birth;
+
+        // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
                 unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
             }
 
-            // Upload new image
             $file = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('upload/dashboard/images/customers/'), $filename);
             $customer->image = $filename;
         }
 
-        // Update fields
+        // Update other fields
         $customer->name = $request->name;
         $customer->phone = $request->phone;
         $customer->passport_no = $request->passport_no;
@@ -427,9 +427,13 @@ public function customerUpdate(Request $request)
         $customer->nid_number = $request->nid_number;
         $customer->country = $request->country;
 
-        //if any field is change 
         if ($customer->isDirty()) {
             $customer->save();
+
+            // Send email if date_of_birth changed
+            if ($oldDob !== $customer->date_of_birth) {
+                Mail::to($customer->email)->send(new CustomerDetailsChange($customer, 'date of birth', $customer->date_of_birth));
+            }
 
             return response()->json([
                 'status' => 'success',

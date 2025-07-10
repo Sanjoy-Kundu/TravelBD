@@ -1115,6 +1115,39 @@ async function customerCreate(event) {
             Swal.fire(response.data.message, '', 'success');
             //document.getElementById('admin_customer_form').reset();
             document.getElementById('purpose_wise_package_section').classList.add('d-none');
+            //refresh input field 
+            document.getElementById('customer_name').value = "";
+            document.getElementById('customer_email').value = "";
+            document.getElementById('customer_phone').value = "";
+            document.getElementById('customer_passport_no').value = "";
+            document.getElementById('customer_age').value = "";
+            document.getElementById('customer_date_of_birth').value = "";
+            document.getElementById('customer_gender').value = "";
+            document.getElementById('customer_nid_number').value = "";
+            // Corrected package_category_id id here:
+            document.getElementById('package_categories_dropdown').value = "";
+            document.getElementById('customer_create_component_available_packages_dropdown').value = "";
+
+            let country = document.getElementById('customer_country').value="";
+            let company_name = document.getElementById('customer_company_name').value="";
+            let pic = document.getElementById('customer_pic').value="";
+            let sales_commission = document.getElementById('customer_sales_commission').value="";
+            let mrp = document.getElementById('customer_mrp').value="";
+            let customer_price = document.getElementById('customer_passenger_price').value="";
+            let medical_date = document.getElementById('customer_medical_date').value="";
+            let medical_center = document.getElementById('customer_medical_center').value="";
+            let medical_result = document.getElementById('customer_medical_result').value="";
+            let visa_online = document.getElementById('customer_visa_online').value="";
+            let calling = document.getElementById('customer_calling').value="";
+            let training = document.getElementById('customer_training').value="";
+            let e_vissa = document.getElementById('customer_e_vissa').value="";
+            let bmet = document.getElementById('customer_bmet').value="";
+            let fly = document.getElementById('customer_fly').value="";
+            let payment = document.getElementById('customer_payment').value="";
+            let payment_method = document.getElementById('customer_payment_method').value="";
+            let account_number = document.getElementById('customer_account_number').value="";
+            let approval_status = document.getElementById('approval').value="";
+            let customer_slot = document.getElementById('customer_slot').value = "";
         } else {
             console.log('❌ Failed: ' + (response.data.message || 'Unknown error'));
         }

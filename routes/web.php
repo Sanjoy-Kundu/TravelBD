@@ -39,6 +39,17 @@ Route::get('/agent/otp/verify', [AgentController::class, 'otpVerifyPage']);
 Route::post('/agent/login/store', [AgentController::class, 'agent_login_store'])->name('agent.login.store');
 Route::post('/agent/otp/verify/store', [AgentController::class, 'agent_otp_verify_store'])->name('agent.otp.verify.store');
 
+
+
+// ====================== Customer Auth Routes ======================
+Route::get('/customer/login', [CustomerController::class, 'customerLoginPage']);
+Route::post('/customer/login/store', [CustomerController::class, 'customer_login_store']);
+
+
+//====================== Customer Dashoboard Routes ======================
+Route::get('/customer/dashboard', [CustomerController::class, 'customerDashboard'])->name('customer.dashboard');
+Route::get('/customer/my-package', [CustomerController::class, 'myPackageDetailsPage']);
+
 // ====================== Agent Dashboard Routes ======================
 Route::get('/agent/dashboard', [AgentController::class, 'agentDashboard'])->name('agent.dashboard');
 Route::get('/agent/profile/create', [AgentProfileController::class, 'agentProfileCreate'])->name('agent.profile.create');
@@ -211,4 +222,23 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
     Route::post('/agent/profile/store', [AgentProfileController::class, 'agentProfileStore']);
     Route::post('/agent/profile/details', [AgentProfileController::class, 'agentProfileDetails']);
     Route::post('/agent/reset/password', [AgentController::class, 'agentResetPassword']);
+});
+
+
+
+
+
+
+
+//===================== for customer =====================
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/auth/customer', [CustomerController::class, 'customerDetails']);
+    Route::post('/customer/package/details-by-id', [CustomerController::class, 'customerPackageDetailsById']);
+    // Route::post('/agent/logout', [AgentController::class, 'logout']);
+
+    // Route::get('/user/details/agent', [AgentController::class, 'agentDetails']);
+    // Route::post('/agent/name/update-by-email', [AgentController::class, 'agentNameUpdateByEmail']);
+    // Route::post('/agent/profile/store', [AgentProfileController::class, 'agentProfileStore']);
+    // Route::post('/agent/profile/details', [AgentProfileController::class, 'agentProfileDetails']);
+    // Route::post('/agent/reset/password', [AgentController::class, 'agentResetPassword']);
 });

@@ -16,12 +16,52 @@ use Illuminate\Support\Facades\Validator;
 class CustomerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Customer Login Page
      */
-    public function index()
+    public function customerLoginPage()
     {
-        //
+        try{
+            return view('form.customer.customerLogin');
+        }catch(Exception $e){
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
+
+
+    /**
+     * Customer Login
+     */
+    public function customer_login_store(Request $request){
+        try{
+            $request->validate([
+                'email' => 'required|email',
+                'date_of_birth' => 'required|date',
+            ]);
+            $customer = Customer::where('email', $request->email)->where('date_of_birth', $request->date_of_birth)->first();
+            if(!$customer){
+                return response()->json(['status' => 'error','message' => 'Invalid Credentials'], 401);
+            }
+
+            $token = $customer->createToken('auth_token')->plainTextToken;
+            return response()->json(['status' => 'login_success','message' => 'Login Successfully','token' => $token], 200);
+         
+        }catch(Exception $ex){
+            return response()->json(['message' => $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Customer Dashboard
+     */
+    public function customerDashboard(Request $request){
+        try{
+            return view('pages.backend.customer.customerDashboardPage');
+        }catch(Exception $ex){
+            return response()->json(['message' => $ex->getMessage()], 500);
+        }
+    }
+
+
 
     /**
      *Pcakge list by category
@@ -269,7 +309,7 @@ public function customerCreateByAdmin(Request $request)
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Customer created successfully!',
+            'message' => 'Customer created successfully! A confirmation email has been sent to the customer with login instruction',
             'data' => $customer,
         ], 200);
 
@@ -282,10 +322,50 @@ public function customerCreateByAdmin(Request $request)
 }
 
     /**
-     * Remove the specified resource from storage.
+     * Working For Customer Dahsboard  customer auth info
      */
-    public function destroy(Customer $customer)
+    public function customerDetails()
     {
-        //
+        try{
+            $customerDetails = Customer::where('id', auth()->user()->id)->first();
+            return response()->json(['status' => 'success', 'data' => $customerDetails]);
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage()]); 
+        }
+    }
+
+
+
+    /**
+     * Customer Package Details 
+     */
+    public function myPackageDetailsPage(){
+        try{
+            return view('pages.backend.customer.customerPackageDetailsPage');
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage()]);
+        }
+    }
+
+
+    /*
+    * Customer Package Details by customer id
+    */
+    public function customerPackageDetailsById(Request $request){
+        $id = $request->id;
+        try{
+            $searchCustomer = Customer::where('id', $id)->first();
+            if(!$searchCustomer){
+                return response()->json(['status' => 'error', 'message' => 'Customer not found']);
+            }
+            $packageDetails = Customer::where('id', $id)->first();
+            return response()->json(['status'=>'success', 'packages' => $packageDetails]);
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error','message' => $ex->getMessage()]);
+        }
     }
 }

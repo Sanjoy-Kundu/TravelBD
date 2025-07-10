@@ -234,6 +234,7 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/auth/customer', [CustomerController::class, 'customerDetails']);
     Route::post('/customer/package/details-by-id', [CustomerController::class, 'customerPackageDetailsById']);
+    Route::post('/customer/update', [CustomerController::class, 'customerUpdate']);
     // Route::post('/agent/logout', [AgentController::class, 'logout']);
 
     // Route::get('/user/details/agent', [AgentController::class, 'agentDetails']);

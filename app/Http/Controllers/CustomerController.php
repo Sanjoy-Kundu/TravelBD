@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\WellComeCustomerMail;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Package;
@@ -10,8 +9,10 @@ use App\Models\Customer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PackageDiscount;
+use App\Mail\WellComeCustomerMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
@@ -20,32 +21,31 @@ class CustomerController extends Controller
      */
     public function customerLoginPage()
     {
-        try{
+        try {
             return view('form.customer.customerLogin');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-
     /**
      * Customer Login
      */
-    public function customer_login_store(Request $request){
-        try{
+    public function customer_login_store(Request $request)
+    {
+        try {
             $request->validate([
                 'email' => 'required|email',
                 'date_of_birth' => 'required|date',
             ]);
             $customer = Customer::where('email', $request->email)->where('date_of_birth', $request->date_of_birth)->first();
-            if(!$customer){
-                return response()->json(['status' => 'error','message' => 'Invalid Credentials'], 401);
+            if (!$customer) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid Credentials'], 401);
             }
 
             $token = $customer->createToken('auth_token')->plainTextToken;
-            return response()->json(['status' => 'login_success','message' => 'Login Successfully','token' => $token], 200);
-         
-        }catch(Exception $ex){
+            return response()->json(['status' => 'login_success', 'message' => 'Login Successfully', 'token' => $token], 200);
+        } catch (Exception $ex) {
             return response()->json(['message' => $ex->getMessage()], 500);
         }
     }
@@ -53,15 +53,14 @@ class CustomerController extends Controller
     /**
      * Customer Dashboard
      */
-    public function customerDashboard(Request $request){
-        try{
+    public function customerDashboard(Request $request)
+    {
+        try {
             return view('pages.backend.customer.customerDashboardPage');
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['message' => $ex->getMessage()], 500);
         }
     }
-
-
 
     /**
      *Pcakge list by category
@@ -181,139 +180,273 @@ class CustomerController extends Controller
     /**
      *Customer created by admin
      */
-public function customerCreateByAdmin(Request $request)
-{
-    try {
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'phone' => 'required|string|max:20',
-            'passport_no' => 'required|string|max:50',
-            'package_id' => 'required|exists:packages,id',
-            'package_category_id' => 'nullable|exists:package_categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    public function customerCreateByAdmin(Request $request)
+    {
+        try {
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:customers,email',
+                'phone' => 'required|string|max:20',
+                'passport_no' => 'required|string|max:50',
+                'package_id' => 'required|exists:packages,id',
+                'package_category_id' => 'nullable|exists:package_categories,id',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed!',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Validation failed!',
+                        'errors' => $validator->errors(),
+                    ],
+                    422,
+                );
+            }
 
-              $imagePath = null;
+            $imagePath = null;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $customer_image_Name = Str::random(20) . '.' . $image->getClientOriginalExtension();
                 $imagePath = $image->move(public_path('upload/dashboard/images/customers'), $customer_image_Name);
             }
 
+            $package = Package::with('discounts')->find($request->package_id);
 
+            if (!$package) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Package not found',
+                    ],
+                    404,
+                );
+            }
 
+            // direct discount
+            $directDiscount = $package->discounts->firstWhere('discount_mode', 'direct');
 
-        $package = Package::with('discounts')->find($request->package_id);
-
-        if (!$package) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Package not found'
-            ], 404);
-        }
-
-
-        // direct discount 
-        $directDiscount = $package->discounts->firstWhere('discount_mode', 'direct');
-
-        $discountPercentage = $directDiscount->discount_value ?? 0;
-        $price = $package->price ?? 0;
-        $discountedPrice = $price - ($price * $discountPercentage / 100);
+            $discountPercentage = $directDiscount->discount_value ?? 0;
+            $price = $package->price ?? 0;
+            $discountedPrice = $price - ($price * $discountPercentage) / 100;
 
             if ($package->seat_availability == 0) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Seat Not Available'
-                ], 400);
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Seat Not Available',
+                    ],
+                    400,
+                );
             }
 
             if ($request->customer_slot > $package->seat_availability) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid Seat Request. Only ' . $package->seat_availability . ' seat(s) available.'
-                ], 400);
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Invalid Seat Request. Only ' . $package->seat_availability . ' seat(s) available.',
+                    ],
+                    400,
+                );
             }
 
-        // Create customer
-        $customer = Customer::create([
-            'admin_id' => $request->admin_id,
-            'name' => Str::upper($request->name),
-            'email' => Str::lower($request->email),
-            'phone' => $request->phone,
-            'passport_no' => $request->passport_no,
-            'age' => $request->age,
-            'date_of_birth' => $request->date_of_birth,
-            'gender' => Str::upper($request->gender),
-            'nid_number' => $request->nid_number,
-            'package_id' => $request->package_id,
-            'package_category_id' => $request->package_category_id,
+            // Create customer
+            $customer = Customer::create([
+                'admin_id' => $request->admin_id,
+                'name' => Str::upper($request->name),
+                'email' => Str::lower($request->email),
+                'phone' => $request->phone,
+                'passport_no' => $request->passport_no,
+                'age' => $request->age,
+                'date_of_birth' => $request->date_of_birth,
+                'gender' => Str::upper($request->gender),
+                'nid_number' => $request->nid_number,
+                'package_id' => $request->package_id,
+                'package_category_id' => $request->package_category_id,
 
-            // From package
-            'price' => $price,
-            'duration' => $package->duration,
-            'inclusions' => $package->inclusions,
-            'exclusions' => $package->exclusions,
-            'visa_processing_time' => $package->visa_processing_time,
-            'documents_required' => $package->documents_required,
-            'seat_availability' => $package->seat_availability,
-            'package_discount' => $discountPercentage,
-            'package_discounted_price' => $discountedPrice,
-            'package_total_seat' => $package->seat_availability,
+                // From package
+                'price' => $price,
+                'duration' => $package->duration,
+                'inclusions' => $package->inclusions,
+                'exclusions' => $package->exclusions,
+                'visa_processing_time' => $package->visa_processing_time,
+                'documents_required' => $package->documents_required,
+                'seat_availability' => $package->seat_availability,
+                'package_discount' => $discountPercentage,
+                'package_discounted_price' => $discountedPrice,
+                'package_total_seat' => $package->seat_availability,
 
-            // Coupon
-            'coupon_code' => Str::upper($request->coupon_code),
-            'coupon_discount' => $request->coupon_discount ?? null,
-            'coupon_use_discounted_price' => $request->coupon_use_discounted_price,
+                // Coupon
+                'coupon_code' => Str::upper($request->coupon_code),
+                'coupon_discount' => $request->coupon_discount ?? null,
+                'coupon_use_discounted_price' => $request->coupon_use_discounted_price,
 
-            // Others
-            'country' => Str::upper($request->country),
-            'company_name' => Str::upper($request->company_name),
-            'pic' => $request->pic,
-            'sales_commission' => $request->sales_commission,
-            'mrp' => $request->mrp,
-            'passenger_price' => $request->passenger_price,
+                // Others
+                'country' => Str::upper($request->country),
+                'company_name' => Str::upper($request->company_name),
+                'pic' => $request->pic,
+                'sales_commission' => $request->sales_commission,
+                'mrp' => $request->mrp,
+                'passenger_price' => $request->passenger_price,
 
-            'medical_date' => $request->medical_date,
-            'medical_center' => Str::upper($request->medical_center),
-            'medical_result' => Str::upper($request->medical_result),
+                'medical_date' => $request->medical_date,
+                'medical_center' => Str::upper($request->medical_center),
+                'medical_result' => Str::upper($request->medical_result),
 
-            'visa_online' => $request->visa_online,
-            'calling' => $request->calling,
-            'training' => $request->training,
-            'e_vissa' => $request->e_vissa,
-            'bmet' => $request->bmet,
-            'fly' => $request->fly,
-            'payment' => $request->payment,
-            'payment_method' => $request->payment_method,
-            'account_number' => $request->account_number,
-            'approval' => $request->approval,
-            'customer_slot'=> $request->customer_slot,
-            'image' => $imagePath,
-            'created_by_ip' => $request->ip(),
+                'visa_online' => $request->visa_online,
+                'calling' => $request->calling,
+                'training' => $request->training,
+                'e_vissa' => $request->e_vissa,
+                'bmet' => $request->bmet,
+                'fly' => $request->fly,
+                'payment' => $request->payment,
+                'payment_method' => $request->payment_method,
+                'account_number' => $request->account_number,
+                'approval' => $request->approval,
+                'customer_slot' => $request->customer_slot,
+                'image' => $imagePath,
+                'created_by_ip' => $request->ip(),
+            ]);
+
+            //sending mail
+            Mail::to($customer->email)->send(new WellComeCustomerMail($customer));
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Customer created successfully! A confirmation email has been sent to the customer with login instruction',
+                    'data' => $customer,
+                ],
+                200,
+            );
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $ex->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    /**
+     * Working For Customer Dahsboard  customer auth info
+     */
+    public function customerDetails()
+    {
+        try {
+            $customerDetails = Customer::where('id', auth()->user()->id)->first();
+            return response()->json(['status' => 'success', 'data' => $customerDetails]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Customer Package Details
+     */
+    public function myPackageDetailsPage()
+    {
+        try {
+            return view('pages.backend.customer.customerPackageDetailsPage');
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
+
+    /*
+     * Customer Package Details by customer id
+     */
+    public function customerPackageDetailsById(Request $request)
+    {
+        $id = $request->id;
+        try {
+            $searchCustomer = Customer::where('id', $id)->first();
+            if (!$searchCustomer) {
+                return response()->json(['status' => 'error', 'message' => 'Customer not found']);
+            }
+            $packageDetails = Customer::with('package', 'packageCategory')->where('id', $id)->first();
+            return response()->json(['status' => 'success', 'packages' => $packageDetails]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+    /**
+     * Customer Update
+     */
+public function customerUpdate(Request $request)
+{
+    try {
+        // Validate request
+        $request->validate([
+            'id' => 'required|exists:customers,id',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'passport_no' => 'nullable|string|max:50',
+            'age' => 'nullable|integer|min:1',
+            'gender' => 'required|in:male,female,other',
+            'date_of_birth' => 'nullable|date',
+            'nid_number' => 'nullable|string|max:50',
+            'country' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        //sending mail
-        Mail::to($customer->email)->send(new WellComeCustomerMail($customer));
+        // Find customer
+        $customer = Customer::findOrFail($request->id);
 
+        // Handle image upload if available
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
+                unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
+            }
 
+            // Upload new image
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('upload/dashboard/images/customers/'), $filename);
+            $customer->image = $filename;
+        }
 
+        // Update fields
+        $customer->name = $request->name;
+        $customer->phone = $request->phone;
+        $customer->passport_no = $request->passport_no;
+        $customer->age = $request->age;
+        $customer->gender = $request->gender;
+        $customer->date_of_birth = $request->date_of_birth;
+        $customer->nid_number = $request->nid_number;
+        $customer->country = $request->country;
+
+        //if any field is change 
+        if ($customer->isDirty()) {
+            $customer->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Customer updated successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'no_change',
+                'message' => 'No changes detected to update.',
+            ]);
+        }
+    } catch (ValidationException $e) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Customer created successfully! A confirmation email has been sent to the customer with login instruction',
-            'data' => $customer,
-        ], 200);
-
-    } catch (Exception $ex) {
+            'status' => 'error',
+            'errors' => $e->errors(),
+        ], 422);
+    } catch (\Exception $ex) {
         return response()->json([
             'status' => 'error',
             'message' => $ex->getMessage(),
@@ -321,51 +454,4 @@ public function customerCreateByAdmin(Request $request)
     }
 }
 
-    /**
-     * Working For Customer Dahsboard  customer auth info
-     */
-    public function customerDetails()
-    {
-        try{
-            $customerDetails = Customer::where('id', auth()->user()->id)->first();
-            return response()->json(['status' => 'success', 'data' => $customerDetails]);
-        }catch(Exception $ex){
-            return response()->json([
-                'status' => 'error',
-                'message' => $ex->getMessage()]); 
-        }
-    }
-
-
-
-    /**
-     * Customer Package Details 
-     */
-    public function myPackageDetailsPage(){
-        try{
-            return view('pages.backend.customer.customerPackageDetailsPage');
-        }catch(Exception $ex){
-            return response()->json([
-                'status' => 'error',
-                'message' => $ex->getMessage()]);
-        }
-    }
-
-
-    /*
-    * Customer Package Details by customer id
-    */
-    public function customerPackageDetailsById(Request $request){
-        $id = $request->id;
-        try{
-            $searchCustomer = Customer::where('id', $id)->first();
-            if(!$searchCustomer){
-                return response()->json(['status' => 'error', 'message' => 'Customer not found']);
-            }
-            $packageDetails = Customer::with('package','packageCategory')->where('id', $id)->first();
-            return response()->json(['status'=>'success', 'packages' => $packageDetails]);
-        }catch(Exception $ex){
-            return response()->json(['status' => 'error','message' => $ex->getMessage()]);
-        }
-    }
 }

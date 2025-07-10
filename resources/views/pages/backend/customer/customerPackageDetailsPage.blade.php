@@ -4,4 +4,5 @@
     @include('dashboard.components.customer.sidebarComponent')
     @include('dashboard.components.customer.packageDetailsComponent')
     @include('dashboard.components.customer.footerComponent')
+    @include('dashboard.components.customer.customerEditComponent')
 @endsection

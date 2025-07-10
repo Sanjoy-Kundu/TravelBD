@@ -10,6 +10,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AgentProfileController;
+use App\Http\Controllers\CustomerPackagePdfController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
@@ -242,4 +243,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::post('/agent/profile/store', [AgentProfileController::class, 'agentProfileStore']);
     // Route::post('/agent/profile/details', [AgentProfileController::class, 'agentProfileDetails']);
     // Route::post('/agent/reset/password', [AgentController::class, 'agentResetPassword']);
+
+
+    //pdf for customer 
+    Route::get('/customer/package/pdf/{id}', [CustomerPackagePdfController::class, 'customerPackageGeneratePackagePdf']);
 });

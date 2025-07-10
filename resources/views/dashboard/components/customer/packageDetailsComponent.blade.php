@@ -43,6 +43,9 @@
                             <button type="button" class="btn btn-primary editCustomerInformation">
                                 <i class="fas fa-edit me-2"></i> EDIT YOUR INFORMAION
                             </button>
+                            <button class="btn btn-danger previewPackagePdf" data-bs-toggle="modal" data-bs-target="#pdfPreviewModal">
+                            <i class="fas fa-file-pdf me-2"></i> Preview Package PDF
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -215,6 +218,8 @@
 
 
 
+
+
 <style>
     .table th {
         width: 220px;
@@ -230,7 +235,14 @@
         margin: 0;
         padding-left: 1.2rem;
     }
+
 </style>
+
+
+
+
+
+
 
 
 
@@ -414,12 +426,14 @@
         }
 
         //edit modal 
-              $(document).ready(function () {
-                        $('.editCustomerInformation').on('click', async function () {
-                            //console.log('button click successfully');
-                            await fillCustomerEditModal(id)
-                            $('#editCustomerModal').modal('show');
-                        });
-                    });
+            $(document).ready(function () {
+                $('.editCustomerInformation').on('click', async function () {
+                //console.log('button click successfully');
+                await fillCustomerEditModal(id)
+                $('#editCustomerModal').modal('show');
+                });
+            });
+
+
     }
 </script>

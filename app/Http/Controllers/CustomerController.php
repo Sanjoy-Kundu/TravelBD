@@ -384,78 +384,78 @@ class CustomerController extends Controller
     /**
      * Customer Update
      */
-public function customerUpdate(Request $request)
-{
-    try {
-        $request->validate([
-            'id' => 'required|exists:customers,id',
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'passport_no' => 'nullable|string|max:50',
-            'age' => 'nullable|integer|min:1',
-            'gender' => 'required|in:male,female,other',
-            'date_of_birth' => 'nullable|date',
-            'nid_number' => 'nullable|string|max:50',
-            'country' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        public function customerUpdate(Request $request)
+        {
+            try {
+                $request->validate([
+                    'id' => 'required|exists:customers,id',
+                    'name' => 'required|string|max:255',
+                    'phone' => 'required|string|max:20',
+                    'passport_no' => 'nullable|string|max:50',
+                    'age' => 'nullable|integer|min:1',
+                    'gender' => 'required|in:male,female,other',
+                    'date_of_birth' => 'nullable|date',
+                    'nid_number' => 'nullable|string|max:50',
+                    'country' => 'nullable|string|max:255',
+                    'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                ]);
 
-        $customer = Customer::findOrFail($request->id);
+                $customer = Customer::findOrFail($request->id);
 
-        // Store old DOB before updating
-        $oldDob = $customer->date_of_birth;
+                // Store old DOB before updating
+                $oldDob = $customer->date_of_birth;
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
-                unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
+                // Handle image upload
+                if ($request->hasFile('image')) {
+                    if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
+                        unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
+                    }
+
+                    $file = $request->file('image');
+                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('upload/dashboard/images/customers/'), $filename);
+                    $customer->image = $filename;
+                }
+
+                // Update other fields
+                $customer->name = $request->name;
+                $customer->phone = $request->phone;
+                $customer->passport_no = $request->passport_no;
+                $customer->age = $request->age;
+                $customer->gender = $request->gender;
+                $customer->date_of_birth = $request->date_of_birth;
+                $customer->nid_number = $request->nid_number;
+                $customer->country = $request->country;
+
+                if ($customer->isDirty()) {
+                    $customer->save();
+
+                    // Send email if date_of_birth changed
+                    if ($oldDob !== $customer->date_of_birth) {
+                        Mail::to($customer->email)->send(new CustomerDetailsChange($customer, 'date of birth', $customer->date_of_birth));
+                    }
+
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Customer updated successfully',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'no_change',
+                        'message' => 'No changes detected to update.',
+                    ]);
+                }
+            } catch (ValidationException $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $e->errors(),
+                ], 422);
+            } catch (\Exception $ex) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $ex->getMessage(),
+                ], 500);
             }
-
-            $file = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('upload/dashboard/images/customers/'), $filename);
-            $customer->image = $filename;
         }
-
-        // Update other fields
-        $customer->name = $request->name;
-        $customer->phone = $request->phone;
-        $customer->passport_no = $request->passport_no;
-        $customer->age = $request->age;
-        $customer->gender = $request->gender;
-        $customer->date_of_birth = $request->date_of_birth;
-        $customer->nid_number = $request->nid_number;
-        $customer->country = $request->country;
-
-        if ($customer->isDirty()) {
-            $customer->save();
-
-            // Send email if date_of_birth changed
-            if ($oldDob !== $customer->date_of_birth) {
-                Mail::to($customer->email)->send(new CustomerDetailsChange($customer, 'date of birth', $customer->date_of_birth));
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Customer updated successfully',
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'no_change',
-                'message' => 'No changes detected to update.',
-            ]);
-        }
-    } catch (ValidationException $e) {
-        return response()->json([
-            'status' => 'error',
-            'errors' => $e->errors(),
-        ], 422);
-    } catch (\Exception $ex) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $ex->getMessage(),
-        ], 500);
-    }
-}
 
 }

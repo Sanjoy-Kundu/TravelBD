@@ -362,7 +362,7 @@ public function customerCreateByAdmin(Request $request)
             if(!$searchCustomer){
                 return response()->json(['status' => 'error', 'message' => 'Customer not found']);
             }
-            $packageDetails = Customer::where('id', $id)->first();
+            $packageDetails = Customer::with('package','packageCategory')->where('id', $id)->first();
             return response()->json(['status'=>'success', 'packages' => $packageDetails]);
         }catch(Exception $ex){
             return response()->json(['status' => 'error','message' => $ex->getMessage()]);

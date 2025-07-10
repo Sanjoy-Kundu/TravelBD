@@ -120,19 +120,13 @@
                         <tr>
                             <th>Inclusions</th>
                             <td>
-                                <ul class="mb-0 ps-3">
-                                    <li>ভিসা ফি</li>
-                                    <li>পারমিট</li>
-                                    <li>বিমান টিকিট</li>
-                                </ul>
+                                <ol class="mb-0 ps-3" id="inclusionList"></ol>
                             </td>
                         </tr>
                         <tr>
                             <th>Exclusions</th>
                             <td>
-                                <ul class="mb-0 ps-3">
-                                    <li>আবাসন ও যাতায়াত অন্তর্ভুক্ত নয়</li>
-                                </ul>
+                                <ol class="mb-0 ps-3" id="exclusionList"></ol>
                             </td>
                         </tr>
                         <tr>
@@ -142,12 +136,7 @@
                         <tr>
                             <th>Documents Required</th>
                             <td>
-                                <ol class="mb-0 ps-3">
-                                    <li>পাসপোর্ট</li>
-                                    <li>ছবি</li>
-                                    <li>চাকরির চিঠি</li>
-                                    <li>নিয়োগপত্র</li>
-                                </ol>
+                                <ol class="mb-0 ps-3" id="documentLists"></ol>
                             </td>
                         </tr>
                         <tr>
@@ -376,6 +365,7 @@
 
         if(res.data.status == "success"){
             console.log(res.data.packages)
+            console.log(res.data.packages.package_category.name)
             document.getElementById('name').innerHTML = res.data.packages.name?res.data.packages.name:"N/A";
             document.getElementById('email').innerHTML = res.data.packages.email?res.data.packages.email:"N/A"; 
             document.getElementById('age').innerHTML = res.data.packages.age?res.data.packages.age:"N/A"; 
@@ -385,6 +375,8 @@
             document.getElementById('calling_status').innerHTML = res.data.packages.calling?res.data.packages.calling:"N/A";      
             document.getElementById('company_name').innerHTML = res.data.packages.company_name?res.data.packages.company_name:"N/A";      
             document.getElementById('country').innerHTML = res.data.packages.country?res.data.packages.country:"N/A";  
+            document.getElementById('package_name').innerHTML = res.data.packages.package.title?res.data.packages.package.title:"N/A";  
+            document.getElementById('category_name').innerHTML = res.data.packages.package_category.name?res.data.packages.package_category.name:"N/A";  
 
             document.getElementById('coupon_code').innerHTML = res.data.packages.coupon_code?res.data.packages.coupon_code:"N/A";      
             document.getElementById('coupon_discount').innerHTML = res.data.packages.coupon_discount?res.data.packages.coupon_discount:"N/A";      
@@ -416,9 +408,37 @@
             document.getElementById('visa_online_status').innerHTML = res.data.packages.visa_online?res.data.packages.visa_online:"N/A";  
             document.getElementById('visa_processing_time').innerHTML = res.data.packages.visa_processing_time?res.data.packages.visa_processing_time:"N/A";  
             document.getElementById('account_number').innerHTML = res.data.packages.account_number?res.data.packages.account_number:"N/A";  
+
+            //inclusions 
+            let inclusionsString = res.data.packages.inclusions;
+            let inclusionsArray = inclusionsString.split(',');
+            let inclusionList = document.getElementById("inclusionList");
+                inclusionList.innerHTML = "";
+                inclusionsArray.forEach(item => {
+                    inclusionList.innerHTML += `<li>${item.trim()}</li>`;
+                });
+            
+            //exclusion
+            let exclusionListString = res.data.packages.exclusions;
+            let exclusionArray = exclusionListString.split(',');
+            let exclusionList = document.getElementById("exclusionList");
+                exclusionList.innerHTML = "";
+                exclusionArray.forEach(item => {
+                    exclusionList.innerHTML += `<li>${item.trim()}</li>`;
+                });
+
+            //document lists
+            let documentsListString = res.data.packages.documents_required;
+            let documentListArray = documentsListString.split(',');
+            let documentLists = document.getElementById('documentLists');
+                documentLists.innerHTML = "";
+                documentListArray.forEach(item => {
+                    documentLists.innerHTML += `<li>${item.trim()}</li>`;
+                })
             //console     documents_required:"পাসপোর্ট, ছবি, চাকরির চিঠি, নিয়োগপত্র"
             //console      exclusions: "আবাসন ও যাতায়াত অন্তর্ভুক্ত নয়"
-            //console      inclusions: "ভিসা ফি, পারমিট, বিমান টিকিট"
+            //console      res.data.packages.inclusions = "ভিসা ফি, পারমিট, বিমান টিকিট"
+          
 
 
         }

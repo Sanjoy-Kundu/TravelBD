@@ -22,7 +22,7 @@
                     <i class="fas fa-envelope me-2"></i> <span class="nav_customer_user_email">Email</span>
                 </li>
                 <li class="dropdown-item">
-                    <i class="fas fa-envelope me-2"></i> <input type="number" readonly class="customer_id">
+                    <i class="fas fa-envelope me-2"></i> <input type="number" hidden readonly class="customer_id">
                 </li>
                 <li class="dropdown-item">
                     <i class="fas fa-user-tag me-2"></i> Role: <span class="nav_customer_user_role">Customer</span>

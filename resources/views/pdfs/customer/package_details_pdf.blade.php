@@ -1,12 +1,96 @@
-<!-- Modal -->
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+    #package_content {
+           width: 794px;
+          min-height: 1123px;
+          padding: 3px;
+          box-sizing: border-box;
+          font-family: 'Segoe UI', sans-serif;
+        
+    }
+
+    #package_content h2 {
+        font-weight: 700;
+        margin-bottom: 1px;
+    }
+
+    #package_content table {
+        width: 90%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    #package_content table,
+    #package_content th,
+    #package_content td {
+        border: 1px solid #dee2e6;
+    }
+
+    #package_content th,
+    #package_content td {
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    #package_content .bg-light {
+        background-color: #f8f9fa !important;
+    }
+
+    #package_content .fw-bold {
+        font-weight: 700;
+    }
+
+    #package_content .text-end {
+        text-align: right;
+    }
+
+    #package_content .small {
+        font-size: 0.875em;
+    }
+
+    #package_content .text-muted {
+        color: #6c757d;
+    }
+
+    #package_content p {
+        margin-bottom: 0.1rem;
+    }
+
+    #package_content .d-flex {
+        display: flex;
+    }
+
+    #package_content .justify-content-between {
+        justify-content: space-between;
+    }
+
+    #package_content .align-items-start {
+        align-items: flex-start;
+    }
+
+    /* Footer social icons spacing */
+    #package_content .bi {
+        font-size: 1.2rem;
+        margin-right: 10px;
+        color: #555;
+    }
+</style>
+
+
 <div class="modal fade" id="packagePdfModal" tabindex="-1" aria-labelledby="packagePdfModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-sm">
 
-            <div class="modal-body" id="package_content" style="font-family: 'Segoe UI', sans-serif; padding-left: 40px; padding-right: 40px;">
+            <div class="modal-body" id="package_content" style="font-family: 'Segoe UI', sans-serif;">
 
                 <!-- Header -->
-                <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="">
                     <!-- Logo + Title -->
                     <div>
                         <img src="{{ asset('/images/logo/logo.png') }}" alt="Logo" style="height: 50px;">
@@ -14,13 +98,13 @@
                     </div>
 
                     <!-- Company Info -->
-                    <div class="text-end small text-muted">
+                    {{-- <div class="text-end small text-muted">
                         <strong>SANDY TRAVELS</strong><br>
                         12/A Puran Polton, Dhaka<br>
                         Dhaka Bangladesh<br>
                         sales@sandytravels.com<br>
                         Phone: +8801759351546
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Customer & Invoice Info -->
@@ -41,7 +125,7 @@
                 </div>
 
                 <!-- Table -->
-                <div class="table-responsive mb-4">
+                <div class="table-responsive">
                     <table class="table table-bordered align-middle"
                         style="border-collapse: collapse; font-family: 'Segoe UI', sans-serif;">
                         {{-- <thead class="table-light">
@@ -110,9 +194,9 @@
 
 
                 <!-- Totals -->
-                <div class="row justify-content-end">
+                <div class="row justify-content-start">
                     <div class="col-md-6">
-                        <table class="table">
+                        <table class="table" style="width: 90%">
                             <tr>
                                 <td class="fw-semibold">SUBTOTAL</td>
                                 <td class="text-end" id="customer_subtotal"></td>
@@ -130,7 +214,7 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="text-muted text-center small mt-5">
+                <div class="text-muted text-center small">
                     www.sanjoy.info.com
                     <div class="mt-2">
                         <i class="bi bi-instagram me-2"></i>

@@ -18,7 +18,7 @@
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong><input readonly name="id" type="text"
+                                <p><strong><input readonly hidden name="id" type="text"
                                             id="customer_id_for_packageDetails"></strong></p>
                                 <p><strong>Name:</strong> <span id="name"></span></p>
                                 <p><strong>Email:</strong> <span id="email"></span></p>
@@ -435,8 +435,7 @@
         });
 
         //preview package pdf
-
-        $(document).ready(function() {
+  $(document).ready(function() {
             let token = localStorage.getItem('token');
             if (!token) {
                 window.location.href = "/customer/login";
@@ -482,6 +481,9 @@
                 }, 2000); // delay to allow modal content to fully appear
             });
         });
+
+
+
 
 
 

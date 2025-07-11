@@ -441,13 +441,48 @@
             if (!token) {
                 window.location.href = "/customer/login";
             }
-            $('.previewPackagePdf').on('click',async function() {
+
+            $('.previewPackagePdf').on('click', async function() {
                 let id = document.getElementById('customer_id_for_packageDetails').value;
 
+                // Data load
                 await fillPackageDetailsLoad(id);
+
+                // Show modal
                 $('#packagePdfModal').modal('show');
+
+                // Wait 1 second for modal content to fully render
+                setTimeout(() => {
+                    let element = document.getElementById('package_content');
+                        element.style.padding = '10px';
+                        element.style.margin = '0';
+                    let opt = {
+                        margin: 0.2,
+                        filename: 'packageView.pdf',
+                        image: {
+                            type: 'jpeg',
+                            quality: 0.98
+                        },
+                        html2canvas: {
+                            scale: 2
+                        },
+                        jsPDF: {
+                            unit: 'in',
+                            format: 'a4',
+                            orientation: 'portrait'
+                        }
+                    };
+
+                    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(
+                        pdf) {
+                        const blobUrl = pdf.output('bloburl');
+                        window.open(blobUrl, '_blank'); // new tab
+                    });
+
+                }, 2000); // delay to allow modal content to fully appear
             });
         });
+
 
 
 

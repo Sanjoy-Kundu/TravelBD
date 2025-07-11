@@ -3,30 +3,28 @@
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-sm">
 
-            <div class="modal-body p-5" id="package-content" style="font-family: 'Segoe UI', sans-serif;">
+            <div class="modal-body" id="package_content" style="font-family: 'Segoe UI', sans-serif; padding-left: 40px; padding-right: 40px;">
 
                 <!-- Header -->
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <!-- Logo + Title -->
                     <div>
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 50px;">
-                        <h2 class="fw-bold mt-2">Travel Package</h2>
-                        <p class="text-uppercase text-muted mb-0">Invoice</p>
+                        <img src="{{ asset('/images/logo/logo.png') }}" alt="Logo" style="height: 50px;">
+                        <h2 class="fw-bold">Package Invoice</h2>
                     </div>
 
                     <!-- Company Info -->
                     <div class="text-end small text-muted">
                         <strong>SANDY TRAVELS</strong><br>
-                        9938 SE Old Town Ct<br>
-                        Happy Valley, Oregon 97086<br>
-                        United States of America<br>
+                        12/A Puran Polton, Dhaka<br>
+                        Dhaka Bangladesh<br>
                         sales@sandytravels.com<br>
-                        Phone: +1 234 567890
+                        Phone: +8801759351546
                     </div>
                 </div>
 
                 <!-- Customer & Invoice Info -->
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col-md-6">
                         <p class="mb-1 fw-semibold">Name: <span id="customer_name">Marcus Rochester</span></p>
                         <p class="mb-1" style="font-weight:bold">Email: <span id="customer_email">marcus@virtuenetwork.com</span></p>
@@ -144,7 +142,7 @@
 
             <!-- Modal Footer -->
             <div class="modal-footer bg-light">
-                <button class="btn btn-primary" id="downloadPdf">⬇️ Download PDF</button>
+                <button class="btn btn-primary" id="downloadPdf">Download PDF</button>
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
 
@@ -173,6 +171,7 @@
       document.getElementById('customer_package_price').innerText = '';
       document.getElementById('customer_discount').innerText = '';
       document.getElementById('customer_discounted_price').innerText = '';
+      document.getElementById('customer_payment_method').innerText = '';
 
 
       document.getElementById('customer_subtotal').innerText = '';
@@ -205,6 +204,7 @@
             document.getElementById('customer_package_price').innerText = res.data.packageData.package.price?res.data.packageData.package.price:'N/A';
             document.getElementById('customer_discount').innerText = res.data.packageData.package.coupon_discount?res.data.packageData.package.coupon_discount:'N/A';
             document.getElementById('customer_discounted_price').innerText = res.data.packageData.package.coupon_use_discounted_price?res.data.packageData.package.coupon_use_discounted_price:'N/A';
+            document.getElementById('customer_payment_method').innerText = res.data.packageData.payment_method?res.data.packageData.payment_method:'N/A';
 
             document.getElementById('customer_subtotal').innerText = res.data.packageData.package.coupon_use_discounted_price?res.data.packageData.package.coupon_use_discounted_price:res.data.packageData.package.price;
             document.getElementById('agency_vat').innerText = res.data.packageData.package.coupon_use_discounted_price?res.data.packageData.passenger_price-res.data.packageData.package.coupon_use_discounted_price:

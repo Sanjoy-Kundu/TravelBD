@@ -1,6 +1,6 @@
-{{-- for pdf --}}
+
 <!-- PDF Preview Modal -->
-<div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,6 +8,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="height: 80vh;">
+        <input type="number" class="">
         <!-- PDF Preview Iframe -->
         <iframe id="pdfViewer" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
       </div>
@@ -19,9 +20,12 @@
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 
-<script>
+{{-- <script>
+  // function showPreviewPdf(id) {
+    
+  // }
 document.addEventListener('DOMContentLoaded', function () {
     const pdfModal = document.getElementById('pdfPreviewModal');
     const pdfViewer = document.getElementById('pdfViewer');
@@ -57,4 +61,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-</script>
+</script> --}}

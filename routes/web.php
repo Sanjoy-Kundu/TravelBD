@@ -2,6 +2,7 @@
 
 use App\Models\PackageCategory;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
@@ -10,11 +11,11 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AgentProfileController;
-use App\Http\Controllers\CustomerPackagePdfController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
 use App\Http\Controllers\PackageDiscountController;
+use App\Http\Controllers\CustomerPackagePdfController;
 
 // ====================== Admin Auth Routes ======================
 Route::get('/admin/registration', [RegistrationController::class, 'adminRegisterPage']);
@@ -246,5 +247,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     //pdf for customer 
-    Route::get('/customer/package/pdf/{id}', [CustomerPackagePdfController::class, 'customerPackageGeneratePackagePdf']);
+    //Route::post('/customer/package/pdf/view', [CustomerPackagePdfController::class, 'customerPackageGeneratePackagePdfView']);
+    Route::post('/customer/package/pdf/view-by-id', [PdfController::class, 'customerPackageDetailsView']);
 });

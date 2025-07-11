@@ -43,8 +43,9 @@
                             <button type="button" class="btn btn-primary editCustomerInformation">
                                 <i class="fas fa-edit me-2"></i> EDIT YOUR INFORMAION
                             </button>
-                            <button class="btn btn-danger previewPackagePdf" data-bs-toggle="modal" data-bs-target="#pdfPreviewModal">
-                            <i class="fas fa-file-pdf me-2"></i> Preview Package PDF
+                            {{-- data-bs-toggle="modal" data-bs-target="#pdfPreviewModal" --}}
+                            <button class="btn btn-danger previewPackagePdf">
+                                <i class="fas fa-file-pdf me-2"></i> Preview Package PDF
                             </button>
                         </div>
                     </div>
@@ -235,7 +236,6 @@
         margin: 0;
         padding-left: 1.2rem;
     }
-
 </style>
 
 
@@ -411,7 +411,7 @@
                     documentLists.innerHTML += `<li>${item.trim()}</li>`;
                 })
             }
-        
+
         } catch (error) {
             // middleware error check 
             if (error.response && error.response.status === 401) {
@@ -426,13 +426,33 @@
         }
 
         //edit modal 
-            $(document).ready(function () {
-                $('.editCustomerInformation').on('click', async function () {
+        $(document).ready(function() {
+            $('.editCustomerInformation').on('click', async function() {
                 //console.log('button click successfully');
                 await fillCustomerEditModal(id)
                 $('#editCustomerModal').modal('show');
-                });
             });
+        });
+
+        //preview package pdf
+
+        $(document).ready(function() {
+            let token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = "/customer/login";
+            }
+            $('.previewPackagePdf').on('click',async function() {
+                let id = document.getElementById('customer_id_for_packageDetails').value;
+
+                await fillPackageDetailsLoad(id);
+                $('#packagePdfModal').modal('show');
+            });
+        });
+
+
+
+
+
 
 
     }

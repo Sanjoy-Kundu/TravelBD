@@ -100,9 +100,7 @@
             if (res.data.status === "success") {
                 let package_category_lists = res.data.PackageCategories;
 
-                if (package_category_lists.length === 0) {
-                    tableBody.append('<tr><td colspan="5" class="text-center">No categories found</td></tr>');
-                } else {
+                if(package_category_lists.length> 0){
                     package_category_lists.forEach((category, index) => {
                         let statusBadge = category.status === 'active' ?
                             '<span class="badge bg-success">Active</span>' :
@@ -136,9 +134,7 @@
                 }
 
                 //  Move these outside the forEach and try block
-            } else {
-                tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
-            }
+            } 
 
             $(selector).DataTable();
 
@@ -172,9 +168,9 @@
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const token = localStorage.getItem('token');
+                        let token = localStorage.getItem('token');
 
-                        const res = await axios.post("/admin/package-category/delete", {
+                        const res = await axios.post("/admin/category/delete", {
                             id: id
                         }, {
                             headers: {
@@ -198,8 +194,6 @@
                 }
             });
         });
-
-
 
     }
 
@@ -230,7 +224,7 @@
 
                 if (res.data.status === "success") {
                     let trashedCategories = res.data.trashedCategories;
-
+                    console.log(res.data);
                     if (trashedCategories.length === 0) {
                         //tableBody.append('<tr><td colspan="6" class="text-center">No trashed categories found</td></tr>');
                     } 

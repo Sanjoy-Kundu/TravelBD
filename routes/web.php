@@ -95,7 +95,7 @@ Route::get('/coupon/lists', [PackageDiscountController::class, 'couponDiscountLi
 
 
 // ====================== Admin Protected Routes ======================
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     //Admin all data cont
       Route::get('/admin/dashboard/counts', [AdminController::class, 'dashboardCounts']);
     // Admin list
@@ -120,6 +120,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/admin/restore', [AdminController::class, 'adminRestore']);
     Route::post('/admin/permanent/delete', [AdminController::class, 'adminPermanentDelete']);
 
+
+
+
     Route::post('/staff/trash', [AdminController::class, 'stafTrash']);
     Route::post('/staff/restore', [AdminController::class, 'staffRestore']);
     Route::post('/staff/permanent/delete', [AdminController::class, 'staffPermanentDelete']);
@@ -140,16 +143,21 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
     // package category
-    Route::get('/admin/package-category/lists', [PackageCategoryController::class, 'packageCategoryLists']);
-    Route::post("/admin/package-category/store", [PackageCategoryController::class, 'packageCategoryStore']);
-    Route::post("/admin/package-category/details", [PackageCategoryController::class, 'packageCategoryDetails']);
-    Route::post("/admin/package-category/update", [PackageCategoryController::class, 'packageCategoryUpdate']);
-    Route::post("/admin/package-category/delete", [PackageCategoryController::class, 'packageCategoryDelete']);
+    Route::get('/admin/package-category/lists', [PackageCategoryController::class, 'CategoryLists']);
+    Route::post("/admin/package-category/store", [PackageCategoryController::class, 'CategoryStore']);
+    Route::post("/admin/package-category/details", [PackageCategoryController::class, 'CategoryDetails']);
+    Route::post("/admin/package-category/update", [PackageCategoryController::class, 'CategoryUpdate']);
+    Route::post("/admin/category/delete", [PackageCategoryController::class, 'CategoryTrash']);
+   
+
+
+
+
 
     //package trash category
-    Route::get('/admin/package-category-trash/lists', [PackageCategoryController::class, 'packageCategoryTrashLists']);
-    Route::post('/admin/package-category/restore', [PackageCategoryController::class, 'packageCategoryRestore']);
-    Route::post('/admin/package-category/permanent-delete', [PackageCategoryController::class, 'packageCategoryPermanentDelete']);
+    Route::get('/admin/package-category-trash/lists', [PackageCategoryController::class, 'CategoryTrashLists']);
+    Route::post('/admin/package-category/restore', [PackageCategoryController::class, 'CategoryRestore']);
+    Route::post('/admin/package-category/permanent-delete', [PackageCategoryController::class, 'CategoryPermanentDelete']);
 
 
 

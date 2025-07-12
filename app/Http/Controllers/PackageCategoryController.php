@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -34,7 +35,7 @@ class PackageCategoryController extends Controller
     /**
      * category store method
      */
-    public function packageCategoryStore(Request $request)
+    public function CategoryStore(Request $request)
     {
         // Step 1: Validation
         $request->validate([
@@ -92,7 +93,7 @@ class PackageCategoryController extends Controller
     /**
      * package category list
      */
-    public function packageCategoryLists()
+    public function CategoryLists()
     {
         try {
             $PackageCategories = PackageCategory::orderBy('id', 'DESC')->get();
@@ -112,7 +113,7 @@ class PackageCategoryController extends Controller
     /**
      * packae category details by id
      */
-    public function packageCategoryDetails(Request $request)
+    public function CategoryDetails(Request $request)
     {
         try {
             $id = $request->id;
@@ -136,7 +137,7 @@ class PackageCategoryController extends Controller
     /**
      * package category update
      */
-    public function packageCategoryUpdate(Request $request)
+    public function CategoryUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:package_categories,id',
@@ -202,11 +203,12 @@ class PackageCategoryController extends Controller
     /**
      * category package delete
      */
-    public function packageCategoryDelete(Request $request)
+    public function CategoryTrash(Request $request)
     {
         try {
-            $id = $request->input('id');
-            $category = PackageCategory::find($id);
+          // Log::info('ID received: ' . $request->id);
+           $id = $request->id;
+           $category = PackageCategory::find($id);
 
             if (!$category) {
                 return response()->json(
@@ -219,7 +221,7 @@ class PackageCategoryController extends Controller
             }
 
             // Soft delete
-            $category->delete();
+           $category->delete();
 
             return response()->json([
                 'status' => 'success',
@@ -230,10 +232,18 @@ class PackageCategoryController extends Controller
         }
     }
 
+
+    // public function categoryDelete(Request $request){
+    //     try{
+    //         return $id = $request->id;
+    //     }catch(Exception $e){
+    //         return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    //     }
+    // }
     /**
      * Category Trash data show
      */
-    public function packageCategoryTrashLists()
+    public function CategoryTrashLists()
     {
         try {
             $trashedCategories = PackageCategory::onlyTrashed()->get();
@@ -258,7 +268,7 @@ class PackageCategoryController extends Controller
     /**
      * trash category restore
      */
-    public function packageCategoryRestore(Request $request){
+    public function CategoryRestore(Request $request){
       $id = $request->id;
 
     try {
@@ -286,7 +296,7 @@ class PackageCategoryController extends Controller
     /**
      * Pacakge Category Permanet delte
      */
-public function packageCategoryPermanentDelete(Request $request)
+public function CategoryPermanentDelete(Request $request)
 {
     try {
         $id = $request->id;

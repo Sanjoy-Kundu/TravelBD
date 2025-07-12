@@ -162,6 +162,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     //package
+    Route::get('/admin/package-category/active/lists', [PackageController::class, 'packageActiveLists']);
     Route::post("/admin/package/store", [PackageController::class, 'packageStore']);
     Route::get("/admin/package/lists",[PackageController::class, 'packageLists']);
     Route::post("/admin/package/details", [PackageController::class, 'packageDetails']);

@@ -58,6 +58,7 @@ class PackageDiscountController extends Controller
             $discount->discount_value = $request->discount_value;
             $discount->start_date = $request->start_date;
             $discount->end_date = $request->end_date;
+            $discount->description = Str::upper($request->description) ?? null;
             $discount->status = $request->status;
             $discount->save();
 
@@ -136,6 +137,7 @@ class PackageDiscountController extends Controller
                 'discount_value' => 'required|numeric|min:1|max:100',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
+                'description' => 'required|string',
                 'status' => 'required|in:active,inactive',
             ]);
 

@@ -87,11 +87,8 @@
                 let package_lists = res.data.packages;
                 //console.log(package_lists)
 
-                if (package_lists.length === 0) {
-                    tableBody.append('<tr><td colspan="11" class="text-center">No categories found</td></tr>');
-                }
-
-                package_lists.forEach((package, index) => {
+                if (package_lists.length > 0) {
+                   package_lists.forEach((package, index) => {
                     //console.log(package.image)
                     //console.log(package.package_category)
                     let tr = `
@@ -134,11 +131,11 @@
 
                     tableBody.append(tr);
                 });
+                }
 
-            } else {
-                tableBody.append('<tr><td colspan="5" class="text-center">Failed to load categories</td></tr>');
-                console.log(res.data)
-            }
+             
+
+            } 
 
             $(selector).DataTable();
 

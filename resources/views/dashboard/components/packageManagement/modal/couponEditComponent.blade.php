@@ -52,6 +52,13 @@
                         </div>
                     </div>
 
+                    <!--Descriptoin--->
+                       <div class="form-floating mb-3">
+                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="edit_coupon_description"></textarea>
+                        <label for=edit_coupon_description">Coupon Description</label>
+                        <span class="text-danger mt-1" id="edit_coupon_description_error"></span>
+                    </div>
+
                     <!-- Status -->
                     <div class="mb-3">
                         <label for="edit_coupon_status" class="form-label">Status <span class="text-danger">*</span></label>
@@ -106,6 +113,7 @@ async function packageCouponEditFormFillup(id) {
         $('#edit_start_date').val(data.start_date);
         $('#edit_end_date').val(data.end_date);
         $('#edit_coupon_status').val(data.status);
+        $('#edit_coupon_description').val(data.description);
 
         editDiscountMethodToggle(); // coupon_code wrapper show/hide
 
@@ -140,6 +148,7 @@ async function updateCouponDiscount(event){
         discount_value: document.getElementById('edit_discount_value').value,
         start_date: document.getElementById('edit_start_date').value,
         end_date: document.getElementById('edit_end_date').value,
+        description: document.getElementById('edit_coupon_description').value,
         status: document.getElementById('edit_coupon_status').value
     };
 

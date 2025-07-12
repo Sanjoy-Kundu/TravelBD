@@ -18,6 +18,7 @@ class PackageDiscount extends Model
         'discount_value',
         'start_date',
         'end_date',
+        'description',
         'status',
     ];
 

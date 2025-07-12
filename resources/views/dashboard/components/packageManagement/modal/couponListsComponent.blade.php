@@ -69,10 +69,7 @@ async function fillCouponLists(id) {
 
     let tableBody = $('#modal_package_coupon_list_body').empty();
     let lists = res.data.PackageCouponLits;
-
-    if (lists.length === 0) {
-      tableBody.append(`<tr><td colspan="6" class="text-danger">No data found</td></tr>`);
-    } else {
+    if(lists.length > 0){
       lists.forEach((item, index) => {
         let statusBadge = item.status === 'active'
           ? `<span class="badge bg-success">Active</span>`
@@ -163,9 +160,7 @@ async function getCouponTrashLists(id) {
     let trashBody = $('#modal_package_trash_coupon_list_body').empty();
     let trashCoupons = res.data.trashCoupons;
 
-    if (trashCoupons.length === 0) {
-      trashBody.append(`<tr><td colspan="6" class="text-danger">No trash data found</td></tr>`);
-    } else {
+     if (trashCoupons.length > 0){
       trashCoupons.forEach((item, index) => {
         let statusBadge = item.status === 'active'
           ? `<span class="badge bg-success">Active</span>`

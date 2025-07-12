@@ -176,7 +176,7 @@
         if (!token) return;
 
         try {
-            const res = await axios.get('/admin/package-category/lists', {
+            const res = await axios.get('/admin/package-category/active/lists', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

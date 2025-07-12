@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Package;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PackageCategory;
 
 class PackageController extends Controller
 {
@@ -22,6 +23,25 @@ class PackageController extends Controller
     }
 
 
+    /**
+     * Active Category Lists
+     */
+ public function packageActiveLists()
+    {
+        try {
+            $PackageCategories = PackageCategory::where('status','active')->orderBy('id', 'DESC')->get();
+            return response()->json(['status' => 'success', 'PackageCategories' => $PackageCategories]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong!',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
 
 
     /**
@@ -119,7 +139,7 @@ public function packageLists(Request $request)
    *  
    * */  
   public function packageDetails(Request $request){
-    $package = Package::with('packageCategory')->find($request->id);
+    $package = Package::with('packageCategory','discounts')->find($request->id);
     if(!$package){
         return response()->json(["status" => "error", "message" => "Package not found"], 404);
     }

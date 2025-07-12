@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="packageCouponDiscountModalLabel">Add Coupon / Discount</h5>
+                <h5 class="modal-title" id="packageCouponDiscountModalLabel">Apply coupon code for <span id="coupon_package_name"></span> and enjoy exclusive discounts.</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -21,7 +21,7 @@
                         <select name="discount_mode" id="discount_type_selector" class="form-select" onchange="discountMethodToggle()">
                             <option value="">Select Type</option>
                             <option value="coupon">Coupon Based</option>
-                            <option value="direct">Direct Discount</option>
+                            <option class="d-none" value="direct">Direct Discount</option>
                         </select>
                         <div class="text-danger mt-1" id="discount_mode_error"></div>
                     </div>
@@ -59,6 +59,14 @@
                         </div>
                     </div>
 
+                    <!-- Description -->
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="coupon_description"></textarea>
+                        <label for="coupon_description">Coupon Description</label>
+                        <span class="text-danger mt-1" id="coupon_description_error"></span>
+                    </div>
+
+
                     <!-- Status -->
                     <div class="mb-3">
                         <label for="coupon_status" class="form-label">Status <span class="text-danger">*</span></label>
@@ -67,7 +75,7 @@
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
-                        <div class="text-danger mt-1" id="status_error"></div>
+                        <div class="text-danger" id="status_error"></div>
                     </div>
 
                     <!-- Submit -->
@@ -86,10 +94,19 @@
         window.location.href = "/admin/login";
     }
 
-    function packageCouponDiscountForm(id) {
-        // document.getElementById('package_coupon_discount_upload_form').reset();
+    async function packageCouponDiscountForm(id) {
+        document.getElementById('coupon_package_name').innerText = "";
         document.getElementById('package_couponDiscount_id').value = id;
-        // toggleDiscountModeFields(); // reset visible fields
+           let res = await axios.post('/admin/package/details', {
+                id: id
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+           // console.log(res.data.package)
+            document.getElementById('coupon_package_name').innerText = res.data.package.title;
+       
     }
 
     function discountMethodToggle() {
@@ -112,7 +129,7 @@
         event.preventDefault();
 
         // Clear errors
-        const errorFields = ['discount_mode_error', 'coupon_code_error', 'discount_value_error', 'start_date_error', 'end_date_error', 'status_error'];
+        const errorFields = ['discount_mode_error', 'coupon_code_error', 'discount_value_error', 'start_date_error', 'end_date_error', 'status_error','coupon_description_error'];
         errorFields.forEach(id => document.getElementById(id).innerText = '');
 
         // Get values
@@ -123,6 +140,8 @@
         const start_date = document.getElementById('start_date').value;
         const end_date = document.getElementById('end_date').value;
         const status = document.getElementById('coupon_status').value;
+        const description = document.getElementById('coupon_description').value;
+
 
         let isError = false;
 
@@ -158,6 +177,10 @@
             document.getElementById('status_error').innerText = 'Status is required.';
             isError = true;
         }
+        if (!description.trim()) {
+            document.getElementById('coupon_description_error').innerText = 'Description is required.';
+            isError = true;
+        }
 
         if (!package_id) {
             alert("Package ID missing!");
@@ -173,6 +196,7 @@
             discount_value,
             start_date,
             end_date,
+            description,
             status,
         };
 

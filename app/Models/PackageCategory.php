@@ -17,7 +17,7 @@ class PackageCategory extends Model
         'image',
         'status',
     ];
-        // রিভার্স রিলেশন, একটি ক্যাটাগরিতে অনেক প্যাকেজ থাকতে পারে
+
     public function packages()
     {
         return $this->hasMany(Package::class, 'category_id');

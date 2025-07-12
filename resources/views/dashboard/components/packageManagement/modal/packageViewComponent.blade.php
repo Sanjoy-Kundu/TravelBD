@@ -81,6 +81,13 @@
                             <th>Category Description</th>
                             <td colspan="3" id="view_category_description"></td>
                         </tr>
+                        <tr class="table-secondary text-center">
+                            <th colspan="4" class="text-primary">Coupon Info</th>
+                        </tr>
+                        <tr>
+                            <th>Coupon Details</th>
+                            <td id="view_coupons_list" colspan="3"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -111,7 +118,10 @@
 
             if (res.data.status === 'success') {
                 const package = res.data.package;
-                console.log(package);
+                //console.log(package);
+
+
+                //console.log(package);
                 const category = package.package_category || {};
                 console.log(category)
 
@@ -143,11 +153,54 @@
                     `/upload/dashboard/images/package-category/default.png`;
 
 
+                let coupons = package.discounts || [];
+                let container = document.getElementById('view_coupons_list');
+                container.innerHTML = ''; //previous container clear
+
+                if (coupons.length === 0) {
+                    container.innerHTML = '<p>No coupons available.</p>';
+                } else {
+                    const ul = document.createElement('ul');
+                    ul.classList.add('list-group');
+
+                    coupons.forEach(coupon => {
+                        //coupon code is not then return 
+                        if (!coupon.coupon_code && !coupon.discount_value) return;
+
+                        const li = document.createElement('li');
+                        li.classList.add('list-group-item');
+
+                        const now = new Date();
+                        const startDate = new Date(coupon.start_date);
+                        const endDate = new Date(coupon.end_date);
+
+                        const validityText = (now < startDate) ?
+                            `Starts on ${coupon.start_date} to Ends ${coupon.end_date}` :
+                            (now > endDate) ?
+                            `Expired on ${coupon.end_date}` :
+                            `Valid until ${coupon.end_date}`;
+
+                        li.innerHTML = `
+                                <strong>Code:</strong> ${coupon.coupon_code || 'N/A'}<br>
+                                <strong>Discount:</strong> ${coupon.discount_value ? coupon.discount_value + '%' : 'N/A'} (${coupon.discount_mode === 'coupon' ? 'Coupon Based' : 'Direct Discount'})<br>
+                                <strong>Validity:</strong> ${validityText}<br>
+                                <strong>Status:</strong> ${coupon.status ? coupon.status.charAt(0).toUpperCase() + coupon.status.slice(1) : 'N/A'}<br>
+                                <small>${coupon.description || ''}</small>
+                            `;
+
+                        ul.appendChild(li);
+                    });
+
+                    container.appendChild(ul);
+                }
 
 
-            document.body.classList.remove('modal-open'); 
-            const backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(el => el.remove());
+
+
+
+                document.body.classList.remove('modal-open');
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(el => el.remove());
             }
 
         } catch (error) {

@@ -34,7 +34,7 @@
 
         <!-- Payment Status -->
         <div class="col-xl-3 col-md-6">
-            <div class="card dashboard-card border-0 shadow-lg rounded-4 text-white" style="background: linear-gradient(135deg, #ffc107, #d39e00);">
+            <div class="card dashboard-card border-0 shadow-lg rounded-4 text-white" style="background: linear-gradient(135deg, #04a2ba, #3fbecc);">
                 <div class="card-body d-flex align-items-center">
                     <i class="fas fa-credit-card fa-2x me-3"></i>
                     <div>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
-                    <a class="text-white text-decoration-none small" href="{{ url('/customer/payment-status') }}">View Details</a>
+                    <a class="text-white text-decoration-none small" href="{{ url('/customer/payment/status') }}">View Details</a>
                     <i class="fas fa-arrow-circle-right"></i>
                 </div>
             </div>

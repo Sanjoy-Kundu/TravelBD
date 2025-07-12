@@ -471,4 +471,31 @@ class CustomerController extends Controller
         ]);
     }
 
+
+
+
+
+
+
+/**
+ * Customer Dashboard Payment Status Pages
+ *  */    
+public function paymentPage(){
+    try{
+        return view('pages.backend.customer.paymentPage');
+    }catch(Exception $ex){
+        return response()->json(['status' => 'error', 'message' => $ex->getMessage()], 500);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 }

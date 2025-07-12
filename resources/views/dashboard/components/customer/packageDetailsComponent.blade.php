@@ -453,7 +453,7 @@
                 // Wait 1 second for modal content to fully render
                 setTimeout(() => {
                     let element = document.getElementById('package_content');
-                        element.style.padding = '10px';
+                        element.style.padding = '0px';
                         element.style.margin = '0';
                     let opt = {
                         margin: 0.2,
@@ -481,16 +481,6 @@
                 }, 2000); // delay to allow modal content to fully appear
             });
         });
-
-
-
-
-
-
-
-
-
-
 
     }
 </script>

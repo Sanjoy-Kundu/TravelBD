@@ -51,6 +51,7 @@ Route::post('/customer/login/store', [CustomerController::class, 'customer_login
 //====================== Customer Dashoboard Routes ======================
 Route::get('/customer/dashboard', [CustomerController::class, 'customerDashboard'])->name('customer.dashboard');
 Route::get('/customer/my-package', [CustomerController::class, 'myPackageDetailsPage']);
+Route::get('/customer/payment/status', [CustomerController::class, 'paymentPage']);
 
 // ====================== Agent Dashboard Routes ======================
 Route::get('/agent/dashboard', [AgentController::class, 'agentDashboard'])->name('agent.dashboard');

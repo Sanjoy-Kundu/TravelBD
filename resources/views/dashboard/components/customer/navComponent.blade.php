@@ -1,6 +1,6 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark no-print">
     <!-- Navbar Brand -->
-    <a class="navbar-brand ps-3" href="{{ url('/customer/dashboard') }}">JobMama</a>
+    <a class="navbar-brand ps-3" href="{{ url('/customer/dashboard') }}">Dashboard</a>
 
     <!-- Sidebar Toggle Button -->
     <button class="btn btn-link btn-sm me-4 me-lg-0" id="sidebarToggle">

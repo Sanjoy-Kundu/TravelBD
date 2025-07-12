@@ -487,7 +487,7 @@
         }
 
         try {
-            const res = await axios.get('/admin/package-category/lists', {
+            const res = await axios.get('/category-all/lists', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

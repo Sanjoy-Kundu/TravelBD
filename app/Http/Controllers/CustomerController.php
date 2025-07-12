@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\Customer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PackageCategory;
 use App\Models\PackageDiscount;
 use App\Mail\WellComeCustomerMail;
 use App\Mail\CustomerDetailsChange;
@@ -64,13 +65,29 @@ class CustomerController extends Controller
     }
 
     /**
+     * All category lists
+
+    */
+    public function allCategoryLists(){
+        try{
+            $PackageCategories = PackageCategory::where('status','active')->get();
+            return response()->json(['status' => 'success', 'message' => 'Category Lists', 'PackageCategories' => $PackageCategories], 200);
+        }catch(Exception $ex){
+            return response()->json(['message' => $ex->getMessage()], 500);
+        }
+    }
+
+
+
+
+    /**
      *Pcakge list by category
      */
     public function packageListByCategory(Request $request)
     {
         try {
             $category_id = $request->category_id;
-            $searchPackageByCategory = Package::where('category_id', $category_id)->get();
+            $searchPackageByCategory = Package::where('category_id', $category_id)->where('status', 'active')->get();
             return response()->json(['status' => 'success', 'packageListByCategory' => $searchPackageByCategory], 200);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

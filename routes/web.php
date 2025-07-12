@@ -191,6 +191,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     //admin added customer 
+    Route::get('/category-all/lists', [CustomerController::class, 'allCategoryLists']);
    Route::post('/admin/package/lists/by/category', [CustomerController::class, 'packageListByCategory']);
    Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetailsByCategory']);
    Route::post('/admin/package/price/update', [CustomerController::class, 'packagePriceUpdateCustomer']);

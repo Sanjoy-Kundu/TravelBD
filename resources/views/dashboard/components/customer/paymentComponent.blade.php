@@ -3,9 +3,6 @@
         .no-print {
             display: none !important;
         }
-        .print-hide {
-            display: none !important;
-        }
     }
 </style>
 
@@ -17,7 +14,7 @@
 
     <div class="container py-4">
         <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-body p-5">
+            <div class="card-body p-5 makeInvoicePDF">
                 <!-- Invoice Header -->
                 <div class="row mb-4">
                     <div class="col-6">
@@ -29,7 +26,7 @@
                     </div>
                     <div class="col-6 text-end">
                         <h5 class="fw-bold" id="payment_customer_name"></h5>
-                        <p class="mb-1"id="payment_customer_email">rahim@email.com</p>
+                        <p class="mb-1" id="payment_customer_email">rahim@email.com</p>
                         <p id="payment_customer_phone">+8801712345678</p>
                     </div>
                 </div>
@@ -50,14 +47,6 @@
                             <td>Package Price</td>
                             <td class="text-end" id="payment_package_price"></td>
                         </tr>
-                        {{-- <tr>
-                            <td>Package Discount (10%)</td>
-                            <td class="text-end text-success">-30,000.00</td>
-                        </tr> --}}
-                        {{-- <tr>
-                            <td>After Package Discount</td>
-                            <td class="text-end">270,000.00</td>
-                        </tr> --}}
                         <tr>
                             <td>Coupon (<span id="payment_coupon_ode"></span>)</td>
                             <td class="text-end text-success" id="payment_coupon_discount"></td>
@@ -78,19 +67,19 @@
                 </table>
 
                 <!-- Payment Form -->
-                <hr class="my-4 print-hide">
-                <h5 class="text-primary mb-3 print-hide">Pay with Mobile Banking</h5>
+                <hr class="my-4 no-print">
+                <h5 class="text-primary mb-3 no-print">Pay with Mobile Banking</h5>
 
-              <div class="alert alert-primary print-hide">
+                <div class="alert alert-primary no-print">
                     <strong>Instruction:</strong> 
                     <ul class="mb-0">
                         <li>নিচে Amount, Payment Method এবং আপনার bKash/Nagad নম্বর দিন।</li>
                         <li>Pay Now চাপলে আপনার পেমেন্ট প্রসেস হবে।</li>
                         <li>পেমেন্ট সফল হলে স্বয়ংক্রিয়ভাবে আপনি কনফার্মেশন পাবেন।</li>
                     </ul>
-            </div>
+                </div>
 
-                <form class="print-hide">
+                <form class="no-print">
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label class="form-label">Amount to Pay (৳)</label>
@@ -123,8 +112,8 @@
                     <div class="col-md-6">
                         <p class="text-muted">Generated on 12 July, 2025 at 04:30 PM</p>
                     </div>
-                    <div class="col-md-6 text-end">
-                        <button class="btn btn-danger" onclick="window.print()">
+                    <div class="col-md-6 text-end no-print">
+                        <button class="btn btn-danger" id="downloadPdfBtn">
                             <i class="fas fa-print me-1"></i> Print Invoice
                         </button>
                     </div>
@@ -135,48 +124,74 @@
     </div>
 </div>
 
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>  <!-- axios CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-    getCustomerData();
-    async function getCustomerData(){
+    async function getCustomerData() {
         let token = localStorage.getItem('token');
-        if(!token){
-            window.location.href = '/customer/login'
+        if (!token) {
+            window.location.href = '/customer/login';
+            return;
         }
 
-        document.getElementById('payment_customer_name').innerText = '';
-        document.getElementById('payment_package_price').innerText = '';
-        try{
-            let res = await axios.get('/auth/customer',{
-                headers:{
-                    'Authorization':`Bearer ${token}`
+        try {
+            let res = await axios.get('/auth/customer', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(res.data.data)
-         document.getElementById('payment_customer_name').innerText = res.data.data.name?res.data.data.name:'N/A'
-         document.getElementById('payment_customer_email').innerText = res.data.data.email?res.data.data.email:'N/A'
-         document.getElementById('payment_customer_phone').innerText = res.data.data.phone?res.data.data.phone:'N/A'
+            const data = res.data.data;
 
-         document.getElementById('payment_package_price').innerText = res.data.data.price?res.data.data.price:'N/A'
-         document.getElementById('payment_coupon_ode').innerText = res.data.data.coupon_code?res.data.data.coupon_code:'N/A'
-         document.getElementById('payment_coupon_discount').innerText = res.data.data.coupon_discount?res.data.data.coupon_discount:'0'
-         document.getElementById('payment_couon_discounted_price').innerText = res.data.data.coupon_use_discounted_price?res.data.data.coupon_use_discounted_price:res.data.data.price
-         document.getElementById('payment_total_paid').innerText = res.data.data.coupon_use_discounted_price?res.data.data.price - res.data.data.coupon_use_discounted_price:res.data.data.price
+            document.getElementById('payment_customer_name').innerText = data.name ?? 'N/A';
+            document.getElementById('payment_customer_email').innerText = data.email ?? 'N/A';
+            document.getElementById('payment_customer_phone').innerText = data.phone ?? 'N/A';
 
-         let deu_ammount = 0;
-         if(res.data.data.coupon_use_discounted_price && res.data.data.passenger_price){
-            deu_ammount = res.data.data.passenger_price - res.data.data.coupon_use_discounted_price;
-         }else if(res.data.data.passenger_price && res.data.data.price){
-              deu_ammount = res.data.data.passenger_price;
-         }
+            document.getElementById('payment_package_price').innerText = data.price ?? 'N/A';
+            document.getElementById('payment_coupon_ode').innerText = data.coupon_code ?? 'N/A';
+            document.getElementById('payment_coupon_discount').innerText = data.coupon_discount ?? '0';
+            document.getElementById('payment_couon_discounted_price').innerText = data.coupon_use_discounted_price ?? data.price;
+            document.getElementById('payment_total_paid').innerText = data.coupon_use_discounted_price ? (data.price - data.coupon_use_discounted_price) : data.price;
 
-         document.getElementById('payment_due_ammount').innerText = deu_ammount.toLocaleString()?deu_ammount.toLocaleString():0;
-        }catch(error){
-            console.log("error",error)
+            let dueAmount = 0;
+            if (data.coupon_use_discounted_price && data.passenger_price) {
+                dueAmount = data.passenger_price - data.coupon_use_discounted_price;
+            } else if (data.passenger_price && data.price) {
+                dueAmount = data.passenger_price;
+            }
+            document.getElementById('payment_due_ammount').innerText = dueAmount.toLocaleString() ?? 0;
+
+        } catch (error) {
+            console.error("Error fetching customer data:", error);
+        }
+    }
+
+    getCustomerData();
+
+    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+        // Hide form and bottom info before generating PDF
+        document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+
+        const { jsPDF } = window.jspdf;
+        const invoiceElement = document.querySelector('.makeInvoicePDF');
+
+        if (!invoiceElement) {
+            alert('Invoice element not found!');
+            return;
         }
 
-    }
+        const canvas = await html2canvas(invoiceElement, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'pt', 'a4');
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('invoice.pdf');
+
+        // Show again after saving PDF
+        document.querySelectorAll('.no-print').forEach(el => el.style.display = '');
+    });
 </script>

@@ -84,6 +84,9 @@ public function packageLists(Request $request)
                 'seat_availability' => 'nullable|integer|min:0',
                 'status' => 'required|in:active,inactive',
                 'image' => 'nullable|image|max:2048',
+
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
             ]);
 
             // Create new Package instance
@@ -103,6 +106,10 @@ public function packageLists(Request $request)
             $package->documents_required = Str::upper($request->documents_required);
             $package->seat_availability = $request->seat_availability;
             $package->status = Str::upper($request->status);
+
+
+            $package->start_date = $request->start_date;
+            $package->end_date = $request->end_date;
 
             // Handle image upload if exists
             if ($request->hasFile('image')) {

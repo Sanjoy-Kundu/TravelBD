@@ -35,37 +35,37 @@ class CategorySeeder extends Seeder
             ['name' => 'Visa Consultancy', 'slug' => 'visa-consultancy', 'description' => 'Professional consultancy for any kind of visa processing.'],
             ['name' => 'Hajj & Umrah Packages', 'slug' => 'hajj-umrah-packages', 'description' => 'Religious travel packages for Hajj and Umrah.'],
             ['name' => 'Student Accommodation Abroad', 'slug' => 'student-accommodation-abroad', 'description' => 'Accommodation arrangement services for international students.'],
-        ];
+         ];
 
         //foreach 
-        foreach($categories as $item){
-        $originalSlug = $item['slug']; //main slug
-        $slug = $originalSlug;
-        $counter = 1;
+            foreach($categories as $item){
+                $originalSlug = $item['slug']; //main slug
+                $slug = $originalSlug;
+                $counter = 1;
 
-        while(PackageCategory::withTrashed()->where('slug', $slug)->exists()){
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
+                while(PackageCategory::withTrashed()->where('slug', $slug)->exists()){
+                    $slug = $originalSlug . '-' . $counter;
+                    $counter++;
+                }
 
+                $originalName = Str::upper($item['name']);  // uppercase here
+                $name = $originalName;
+                $counterName = 1;
 
-            $originalName = $item['name'];
-            $name = $originalName;
-            $counterName = 1;
+                while(PackageCategory::withTrashed()->where('name', $name)->exists()){
+                    $name = $originalName . ' ' . $counterName; // name always uppercase maintained
+                    $counterName++;
+                }
 
-            while(PackageCategory::withTrashed()->where('name', $name)->exists()){
-                $name = $originalName . ' ' . $counterName;
-                $counterName++;
+                PackageCategory::create([
+                    'name' => $name,
+                    'slug' => $slug,
+                    'description' => $item['description'],
+                    'status' => 'active',
+                    'image' => null,
+                ]);
             }
 
-            PackageCategory::create([
-                'name' => $name,
-                'slug' => $slug,
-                'description' => $item['description'],
-                'status' => 'active',
-                'image' => null,
-            ]);
-        }
     }
 }
 

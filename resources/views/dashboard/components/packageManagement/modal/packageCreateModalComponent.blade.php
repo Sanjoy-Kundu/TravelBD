@@ -128,6 +128,23 @@
                         <div id="package_image_error" class="text-danger mt-1"></div>
                     </div>
 
+
+                    <div class="mb-3">
+                        <label for="package_start_date" class="form-label">Start Date*</label>
+                        <input type="date" id="package_start_date" name="start_date" class="form-control" placeholder="Start Date">
+                        <div id="package_start_date_error" class="text-danger mt-1"></div>
+                    </div>
+
+                <!-- End Date -->
+                <div class="mb-3">
+                    <label for="package_end_date" class="form-label">End Date*</label>
+                    <input type="date" id="package_end_date" name="end_date" class="form-control" placeholder="End Date">
+                    <div id="package_end_date_error" class="text-danger mt-1"></div>
+                </div>
+
+
+
+
                     <!-- Status -->
                     <div class="mb-3">
                         <label for="package_status" class="form-label">Status <span
@@ -224,6 +241,8 @@
         document.getElementById('package_seat_availability_error').textContent = '';
         document.getElementById('package_image_error').textContent = '';
         document.getElementById('package_status_error').textContent = '';
+        document.getElementById('package_start_date_error').textContent = '';
+        document.getElementById('package_end_date_error').textContent = '';
 
 
 
@@ -241,6 +260,8 @@
         const visa_processing_time = document.getElementById('package_visa_processing_time').value.trim();
         const documents_required = document.getElementById('package_documents_required').value.trim();
         const seat_availability = document.getElementById('package_seat_availability').value.trim();
+        const start_date = document.getElementById('package_start_date').value.trim();
+        const end_date = document.getElementById('package_end_date').value.trim();
 
         const image = document.getElementById('package_image').files[0];
         const status = document.getElementById('package_status').value;
@@ -254,6 +275,21 @@
 
         if (!category_id) {
             document.getElementById('package_category_select_error').textContent = 'Category is required';
+            hasError = true;
+        }
+
+        if (!start_date) {
+            document.getElementById('package_start_date_error').textContent = 'Start date is required';
+            hasError = true;
+        }
+
+        if (!end_date) {
+            document.getElementById('package_end_date_error').textContent = 'End date is required';
+            hasError = true;
+        }
+
+        if (start_date && end_date && new Date(end_date) < new Date(start_date)) {
+            document.getElementById('package_end_date_error').textContent = 'End date cannot be earlier than start date';
             hasError = true;
         }
 
@@ -272,6 +308,8 @@
         formData.append('visa_processing_time', visa_processing_time);
         formData.append('documents_required', documents_required);
         formData.append('seat_availability', seat_availability);
+        formData.append('start_date', start_date);
+        formData.append('end_date', end_date);
         formData.append('status', status);
         if (image) formData.append('image', image);
 

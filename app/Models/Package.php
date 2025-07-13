@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Package extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['category_id', 'title', 'slug', 'short_description', 'long_description', 'price', 'currency', 'duration', 'inclusions', 'exclusions', 'visa_processing_time', 'documents_required', 'seat_availability', 'image', 'status'];
+    protected $fillable = ['category_id', 'title', 'slug', 'short_description', 'long_description', 'price', 'currency', 'duration', 'inclusions', 'exclusions', 'visa_processing_time', 'documents_required', 'seat_availability', 'image', 'status','start_date','end_date','total_sold'];
 
     // relation betweent package and package category
     public function packageCategory()

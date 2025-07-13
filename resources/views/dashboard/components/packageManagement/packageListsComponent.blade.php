@@ -17,7 +17,7 @@
                     <th>Category Name</th>
                     <th>Package Name</th>
                     <th>Image</th>
-                    <th>Short Description</th>
+                    <th>Validity Period</th>
                     <th>Price (BDT)</th>
                     <th>Coupne/Discount</th>
                     <th>Duration</th>
@@ -90,7 +90,7 @@
                 if (package_lists.length > 0) {
                    package_lists.forEach((package, index) => {
                     //console.log(package.image)
-                    //console.log(package.package_category)
+                    console.log(package)
                     let tr = `
                             <tr>
                             <th>${index+1}</th>
@@ -103,7 +103,11 @@
                                     : `<img src="/upload/dashboard/images/packages/default.png" alt="default Image" width="50" height="50">`
                                 }
                             </th>
-                            <th>${package.short_description}</th>
+                           <th>
+                             <span class="badge bg-success fs-6">${package.start_date ? package.start_date : 'N/A'}</span>
+                             <span class="mx-1">to</span><span class="badge bg-danger fs-6">${package.end_date ? package.end_date : 'N/A'}</span>
+                            </th>
+
                             <th>${package.price}</th>
                             <th>
                                 <div class="btn-group" role="group" aria-label="Coupon Actions">

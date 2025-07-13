@@ -266,12 +266,30 @@ class PackageSeeder extends Seeder
         ];
 
         foreach ($packages as $package) {
-            $slug = Str::slug($package['title']);
-            $count = Package::where('slug', 'like', "{$slug}%")->count();
+            // Title uppercase
+            $package['title'] = Str::upper($package['title']);
+            // Slug always lowercase slug of title
+            $slugBase = Str::slug($package['title']);
+            
+            $count = Package::where('slug', 'like', "{$slugBase}%")->count();
             if ($count > 0) {
-                $slug = $slug . '-' . ($count + 1);
+                $slug = $slugBase . '-' . ($count + 1);
+            } else {
+                $slug = $slugBase;
             }
+            
             $package['slug'] = $slug;
+
+            // make uppder case or lower case
+            $package['currency'] = isset($package['currency']) ? Str::upper($package['currency']) : null;
+            $package['duration'] = isset($package['duration']) ? Str::upper($package['duration']) : null;
+            $package['short_description'] = isset($package['short_description']) ? Str::upper($package['short_description']) : null;
+            $package['long_description'] = isset($package['long_description']) ? Str::upper($package['long_description']) : null;
+            $package['inclusions'] = isset($package['inclusions']) ? Str::upper($package['inclusions']) : null;
+            $package['exclusions'] = isset($package['exclusions']) ? Str::upper($package['exclusions']) : null;
+            $package['visa_processing_time'] = isset($package['visa_processing_time']) ? Str::upper($package['visa_processing_time']) : null;
+            $package['documents_required'] = isset($package['documents_required']) ? Str::upper($package['documents_required']) : null;
+            $package['status'] = isset($package['status']) ? Str::upper($package['status']) : null;
 
             Package::create($package);
         }

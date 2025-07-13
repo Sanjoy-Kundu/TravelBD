@@ -137,68 +137,80 @@ class PackageCategoryController extends Controller
     /**
      * package category update
      */
-    public function CategoryUpdate(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:package_categories,id',
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255',
-            'description' => 'required|string',
-            'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+  public function CategoryUpdate(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'id' => 'required|exists:package_categories,id',
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'status' => 'required|in:active,inactive',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'errors' => $validator->errors(),
-                ],
-                422,
-            );
-        }
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors(),
+        ], 422);
+    }
 
-        try {
-            $category = PackageCategory::findOrFail($request->id);
+    try {
+        $category = PackageCategory::findOrFail($request->id);
 
-            $category->name = $request->name;
-            $category->slug = $request->slug ?? $category->slug;
-            $category->description = $request->description;
-            $category->status = $request->status;
+        // নাম আপডেট
+        $category->name = Str::upper($request->name);
 
-            if ($request->hasFile('image')) {
-                // Delete old image using File facade
-                if ($category->image) {
-                    $imagePath = public_path('upload/dashboard/images/package-category/' . $category->image);
-                    if (File::exists($imagePath)) {
-                        File::delete($imagePath);
-                    }
-                }
+        // slug যদি আগেই না থাকে, তখন নাম থেকে slug তৈরি করবে
+        if (!$category->slug) {
+            $baseSlug = Str::slug($request->name);
+            $slug = $baseSlug;
+            $counter = 1;
 
-                $image = $request->file('image');
-                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('upload/dashboard/images/package-category'), $imageName);
-
-                $category->image = $imageName;
+            // slug ইউনিক কিনা চেক করবে
+            while (PackageCategory::withTrashed()
+                ->where('slug', $slug)
+                ->where('id', '!=', $category->id)
+                ->exists()) {
+                $slug = $baseSlug . '-' . $counter++;
             }
 
-            $category->save();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Package category updated successfully!',
-                'PackageCategory' => $category,
-            ]);
-        } catch (Exception $e) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => 'Failed to update package category. Error: ' . $e->getMessage(),
-                ],
-                500,
-            );
+            $category->slug = Str::lower($slug);
         }
+
+        // বাকি ফিল্ড আপডেট
+        $category->description = $request->description;
+        $category->status = $request->status;
+
+        // ইমেজ আপলোড ও পুরানো ইমেজ ডিলিট
+        if ($request->hasFile('image')) {
+            if ($category->image) {
+                $oldImagePath = public_path('upload/dashboard/images/package-category/' . $category->image);
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('upload/dashboard/images/package-category'), $imageName);
+
+            $category->image = $imageName;
+        }
+
+        $category->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Package category updated successfully!',
+            'PackageCategory' => $category,
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to update package category. Error: ' . $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * category package delete
@@ -206,9 +218,9 @@ class PackageCategoryController extends Controller
     public function CategoryTrash(Request $request)
     {
         try {
-          // Log::info('ID received: ' . $request->id);
-           $id = $request->id;
-           $category = PackageCategory::find($id);
+            // Log::info('ID received: ' . $request->id);
+            $id = $request->id;
+            $category = PackageCategory::find($id);
 
             if (!$category) {
                 return response()->json(
@@ -221,7 +233,7 @@ class PackageCategoryController extends Controller
             }
 
             // Soft delete
-           $category->delete();
+            $category->delete();
 
             return response()->json([
                 'status' => 'success',
@@ -231,7 +243,6 @@ class PackageCategoryController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
 
     // public function categoryDelete(Request $request){
     //     try{
@@ -263,74 +274,77 @@ class PackageCategoryController extends Controller
         }
     }
 
-
-
     /**
      * trash category restore
      */
-    public function CategoryRestore(Request $request){
-      $id = $request->id;
+    public function CategoryRestore(Request $request)
+    {
+        $id = $request->id;
 
-    try {
-        // find category
-        $category = PackageCategory::onlyTrashed()->findOrFail($id);
+        try {
+            // find category
+            $category = PackageCategory::onlyTrashed()->findOrFail($id);
 
-    
-        $category->restore();
+            $category->restore();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Category restored successfully.'
-        ]);
-    } catch (Exception $ex) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Failed to restore category: ' . $ex->getMessage(),
-        ], 500);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category restored successfully.',
+            ]);
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Failed to restore category: ' . $ex->getMessage(),
+                ],
+                500,
+            );
+        }
     }
-    }
-
-
-
 
     /**
      * Pacakge Category Permanet delte
      */
-public function CategoryPermanentDelete(Request $request)
-{
-    try {
-        $id = $request->id;
+    public function CategoryPermanentDelete(Request $request)
+    {
+        try {
+            $id = $request->id;
 
-        $category = PackageCategory::onlyTrashed()->where('id', $id)->first();
+            $category = PackageCategory::onlyTrashed()->where('id', $id)->first();
 
-        if (!$category) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Category not found in trash',
-            ], 404);
-        }
-
-        // image file delte
-        if ($category->image) {
-            $imagePath = public_path('upload/dashboard/images/package-category/' . $category->image);
-            if (file_exists($imagePath)) {
-                unlink($imagePath); // img file delte
+            if (!$category) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Category not found in trash',
+                    ],
+                    404,
+                );
             }
+
+            // image file delte
+            if ($category->image) {
+                $imagePath = public_path('upload/dashboard/images/package-category/' . $category->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath); // img file delte
+                }
+            }
+
+            // db delete
+            $category->forceDelete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category permanently deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
         }
-
-        // db delete
-        $category->forceDelete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Category permanently deleted successfully',
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage(),
-        ], 500);
     }
-}
-
 }

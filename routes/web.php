@@ -76,7 +76,7 @@ Route::get('/staff/create', [StaffController::class, 'staffCreatePage']);
 Route::get('/agent/create', [AgentController::class, 'agentCreatePage']);
 Route::get('/agent/lists', [AdminController::class, 'agentListsPage']);
 
-Route::get('/admin/customer/create', [AdminController::class, 'customerCreatePage']);
+Route::get('/admin/create/customer', [AdminController::class, 'customerCreatePage']);
 
 
 

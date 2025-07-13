@@ -128,7 +128,7 @@
 
                      <div class="collapse" id="collapseCustomer" data-bs-parent="#sidenavAccordionUser">
                          <nav class="sb-sidenav-menu-nested nav">
-                             <a class="nav-link" href="" target="_blank">Add Customer</a>
+                             <a class="nav-link" href="{{url('/admin/create/customer')}}" target="_blank">Create Customer</a>
                              <a class="nav-link" href="" target="_blank">Admin Customer Lists</a>
                              {{-- <a class="nav-link" href="{{ url('/customer/history') }}" target="_blank">Customer History</a> --}}
                          </nav>

@@ -305,6 +305,7 @@ class CustomerController extends Controller
                 'company_name' => Str::upper($request->company_name),
                 'pic' => $request->pic,
                 'sales_commission' => $request->sales_commission,
+                'sales_commission_discount' => $request->sales_commission_discount,
                 'mrp' => $request->mrp,
                 'passenger_price' => $request->passenger_price,
 

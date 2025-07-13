@@ -55,6 +55,7 @@ return new class extends Migration
         $table->string('company_name')->nullable();
         $table->string('pic')->nullable();
 
+        $table->decimal('sales_commission_discount')->nullable();
         $table->decimal('sales_commission', 18, 2)->nullable();
         $table->decimal('mrp', 18, 2)->nullable();
 

@@ -7,7 +7,7 @@
 </style>
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 no-print">Welcome <span class="customer_name text-primary fw-bold">Mr. Rahim</span></h1>
+    <h1 class="mt-4 no-print">Welcome To Your Dashboard<span class="customer_name text-primary fw-bold"></span></h1>
     <ol class="breadcrumb mb-4 no-print">
         <li class="breadcrumb-item active">Customer Dashboard</li>
     </ol>

@@ -217,7 +217,7 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label>Sales Discount(%) Per Passenger Price</label>
-                            <input type="number" class="form-control" name="sales_commission"
+                            <input type="number" class="form-control" name="sales_commission_discount"
                                 id="customer_sales_commission_discount" placeholder="e.g. 20,000">
                             <span class="customer_sales_commission_discount_error" style="color:red"
                                 id="customer_sales_commission_error_message"></span>
@@ -589,198 +589,210 @@ document.getElementById('package_categories_dropdown')
 
 
 
+//packge updata value randering
+// global variable to hold current package details
+let packageDetails = {};
+
+// Show/hide coupon section
+function toggleCouponSections(show) {
+    const section = document.getElementById('coupon_section_wrapper');
+    if (section) {
+        section.classList.toggle('d-none', !show);
+    }
+}
+
+
+// Coupon Render Function
+function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null) {
+    const couponSection = document.getElementById('dynamic_coupon_section');
+    couponSection.innerHTML = '';
+
+    const today = new Date().toISOString().slice(0, 10);
+    const validCoupons = discounts.filter(discount => discount.start_date <= today && discount.end_date >= today);
+    const hasCoupon = validCoupons.some(discount => discount.coupon_code);
+    toggleCouponSections(hasCoupon);
+
+    if (validCoupons.length > 0) {
+        validCoupons.forEach((discount, index) => {
+            const isOnlyDiscount = !discount.coupon_code;
+            const discountedPrice = currentPrice - (currentPrice * (discount.discount_value ?? 0) / 100);
+
+            couponSection.innerHTML += `
+            <div class="row border p-2 mb-2 rounded bg-light">
+                <div class="col-md-3 mb-2">
+                    <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
+                    <input type="text" class="form-control" value="${isOnlyDiscount ? 'Only Discount' : discount.coupon_code}" readonly>
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label>Validity</label>
+                    <input type="text" class="form-control" value="${discount.start_date ?? ''} to ${discount.end_date ?? ''}" readonly>
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label>Discount</label>
+                    <input type="text" class="form-control" value="${discount.discount_value ?? 'N/A'}%" readonly>
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label>Current Price</label>
+                    <input type="text" class="form-control customer_current_price" value="${currentPrice}" readonly>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label>Discounted Price</label>
+                    <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
+                </div>
+            </div>`;
+        });
+    } else if (fallbackDiscount) {
+        const discountedPrice = currentPrice - (currentPrice * fallbackDiscount / 100);
+        toggleCouponSections(false);
+        couponSection.innerHTML = `
+        <div class="row border p-2 mb-2 rounded bg-light">
+            <div class="col-md-3 mb-2">
+                <label>Discount</label>
+                <input type="text" class="form-control" value="Only Discount" readonly>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label>Discount %</label>
+                <input type="text" class="form-control" value="${fallbackDiscount}%" readonly>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label>Current Price</label>
+                <input type="text" class="form-control customer_current_price" value="${currentPrice}" readonly>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label>Discounted Price</label>
+                <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
+            </div>
+        </div>`;
+    } else {
+        toggleCouponSections(false);
+        couponSection.innerHTML = `
+        <div class="row border p-2 mb-2 rounded bg-light">
+            <div class="col-md-12 mb-2">
+                <label>No Discount Available</label>
+                <input type="text" class="form-control" value="N/A" readonly>
+            </div>
+        </div>`;
+    }
+}
+
+
+// Fetch package details on dropdown change
+document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change', async function () {
+    const id = this.value;
+    const token = localStorage.getItem('token');
+
+    document.getElementById('admin_package_price_error').innerHTML = '';
+    document.getElementById('purpose_wise_package_section').classList.remove('d-none');
+    document.getElementById('admin_price_section').classList.remove('d-none');
+
+    try {
+        const res = await axios.post('/admin/package/lists/details/by/catgory', { id }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.data.status !== 'success') throw new Error(res.data.message || 'Failed to fetch package details');
+
+        packageDetails = res.data.packageDetails || {};
+        const currentPrice = packageDetails.price ?? 0;
+
+        // Set form fields
+        document.getElementById('customer_mrp').value = currentPrice;
+        document.getElementById('customer_passenger_price').value = currentPrice;
+        document.getElementById('admin_package_price_field').value = currentPrice;
+        document.getElementById('package_duration').value = packageDetails.duration ?? '';
+        document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
+        document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
+        document.getElementById('package_visa_processing_time').value = packageDetails.visa_processing_time ?? '';
+        document.getElementById('package_documents_required').value = packageDetails.documents_required ?? '';
+        document.getElementById('package_seat_availability').value = packageDetails.seat_availability ?? '';
+
+        // Render coupons
+        renderCoupons(packageDetails.discounts || [], currentPrice, packageDetails.discount ?? null);
+
+    } catch (error) {
+        console.error("Error fetching packages:", error);
+        alert("Failed to load package details. Please try again.");
+    }
+});
+
+//packge updata value randering end
 
 
 
-document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change',
-    async function() {
-            const id = this.value; // package id
-            const token = localStorage.getItem('token');
+// price update function with coupon re-rendering
+// Update package price
+async function customerCreateUpdatePackagePrice(event) {
+    event.preventDefault();
 
-            document.getElementById('admin_package_price_error').innerHTML = '';
-            document.getElementById('purpose_wise_package_section').classList.remove('d-none');
-            document.getElementById('admin_price_section').classList.remove('d-none');
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Unauthorized. Please login again.");
+        return window.location.href = "/admin/login";
+    }
 
-            try {
-                const res = await axios.post('/admin/package/lists/details/by/catgory', {
-                    id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+    const id = document.getElementById("customer_create_component_available_packages_dropdown").value;
+    const new_price = document.getElementById("admin_package_price_field").value.trim();
 
-                if (res.data.status !== 'success') {
-                    throw new Error(res.data.message || 'Failed to fetch package details');
-                }
+    if (!id) return alert("Please select a package first.");
+    if (!new_price || isNaN(new_price) || Number(new_price) <= 0) return alert("Enter a valid price.");
 
-                const packageDetails = res.data.packageDetails || {};
-                const currentPrice = packageDetails.price ?? 0;
-
-                // Set values by id
-                document.getElementById('customer_mrp').value = packageDetails.price;
-                document.getElementById('customer_passenger_price').value = packageDetails.price;
-
-                document.getElementById('admin_package_price_field').value = packageDetails.price ?? '';
-                document.getElementById('package_duration').value = packageDetails.duration ?? '';
-                document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
-                document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
-                document.getElementById('package_visa_processing_time').value = packageDetails
-                    .visa_processing_time ?? '';
-                document.getElementById('package_documents_required').value = packageDetails
-                    .documents_required ?? '';
-                document.getElementById('package_seat_availability').value = packageDetails.seat_availability ??
-                    '';
-
-                // Coupon and discounts
-                const discounts = packageDetails.discounts || [];
-                const couponSection = document.getElementById('dynamic_coupon_section');
-                couponSection.innerHTML = '';
-
-                const today = new Date().toISOString().slice(0, 10);
-                const validCoupons = discounts.filter(discount => discount.start_date <= today && discount
-                    .end_date >= today);
-                const hasCoupon = validCoupons.some(discount => discount.coupon_code);
-                toggleCouponSections(hasCoupon);
-
-                if (validCoupons.length > 0) {
-                    validCoupons.forEach((discount, index) => {
-                        const isOnlyDiscount = !discount.coupon_code;
-                        const discountedPrice = currentPrice - (currentPrice * (discount
-                            .discount_value ?? 0) / 100);
-
-                        couponSection.innerHTML += `
-                    <div class="row border p-2 mb-2 rounded bg-light">
-                        <div class="col-md-3 mb-2">
-                            <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
-                            <input type="text" class="form-control" value="${isOnlyDiscount ? 'Only Discount' : discount.coupon_code}" readonly>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <label>Validity</label>
-                            <input type="text" class="form-control" value="${discount.start_date ?? ''} to ${discount.end_date ?? ''}" readonly>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <label>Discount</label>
-                            <input type="text" class="form-control" value="${discount.discount_value ?? 'N/A'}%" readonly>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <label>Current Price</label>
-                            <input type="text" class="form-control" value="${currentPrice}" readonly>
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>Discounted Price</label>
-                            <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
-                        </div>
-                    </div>`;
-                    });
-                } else if (packageDetails.discount) {
-                    const discountedPrice = currentPrice - (currentPrice * packageDetails.discount / 100);
-                    toggleCouponSections(false);
-                    couponSection.innerHTML = `
-                <div class="row border p-2 mb-2 rounded bg-light">
-                    <div class="col-md-3 mb-2">
-                        <label>Discount</label>
-                        <input type="text" class="form-control" value="Only Discount" readonly>
-                    </div>
-                    <div class="col-md-2 mb-2">
-                        <label>Discount %</label>
-                        <input type="text" class="form-control" value="${packageDetails.discount}%" readonly>
-                    </div>
-                    <div class="col-md-2 mb-2">
-                        <label>Current Price</label>
-                        <input type="text" class="form-control" value="${currentPrice}" readonly>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <label>Discounted Price</label>
-                        <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
-                    </div>
-                </div>`;
-                } else {
-                    toggleCouponSections(false);
-                    couponSection.innerHTML = `
-                <div class="row border p-2 mb-2 rounded bg-light">
-                    <div class="col-md-12 mb-2">
-                        <label>No Discount Available</label>
-                        <input type="text" class="form-control" value="N/A" readonly>
-                    </div>
-                </div>`;
-                }
-            } catch (error) {
-                console.error("Error fetching packages:", error);
-                alert("Failed to load package details. Please try again.");
+    try {
+        const res = await axios.post("/admin/package/price/update", {
+            id,
+            price: Number(new_price)
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         });
 
-
-
-
-
-
-
-//package price update
-async function customerCreateUpdatePackagePrice(event) {
-        event.preventDefault();
-
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert("Unauthorized. Please login again.");
-            return window.location.href = "/admin/login";
-        }
-
-        const id = document.getElementById("customer_create_component_available_packages_dropdown").value;
-        const new_price = document.getElementById("admin_package_price_field").value.trim();
-
-        if (!id) {
-            alert("Please select a package first.");
-            return;
-        }
-
-        if (!new_price || isNaN(new_price) || Number(new_price) <= 0) {
-            alert("Enter a valid positive price.");
-            return;
-        }
-
-        try {
-            const res = await axios.post("/admin/package/price/update", {
-                id,
-                price: Number(new_price)
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+        if (res.data.status === "success") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: res.data.message,
+                timer: 2000,
+                showConfirmButton: false
             });
 
-            if (res.data.status === "success") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Updated!',
-                    text: res.data.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+            // Update price on all fields
+            document.getElementById('admin_package_price_field').value = new_price;
+            document.getElementById('customer_mrp').value = new_price;
+            document.getElementById('customer_passenger_price').value = new_price;
 
-                //ui update
-                document.getElementById('admin_package_price_field').value = new_price;
-                document.getElementById('customer_mrp').value = new_price; //update mrp
-                 document.getElementById('customer_passenger_price').value = new_price //update mrp
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Update failed',
-                    text: res.data.message
-                });
-            }
-        } catch (error) {
-            const msg = error?.response?.data?.message || "An error occurred. Please try again.";
+            // Update all rendered coupon "current price"
+            document.querySelectorAll('.customer_current_price').forEach(input => {
+                input.value = new_price;
+            });
+
+            // update packageDetails object
+            packageDetails.price = Number(new_price);
+
+            // Re-render coupons
+            renderCoupons(packageDetails.discounts || [], Number(new_price), packageDetails.discount ?? null);
+
+        } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: msg
+                title: 'Update failed',
+                text: res.data.message
             });
-            console.error("Update error:", error);
         }
+    } catch (error) {
+        const msg = error?.response?.data?.message || "An error occurred. Please try again.";
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: msg
+        });
+        console.error("Update error:", error);
     }
+}
+
+
+
+
 
     //APPLY COUPON SECTION
 
@@ -962,6 +974,7 @@ async function customerCreateUpdatePackagePrice(event) {
         let company_name = document.getElementById('customer_company_name').value.trim();
         let pic = document.getElementById('customer_pic').value.trim();
         let sales_commission = document.getElementById('customer_sales_commission').value.trim();
+        let sales_commission_discount = document.getElementById('customer_sales_commission_discount').value.trim();
         let mrp = document.getElementById('customer_mrp').value.trim();
         let customer_price = document.getElementById('customer_passenger_price').value.trim();
         let medical_date = document.getElementById('customer_medical_date').value.trim();
@@ -1038,11 +1051,11 @@ async function customerCreateUpdatePackagePrice(event) {
             document.getElementById('customer_pic_error_message').innerText = 'PIC is required';
             error = true;
         }
-        if (!sales_commission) {
-            document.getElementById('customer_sales_commission_error_message').innerText =
-                'Sales Commission is required';
-            error = true;
-        }
+        // if (!sales_commission) {
+        //     document.getElementById('customer_sales_commission_error_message').innerText =
+        //         'Sales Commission is required';
+        //     error = true;
+        // }
         if (!mrp) {
             document.getElementById('customer_mrp_error_message').innerText = 'MRP is required';
             error = true;
@@ -1144,6 +1157,7 @@ async function customerCreateUpdatePackagePrice(event) {
             company_name,
             pic,
             sales_commission,
+            sales_commission_discount,
             mrp,
             passenger_price: customer_price,
             medical_date,
@@ -1198,6 +1212,7 @@ async function customerCreateUpdatePackagePrice(event) {
                 let company_name = document.getElementById('customer_company_name').value = "";
                 let pic = document.getElementById('customer_pic').value = "";
                 let sales_commission = document.getElementById('customer_sales_commission').value = "";
+                let sales_commission_discount = document.getElementById('customer_sales_commission_discount').value = "";
                 let mrp = document.getElementById('customer_mrp').value = "";
                 let customer_price = document.getElementById('customer_passenger_price').value = "";
                 let medical_date = document.getElementById('customer_medical_date').value = "";
@@ -1228,5 +1243,4 @@ async function customerCreateUpdatePackagePrice(event) {
                 Swal.fire('❌ Error', error.response?.data?.message || error.message, 'error');
             }
         }
-    }
-</script>
+    }</script>

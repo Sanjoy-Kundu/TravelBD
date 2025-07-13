@@ -1,17 +1,29 @@
+<style>
+    #printable_package_section {
+        background-color: #ffffff;
+        padding: 20px;
+        overflow: visible !important;
+        color: #000;
+    }
+
+    /* .no-print {
+        display: none !important;
+    } */
+</style>
 <div class="container my-4">
     <h1>Welcome, <span class="customer_name_main text-primary fw-bold">Customer</span></h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Customer Dashboard</li>
     </ol>
 
-    <div class="container my-5">
+    <div class="container my-5"id="printable_package_section">
         <h3 class="mb-4 text-primary">📦 My Package Full Details</h3>
 
         <!-- Customer Info & Package Basic -->
         <div class="card mb-4 shadow-sm rounded-4">
             <div class="card-body">
                 <div class="row g-4 align-items-center">
-                    <div class="col-md-3 text-center">
+                    <div class="col-md-3 text-center no-print">
                         <img src=""alt="Customer Image" class="img-fluid rounded-4 shadow-sm"
                             id="customer_image" />
                     </div>
@@ -35,11 +47,13 @@
                             <div class="col-md-6">
                                 <p><strong>Package:</strong> <span id="package_name"></span></p>
                                 <p><strong>Category:</strong> <span id="category_name"></span></p>
+                                <img src=""alt="Customer Image" class="img-fluid rounded-4 shadow-sm no-print"
+                                    id="package_image" />
                             </div>
                         </div>
                         <!-- Edit Button  data-bs-toggle="modal"
                                 data-bs-target="#editCustomerModal"-->
-                        <div class="text-end mt-3">
+                        <div class="text-end mt-3 no-print">
                             <button type="button" class="btn btn-primary editCustomerInformation">
                                 <i class="fas fa-edit me-2"></i> EDIT YOUR INFORMAION
                             </button>
@@ -199,7 +213,7 @@
                     </tbody>
                 </table>
 
-                <div class="text-end mt-4">
+                <div class="text-end mt-4 no-print">
                     <a href="{{ url('/customer/payment') }}" class="btn btn-success btn-lg px-4">
                         <i class="fas fa-credit-card me-2"></i> Make Payment
                     </a>
@@ -245,6 +259,9 @@
 
 
 
+<!-- jsPDF & html2canvas-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 <script>
@@ -301,11 +318,15 @@
 
 
             if (res.data.status == "success") {
-                console.log(res.data.packages)
-                console.log(res.data.packages.package_category.name)
+                console.log(res.data.packages.package.image)
+                //console.log(res.data.packages.package_category.name)
 
                 document.getElementById('customer_image').src = res.data.packages.image ?
                     `/upload/dashboard/images/customers/${res.data.packages.image}` :
+                    `/upload/dashboard/images/customers/default.jpg`;
+
+                document.getElementById('package_image').src = res.data.packages.package.image ?
+                    `/${res.data.packages.package.image}` :
                     `/upload/dashboard/images/customers/default.jpg`;
                 document.getElementById('name').innerHTML = res.data.packages.name ? res.data.packages.name : "N/A";
                 document.getElementById('email').innerHTML = res.data.packages.email ? res.data.packages.email :
@@ -435,52 +456,71 @@
         });
 
         //preview package pdf
-  $(document).ready(function() {
-            let token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = "/customer/login";
+        $('.previewPackagePdf').on('click', async function() {
+            const id = document.getElementById('customer_id_for_packageDetails')?.value;
+            if (!id) {
+                alert("Customer ID not found.");
+                return;
             }
 
-            $('.previewPackagePdf').on('click', async function() {
-                let id = document.getElementById('customer_id_for_packageDetails').value;
+            const invoiceElement = document.getElementById('printable_package_section');
+            if (!invoiceElement) {
+                alert("Package content not found!");
+                return;
+            }
 
-                // Data load
-                await fillPackageDetailsLoad(id);
+            // 👉 Hide no-print elements before capturing
+            const noPrintEls = document.querySelectorAll('.no-print');
+            noPrintEls.forEach(el => el.style.display = 'none');
 
-                // Show modal
-                $('#packagePdfModal').modal('show');
+            try {
+                const canvas = await html2canvas(invoiceElement, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    scrollY: 0
+                });
 
-                // Wait 1 second for modal content to fully render
-                setTimeout(() => {
-                    let element = document.getElementById('package_content');
-                        element.style.padding = '0px';
-                        element.style.margin = '0';
-                    let opt = {
-                        margin: 0.2,
-                        filename: 'packageView.pdf',
-                        image: {
-                            type: 'jpeg',
-                            quality: 0.98
-                        },
-                        html2canvas: {
-                            scale: 2
-                        },
-                        jsPDF: {
-                            unit: 'in',
-                            format: 'a4',
-                            orientation: 'portrait'
-                        }
-                    };
+                const imgData = canvas.toDataURL('image/png');
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const pdf = new jsPDF('p', 'pt', 'a4');
 
-                    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(
-                        pdf) {
-                        const blobUrl = pdf.output('bloburl');
-                        window.open(blobUrl, '_blank'); // new tab
-                    });
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
 
-                }, 2000); // delay to allow modal content to fully appear
-            });
+                const imgWidth = pdfWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pdfHeight;
+
+                while (heightLeft > 0) {
+                    position -= pdfHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pdfHeight;
+                }
+
+                const blob = pdf.output('blob');
+                const blobURL = URL.createObjectURL(blob);
+                window.open(blobURL, '_blank');
+            } catch (err) {
+                console.error("PDF generation failed:", err);
+                alert("Failed to generate PDF preview.");
+            } finally {
+                // 👉 Restore no-print elements
+                noPrintEls.forEach(el => el.style.display = '');
+            }
         });
+
+
+
 
     }
 </script>

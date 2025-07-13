@@ -20,7 +20,7 @@ protected $fillable = [
     'coupon_code', 'coupon_discount', 'coupon_use_discounted_price',
     'package_discount', 'package_discounted_price',
     'country', 'company_name', 'pic',
-    'sales_commission', 'mrp',
+    'sales_commission','sales_commission_discount','mrp',
     'agent_name', 'agent_code', 'agent_price', 'passenger_price',
     'staff_name', 'staff_code', 'staff_price',
     'medical_date', 'medical_center', 'medical_result',

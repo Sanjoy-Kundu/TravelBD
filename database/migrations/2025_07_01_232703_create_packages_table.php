@@ -14,24 +14,23 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('category_id')->constrained('package_categories')->onDelete('cascade'); // ক্যাটাগরির সাথে সম্পর্ক
-            $table->string('title'); // প্যাকেজের নাম
+            $table->string('title'); // package title
             $table->string('slug')->unique(); // SEO friendly URL
-            $table->string('short_description')->nullable(); // হোমপেজ বা লিস্টে ছোট ডিসক্রিপশন
-            $table->text('long_description')->nullable(); // বিস্তারিত বর্ণনা (ফুল ডিটেইলস পেজে)
+            $table->string('short_description')->nullable(); //home description
+            $table->text('long_description')->nullable(); // long description
 
-            $table->decimal('price', 10, 2)->nullable(); // প্যাকেজ প্রাইস (USD, BDT etc)
-            $table->string('currency')->default('BDT'); // ডলার, টাকা ইত্যাদি
-            $table->string('duration')->nullable(); // যেমন: 7 Days, 1 Month, 1 Year
+            $table->decimal('price', 10, 2)->nullable(); // price
+            $table->string('currency')->default('BDT'); // usd and BDT
+            $table->string('duration')->nullable(); // 7 Days, 1 Month, 1 Year
 
-            $table->text('inclusions')->nullable(); // কি কি সুবিধা অন্তর্ভুক্ত (Visa, Flight, Hotel)
-            $table->text('exclusions')->nullable(); // কি কি বাদ (Food, Personal Expense)
+            $table->text('inclusions')->nullable(); // (Visa, Flight, Hotel, others)
+            $table->text('exclusions')->nullable(); // (Food, Personal Expense)
 
-            $table->string('visa_processing_time')->nullable(); // প্রসেসিং টাইম: 10 Days, 15 Days
-            $table->text('documents_required')->nullable(); // পাসপোর্ট, ছবি, NID ইত্যাদি
-
-            $table->integer('seat_availability')->nullable(); // কয়টা সিট বা স্লট ফ্রি আছে
+            $table->string('visa_processing_time')->nullable(); // 10 Days, 15 Days, 1months
+            $table->text('documents_required')->nullable(); // passport, image, NID 
+            $table->integer('seat_availability')->nullable(); // slot
             $table->string('image')->nullable(); // thumbnail image
-            $table->enum('status', ['active', 'inactive'])->default('active'); // package চালু নাকি বন্ধ
+            $table->enum('status', ['active', 'inactive'])->default('active'); // package active or inactive
 
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // trash system

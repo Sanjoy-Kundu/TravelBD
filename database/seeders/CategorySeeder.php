@@ -48,8 +48,18 @@ class CategorySeeder extends Seeder
             $counter++;
         }
 
+
+            $originalName = $item['name'];
+            $name = $originalName;
+            $counterName = 1;
+
+            while(PackageCategory::withTrashed()->where('name', $name)->exists()){
+                $name = $originalName . ' ' . $counterName;
+                $counterName++;
+            }
+
             PackageCategory::create([
-                'name' => $item['name'],
+                'name' => $name,
                 'slug' => $slug,
                 'description' => $item['description'],
                 'status' => 'active',

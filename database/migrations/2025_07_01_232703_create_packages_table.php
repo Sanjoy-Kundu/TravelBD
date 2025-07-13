@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('short_description')->nullable(); //home description
             $table->text('long_description')->nullable(); // long description
 
-            $table->decimal('price', 10, 2)->nullable(); // price
+            $table->decimal('price', 10, 2)->nullable(); // MRP
             $table->string('currency')->default('BDT'); // usd and BDT
             $table->string('duration')->nullable(); // 7 Days, 1 Month, 1 Year
 

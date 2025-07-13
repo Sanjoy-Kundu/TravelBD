@@ -586,6 +586,9 @@ document.getElementById('customer_create_component_available_packages_dropdown')
         const currentPrice = packageDetails.price ?? 0;
 
         // Set values by id
+        document.getElementById('customer_mrp').value = packageDetails.price;
+        document.getElementById('customer_passenger_price').value = packageDetails.price;
+        
         document.getElementById('admin_package_price_field').value = packageDetails.price ?? '';
         document.getElementById('package_duration').value = packageDetails.duration ?? '';
         document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';

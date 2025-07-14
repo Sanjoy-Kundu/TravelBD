@@ -59,7 +59,7 @@
                             </button>
                             {{-- data-bs-toggle="modal" data-bs-target="#pdfPreviewModal" --}}
                             <button class="btn btn-danger previewPackagePdf">
-                                <i class="fas fa-file-pdf me-2"></i> Preview Package PDF
+                                <i class="fas fa-file-pdf me-2"></i> Download PDF
                             </button>
                         </div>
                     </div>
@@ -69,52 +69,40 @@
 
 
         <!-- Price & Discount Section -->
-        <div class="card mb-4 shadow-sm rounded-4 border-primary">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">💰 Pricing Details</h5>
+        <div class="card mb-4 shadow rounded-4 border-0">
+            <div class="card-header bg-gradient bg-primary text-white rounded-top-4">
+                <h5 class="mb-0 fw-semibold"><i class="bi bi-currency-dollar"></i> Pricing Details</h5>
             </div>
-            <div class="card-body">
-                <div class="row text-center text-md-start">
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Original Price</h6>
-                        <p class="fs-5 fw-bold text-danger" id="package_price"></p>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Discount (%)</h6>
-                        <p class="fs-5 fw-bold text-success"><span id="package_discount"></span>%</p>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Discounted Price</h6>
-                        <p class="fs-5 fw-bold text-primary" id="package_discounted_price"></p>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Passenger Price</h6>
-                        <p class="fs-5 fw-bold text-warning" id="passenger_price"></p>
+            <div class="card-body px-4 py-3">
+                <div class="row gy-3 text-center text-md-start">
+                    <div class="col-6 col-md-3">
+                        <h6 class="text-muted mb-1">Your Package Price</h6>
+                        <p class="fs-4 fw-bold text-danger mb-0"><span id="package_price"></span> TAKA</p>
                     </div>
 
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Coupon Code</h6>
-                        <p class="fs-6" id="coupon_code"></p>
+                    <div class="col-6 col-md-3">
+                        <h6 class="text-muted mb-1">Coupon Code</h6>
+                        <p class="fs-4 fw-bold text-dark mb-0" id="coupon_code"></p>
                     </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Coupon Discount</h6>
-                        <p class="fs-6" id="coupon_discount"></p>
+
+                    <div class="col-6 col-md-3">
+                        <h6 class="text-muted mb-1">Coupon Discount</h6>
+                        <p class="fs-4 fw-bold text-success mb-0"><span id="coupon_discount"></span>%</p>
                     </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">After Coupon Price</h6>
-                        <p class="fs-6" id="afterCouponPrice"></p>
+
+                    <div class="col-6 col-md-3">
+                        <h6 class="text-muted mb-1">Coupon Discounted Price</h6>
+                        <p class="fs-4 fw-bold text-primary mb-0"><span id="afterCouponPrice"></span> TAKA</p>
                     </div>
-                    {{-- <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">Sales Commission</h6>
-                        <p class="fs-6">৳3,500</p>
-                    </div> --}}
-                    <div class="col-6 col-md-3 mb-3">
-                        <h6 class="text-secondary">MRP</h6>
-                        <p class="fs-6" id="mrp"></p>
+
+                    <div class="col-6 col-md-3">
+                        <h6 class="text-muted mb-1">Payable Amount</h6>
+                        <p class="fs-4 fw-bold fw-semibold text-success mb-0"><span id="payable_amount"></span> TAKA</p>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Full Package Details Table -->
         <div class="card shadow-sm rounded-4">
@@ -122,93 +110,93 @@
                 <h5 class="mb-0">📋 Full Package Details</h5>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-striped table-sm align-middle">
+                <table class="table table-bordered table-striped table-sm align-middle" style="border-collapse: collapse; width: 100%;">
                     <tbody>
                         <tr>
-                            <th>Duration</th>
-                            <td id="duration"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Duration</th>
+                            <td style="border: 1px solid #000; padding: 8px"id="duration"></td>
                         </tr>
                         <tr>
-                            <th>Seat Availability</th>
-                            <td id="seat_avaliability"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Seat Availability</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="seat_avaliability"></td>
                         </tr>
                         <tr>
-                            <th>Customer Slot</th>
-                            <td id="customer_slot"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Customer Slot</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="customer_slot"></td>
                         </tr>
                         <tr>
-                            <th>Inclusions</th>
-                            <td>
+                            <th style="border: 1px solid #000; padding: 8px">Inclusions</th>
+                            <td style="border: 1px solid #000; padding: 8px">
                                 <ol class="mb-0 ps-3" id="inclusionList"></ol>
                             </td>
                         </tr>
                         <tr>
-                            <th>Exclusions</th>
-                            <td>
+                            <th style="border: 1px solid #000; padding: 8px">Exclusions</th>
+                            <td style="border: 1px solid #000; padding: 8px">
                                 <ol class="mb-0 ps-3" id="exclusionList"></ol>
                             </td>
                         </tr>
                         <tr>
-                            <th>Visa Processing Time</th>
-                            <td id="visa_processing_time"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Visa Processing Time</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="visa_processing_time"></td>
                         </tr>
                         <tr>
-                            <th>Documents Required</th>
-                            <td>
+                            <th style="border: 1px solid #000; padding: 8px">Documents Required</th>
+                            <td style="border: 1px solid #000; padding: 8px">
                                 <ol class="mb-0 ps-3" id="documentLists"></ol>
                             </td>
                         </tr>
                         <tr>
-                            <th>Medical Center</th>
-                            <td id="medical_center"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Medical Center</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="medical_center"></td>
                         </tr>
                         <tr>
-                            <th>Medical Date</th>
-                            <td id="medical_date"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Medical Date</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="medical_date"></td>
                         </tr>
                         <tr>
-                            <th>Medical Result</th>
-                            <td id="medical_result"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Medical Result</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="medical_result"></td>
                         </tr>
                         <tr>
                             <th>Visa Online</th>
-                            <td id="visa_online_status"></td>
+                            <td style="border: 1px solid #000; padding: 8px" id="visa_online_status"></td>
                         </tr>
                         <tr>
                             <th>Calling</th>
-                            <td id="calling_status"></td>
+                            <td style="border: 1px solid #000; padding: 8px" id="calling_status"></td>
                         </tr>
                         <tr>
-                            <th>Training</th>
-                            <td id="training_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Training</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="training_status"></td>
                         </tr>
                         <tr>
-                            <th>E-Visa</th>
-                            <td id="e_visa_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">E-Visa</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="e_visa_status"></td>
                         </tr>
                         <tr>
-                            <th>BMET</th>
-                            <td id="bmet_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">BMET</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="bmet_status"></td>
                         </tr>
                         <tr>
-                            <th>Fly Status</th>
-                            <td id="fly_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Fly Status</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="fly_status"></td>
                         </tr>
                         <tr>
-                            <th>Payment</th>
-                            <td id="payment_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Payment</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="payment_status"></td>
                         </tr>
                         <tr>
-                            <th>Payment Method</th>
-                            <td id="payment_method"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Payment Method</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="payment_method"></td>
                         </tr>
                         <tr>
-                            <th>Account Number</th>
-                            <td id="account_number"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Account Number</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="account_number"></td>
                         </tr>
                         <tr>
-                            <th>Approval Status</th>
-                            <td id="approval_status"></td>
+                            <th style="border: 1px solid #000; padding: 8px">Approval Status</th>
+                            <td style="border: 1px solid #000; padding: 8px" id="approval_status"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -260,6 +248,7 @@
 
 
 <!-- jsPDF & html2canvas-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -278,7 +267,7 @@
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(res.data)
+            //console.log(res.data)
 
             if (res.data.status == "success") {
                 document.querySelector("#customer_id_for_packageDetails").value = res.data.data.id;
@@ -318,8 +307,8 @@
 
 
             if (res.data.status == "success") {
-                console.log(res.data.packages.package.image)
-                //console.log(res.data.packages.package_category.name)
+                //console.log(res.data.packages.package.image)
+                console.log('package details', res.data)
 
                 document.getElementById('customer_image').src = res.data.packages.image ?
                     `/upload/dashboard/images/customers/${res.data.packages.image}` :
@@ -350,13 +339,16 @@
 
                 document.getElementById('coupon_code').innerHTML = res.data.packages.coupon_code ? res.data.packages
                     .coupon_code : "N/A";
-                document.getElementById('coupon_discount').innerHTML = res.data.packages.coupon_discount ? res.data
-                    .packages.coupon_discount : "N/A";
+                document.getElementById('coupon_discount').innerHTML = res.data.packages.coupon_discount ? parseInt(res.data
+                    .packages.coupon_discount) : 0;
                 document.getElementById('afterCouponPrice').innerHTML = res.data.packages
-                    .coupon_use_discounted_price ? res.data.packages.coupon_use_discounted_price : "N/A";
+                    .coupon_use_discounted_price ? parseInt(res.data.packages.coupon_use_discounted_price) : 0;
+                document.getElementById('payable_amount').innerHTML = res.data.packages
+                    .coupon_use_discounted_price ? parseInt(res.data.packages.coupon_use_discounted_price) : parseInt(res.data.packages
+                    .mrp);
 
-                document.getElementById('customer_slot').innerHTML = res.data.packages.customer_slot ? res.data
-                    .packages.customer_slot : "N/A";
+                document.getElementById('customer_slot').innerHTML = res.data.packages.customer_slot ? parseInt(res.data
+                    .packages.customer_slot) : "N/A";
                 document.getElementById('dob').innerHTML = res.data.packages.date_of_birth ? res.data.packages
                     .date_of_birth : "N/A";
                 document.getElementById('duration').innerHTML = res.data.packages.duration ? res.data.packages
@@ -373,15 +365,15 @@
                     .packages.medical_date : "N/A";
                 document.getElementById('medical_result').innerHTML = res.data.packages.medical_result ? res.data
                     .packages.medical_result : "N/A";
-                document.getElementById('mrp').innerHTML = res.data.packages.mrp ? res.data.packages.mrp : "N/A";
+                // document.getElementById('mrp').innerHTML = res.data.packages.mrp ? res.data.packages.mrp : "N/A";
                 document.getElementById('nid_number').innerHTML = res.data.packages.nid_number ? res.data.packages
                     .nid_number : "N/A";
-                document.getElementById('package_discount').innerHTML = res.data.packages.package_discount ? res
-                    .data.packages.package_discount : "N/A";
-                document.getElementById('package_discounted_price').innerHTML = res.data.packages
-                    .package_discounted_price ? res.data.packages.package_discounted_price : "N/A";
-                document.getElementById('passenger_price').innerHTML = res.data.packages.passenger_price ? res.data
-                    .packages.passenger_price : "N/A";
+                // document.getElementById('package_discount').innerHTML = res.data.packages.package_discount ? res
+                //     .data.packages.package_discount : "N/A";
+                // document.getElementById('package_discounted_price').innerHTML = res.data.packages
+                //     .package_discounted_price ? res.data.packages.package_discounted_price : "N/A";
+                // document.getElementById('passenger_price').innerHTML = res.data.packages.passenger_price ? res.data
+                //     .packages.passenger_price : "N/A";
                 document.getElementById('passport_no').innerHTML = res.data.packages.passport_no ? res.data.packages
                     .passport_no : "N/A";
                 document.getElementById('payment_status').innerHTML = res.data.packages.payment ? res.data.packages
@@ -391,8 +383,8 @@
                 document.getElementById('mobile_no').innerHTML = res.data.packages.phone ? res.data.packages.phone :
                     "N/A";
                 document.getElementById('pic').innerHTML = res.data.packages.pic ? res.data.packages.pic : "N/A";
-                document.getElementById('package_price').innerHTML = res.data.packages.price ? res.data.packages
-                    .price : "N/A";
+                document.getElementById('package_price').innerHTML = res.data.packages.mrp ? parseInt(res.data.packages
+                    .mrp) : "N/A";
                 //document.getElementById('sales_commission').innerHTML = res.data.packages.sales_commission?res.data.packages.sales_commission:"N/A";  
                 document.getElementById('seat_avaliability').innerHTML = res.data.packages.seat_availability ? res
                     .data.packages.seat_availability : "N/A";
@@ -456,68 +448,41 @@
         });
 
         //preview package pdf
-        $('.previewPackagePdf').on('click', async function() {
-            const id = document.getElementById('customer_id_for_packageDetails')?.value;
-            if (!id) {
-                alert("Customer ID not found.");
-                return;
-            }
+$('.previewPackagePdf').on('click', async function () {
+    const id = document.getElementById('customer_id_for_packageDetails')?.value;
+    if (!id) {
+        alert("Customer ID not found.");
+        return;
+    }
 
-            const invoiceElement = document.getElementById('printable_package_section');
-            if (!invoiceElement) {
-                alert("Package content not found!");
-                return;
-            }
+    const invoiceElement = document.getElementById('printable_package_section');
+    if (!invoiceElement) {
+        alert("Package content not found!");
+        return;
+    }
 
-            // 👉 Hide no-print elements before capturing
-            const noPrintEls = document.querySelectorAll('.no-print');
-            noPrintEls.forEach(el => el.style.display = 'none');
+    // 👉 Hide no-print elements before capturing
+    const noPrintEls = document.querySelectorAll('.no-print');
+    noPrintEls.forEach(el => el.style.display = 'none');
 
-            try {
-                const canvas = await html2canvas(invoiceElement, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    logging: false,
-                    scrollY: 0
-                });
+    try {
+        const opt = {
+            margin:       10,
+            filename:     `package-details-${id}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, scrollY: 0 },
+            jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+        };
 
-                const imgData = canvas.toDataURL('image/png');
-                const {
-                    jsPDF
-                } = window.jspdf;
-                const pdf = new jsPDF('p', 'pt', 'a4');
-
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-
-                const imgWidth = pdfWidth;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pdfHeight;
-
-                while (heightLeft > 0) {
-                    position -= pdfHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pdfHeight;
-                }
-
-                const blob = pdf.output('blob');
-                const blobURL = URL.createObjectURL(blob);
-                window.open(blobURL, '_blank');
-            } catch (err) {
-                console.error("PDF generation failed:", err);
-                alert("Failed to generate PDF preview.");
-            } finally {
-                // 👉 Restore no-print elements
-                noPrintEls.forEach(el => el.style.display = '');
-            }
-        });
+        await html2pdf().set(opt).from(invoiceElement).save();
+    } catch (err) {
+        console.error("PDF generation failed:", err);
+        alert("Failed to generate PDF preview.");
+    } finally {
+        // Restore no-print elements
+        noPrintEls.forEach(el => el.style.display = '');
+    }
+});
 
 
 

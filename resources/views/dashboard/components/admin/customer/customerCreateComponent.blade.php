@@ -159,7 +159,7 @@
                                             id="package_documents_required"> --}}
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label>Seat Availability</label>
                                         <input type="text" class="form-control" name="seat_availability"
                                             placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
@@ -167,7 +167,7 @@
 
                                     <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
                                     {{-- coupon or discount --}}
-                                    <div class="col-md-6 mb-3 d-none" id="coupon_code_section">
+                                    <div class="col-md-4 mb-3 d-none" id="coupon_code_section">
                                         <label>Write Your Coupon Code</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="coupon_code_input"
@@ -175,13 +175,14 @@
                                             <button type="button" class="btn btn-warning"
                                                 onclick="applyCouponCode()">Apply Your Coupon Code</button>
                                         </div>
+                                        
                                         <span class="text-success" id="coupon_success_message"
                                             style="display: block; margin-top: 5px;"></span>
                                         <span class="text-danger" id="coupon_error_message"
                                             style="display: block; margin-top: 5px;"></span>
                                     </div>
 
-                                    <div class="col-md-6 mb-3 d-none" id="new_price_section">
+                                    <div class="col-md-4 mb-3 d-none" id="new_price_section">
                                         <label>Now Your New Price</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="coupon_use_new_price"
@@ -193,6 +194,19 @@
                                             style="display: block; margin-top: 5px;"></span>
                                         <span class="text-danger" id="coupon_error_message"
                                             style="display: block; margin-top: 5px;"></span>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3" id="new_price_section">
+                                        
+                                        <div class="input-group">
+                                       <label>Coupon Discount</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="coupon_discount_input"
+                                                placeholder="Enter coupon code" name="coupon_discount">
+                                        </div>
+
+                                        </div>
+                                     
                                     </div>
 
                                 </div>
@@ -804,6 +818,7 @@ async function customerCreateUpdatePackagePrice(event) {
         const couponError = document.getElementById('coupon_error_message');
         const couponInput = document.getElementById('coupon_code_input');
         const packageSelect = document.getElementById('customer_create_component_available_packages_dropdown');
+        const couponDiscount = document.getElementById('coupon_discount_input') 
 
         couponSuccess.innerText = '';
         couponError.innerText = '';
@@ -837,8 +852,11 @@ async function customerCreateUpdatePackagePrice(event) {
             });
 
             if (response.data.status === 'success') {
+                console.log(response.data);
                 const discount_amount = response.data.discounted_price;
+                const discount = response.data.discount_value;
                 document.getElementById('coupon_use_new_price').value = discount_amount;
+                document.getElementById('coupon_discount_input').value = discount;
 
                 Swal.fire({
                     icon: 'success',
@@ -992,6 +1010,7 @@ async function customerCreateUpdatePackagePrice(event) {
         let approval_status = document.getElementById('approval').value.trim();
 
         let coupon_code = document.getElementById('coupon_code_input')?.value;
+        let coupon_discount = document.getElementById('coupon_discount_input')?.value;
         let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value;
         let package_discount = document.getElementById('package_discount')?.value;
         let customer_slot = document.getElementById('customer_slot').value.trim();
@@ -1152,6 +1171,7 @@ async function customerCreateUpdatePackagePrice(event) {
             date_of_birth,
             nid_number: customer_nid,
             coupon_code,
+            coupon_discount,
             coupon_use_discounted_price,
             country,
             company_name,

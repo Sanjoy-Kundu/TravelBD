@@ -1,64 +1,137 @@
+<!-- ===============================
+✅ CSS Styling Section (Put in <head>)
+=============================== -->
+<style>
+    /* Table Head Design */
+    table.table th {
+        /* background: linear-gradient(to right, #4f83cc, #e0e7f1); */
+        color: #222;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    /* Table Hover */
+    table.table tbody tr:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    /* Image Style */
+    .package-image {
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        object-fit: cover;
+    }
+
+    /* Badge Styling */
+    .badge-status-active {
+        background-color: #198754;
+        color: #fff;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        border-radius: 5px;
+    }
+
+    .badge-status-pending {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        border-radius: 5px;
+    }
+
+    .validity-badge {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+    }
+
+    /* Action Buttons */
+    .action-btn-group .btn {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+        margin: 2px;
+    }
+
+    /* General Alignment */
+    .table th, .table td {
+        vertical-align: middle !important;
+    }
+
+    h2 {
+        margin-top: 40px;
+        font-weight: 600;
+        font-size: 22px;
+        color: #333;
+    }
+</style>
+
+<!-- ===============================
+✅ HTML Section (Put in <body>)
+=============================== -->
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Package Lists</li>
     </ol>
+
+    <!-- Add New Package Button -->
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#packageCategoryFormModal">
             <i class="fas fa-plus"></i> Add New Package
         </button>
     </div>
 
+    <!-- Main Package Table -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center align-middle" id="packageListTable">
-            <thead class="table-light">
+            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Category Name</th>
-                    <th>Package Name</th>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Package</th>
                     <th>Image</th>
-                    <th>Validity Period</th>
+                    <th>Validity</th>
                     <th>Price (BDT)</th>
-                    <th>Coupne/Discount</th>
+                    <th>Coupon</th>
                     <th>Duration</th>
-                    <th>Seat Ability</th>
+                    <th>Seat (Total/Sold/Left)</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody id="package_package_list_body">
-
+                <!-- Data will be injected via JS -->
             </tbody>
         </table>
     </div>
 
-
+    <!-- Trash Table -->
     <div class="table-responsive">
         <h2>Trash Lists</h2>
         <table class="table table-bordered table-hover text-center align-middle" id="packageTrashListTable">
-            <thead class="table-light">
+            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Category Name</th>
-                    <th>Package Name</th>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Package</th>
                     <th>Image</th>
                     <th>Price</th>
                     <th>Currency</th>
                     <th>Duration</th>
-                    <th>Seat Ability</th>
+                    <th>Seat</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody id="package_trash_list_body">
-
+                <!-- Data will be injected via JS -->
             </tbody>
         </table>
     </div>
 </div>
 
+
 <script>
-    // Load package categories list with axios + DataTable
     packageListLoadData();
     async function packageListLoadData() {
         let token = localStorage.getItem('token');
@@ -121,7 +194,8 @@
 
                             </th>
                             <th>${package.duration}</th>
-                            <th>${package.seat_availability}</th>
+                            <th>${package.seat_availability} / ${package.total_sold} / ${package.seat_availability - package.total_sold}</th>
+
                             <th>${package.status == 'active' ? `<span class="badge text-bg-success">Active</span>` : `<span class="badge text-bg-danger">Pending</span>`}</th>
                             <th>
                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">

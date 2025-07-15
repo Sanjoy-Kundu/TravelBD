@@ -32,7 +32,7 @@ class AgentController extends Controller
      */
     public function otpVerifyPage(){
         try{
-            return view("/form.agent.otp_verify");
+            return view("/form.agent.otpPage");
         }catch(Exception $ex){
             return response()->json(['error' => $ex->getMessage()]);
         }
@@ -312,11 +312,15 @@ class AgentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Agent Customer Create Page 
      */
-    public function create()
+    public function customerCreatePage()
     {
-        //
+        try{
+            return view('pages.backend.agentCustomerCreatePage');
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
     }
 
     /**

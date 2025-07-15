@@ -519,7 +519,7 @@ async function getUserInfo() {
                 console.error("Unexpected error:", error);
             }
         }
-    }
+}
 
 
     //account filed form

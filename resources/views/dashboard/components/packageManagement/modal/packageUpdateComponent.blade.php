@@ -62,6 +62,21 @@
                         <div id="update_package_duration_error" class="text-danger mt-1"></div>
                     </div>
 
+                    <!--Applicatoin Start Date-->
+                    <div class="mb-3">
+                        <label class="form-label">Application Start Date</label>
+                        <input type="date" id="update_package_start_date" name="start_date" class="form-control">
+                        <div id="update_package_start_date_error" class="text-danger mt-1"></div>
+                    </div>
+
+                    <!--Application End Date-->
+                    <div class="mb-3">
+                        <label class="form-label">Application End Date</label>
+                        <input type="date" id="update_package_end_date" name="end_date" class="form-control">
+                        <div id="update_package_end_date_error" class="text-danger mt-1"></div>
+                    </div>
+                                        
+
                     <!-- Inclusions -->
                     <div class="mb-3">
                         <label class="form-label">Inclusions</label>
@@ -166,6 +181,7 @@
                 const package = res.data.package;
                 const category_id = package.package_category?.id || '';
                 await loadPackageCategories(category_id);
+                console.log(package);
 
                 // Fill form fields
                 document.getElementById('update_package_title').value = package.title || '';
@@ -174,6 +190,8 @@
                 document.getElementById('update_package_price').value = package.price || '';
                 document.getElementById('update_package_currency').value = package.currency || '';
                 document.getElementById('update_package_duration').value = package.duration || '';
+                document.getElementById('update_package_start_date').value = package.start_date || '';
+                document.getElementById('update_package_end_date').value = package.end_date || '';
                 document.getElementById('update_package_inclusions').value = package.inclusions || '';
                 document.getElementById('update_package_exclusions').value = package.exclusions || '';
                 document.getElementById('update_package_visa_processing_time').value = package.visa_processing_time || '';
@@ -231,6 +249,8 @@
     document.getElementById('update_package_price_error').textContent = '';
     document.getElementById('update_package_currency_error').textContent = '';
     document.getElementById('update_package_duration_error').textContent = '';
+    document.getElementById('update_package_start_date_error').textContent = '';
+    document.getElementById('update_package_end_date_error').textContent = '';
     document.getElementById('update_package_inclusions_error').textContent = '';
     document.getElementById('update_package_exclusions_error').textContent = '';
     document.getElementById('update_package_visa_processing_time_error').textContent = '';
@@ -247,6 +267,8 @@
     const price = document.getElementById('update_package_price').value.trim();
     const currency = document.getElementById('update_package_currency').value;
     const duration = document.getElementById('update_package_duration').value.trim();
+    const start_date = document.getElementById('update_package_start_date').value.trim();
+    const end_date = document.getElementById('update_package_end_date').value.trim();
     const inclusions = document.getElementById('update_package_inclusions').value.trim();
     const exclusions = document.getElementById('update_package_exclusions').value.trim();
     const visa_processing_time = document.getElementById('update_package_visa_processing_time').value.trim();
@@ -274,6 +296,8 @@
     formData.append('title', title);
     formData.append('category_id', category_id);
     formData.append('duration', duration);
+    formData.append('start_date', start_date);
+    formData.append('end_date', end_date);
     formData.append('price', price);
     formData.append('short_description', short_description);
     formData.append('long_description', long_description);

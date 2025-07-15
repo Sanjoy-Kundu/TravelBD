@@ -252,6 +252,8 @@ public function packageUpdate(Request $request)
             'price' => 'nullable|numeric',
             'currency' => 'nullable|string|max:10',
             'duration' => 'nullable|string|max:100',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'inclusions' => 'nullable|string',
             'exclusions' => 'nullable|string',
             'visa_processing_time' => 'nullable|string|max:100',
@@ -275,6 +277,8 @@ public function packageUpdate(Request $request)
         $package->price = $request->price;
         $package->currency = Str::upper($request->currency);
         $package->duration = $request->duration;
+        $package->start_date = $request->start_date;
+        $package->end_date = $request->end_date;
         $package->inclusions = Str::upper($request->inclusions);
         $package->exclusions = Str::upper($request->exclusions);
         $package->visa_processing_time = $request->visa_processing_time;

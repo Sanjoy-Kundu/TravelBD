@@ -50,6 +50,16 @@
                             <td id="view_status"></td>
                         </tr>
                         <tr>
+                            <th>Application Start Date</th>
+                            <td id="view_application_start_date" style="front-weight: bold"></td>
+                            <th>Application End Date</th>
+                            <td id="view_application_end_date" style="front-weight: bold"></td>
+                        </tr>
+                         <th>Seat Availability</th>
+                            <td id="view_seat_availability" style="front-weight: bold"></td>
+                        <th>Seat Sold</th>
+                            <td id="view_sold_seat" style="front-weight: bold"></td>
+                        <tr>
                             <th>Inclusions</th>
                             <td colspan="3" id="view_inclusions"></td>
                         </tr>
@@ -59,9 +69,7 @@
                         </tr>
                         <tr>
                             <th>Visa Processing Time</th>
-                            <td id="view_visa_processing_time"></td>
-                            <th>Seat Availability</th>
-                            <td id="view_seat_availability"></td>
+                            <td id="view_visa_processing_time" style="front-weight: bold"></td>
                         </tr>
                         <tr>
                             <th>Documents Required</th>
@@ -118,12 +126,13 @@
 
             if (res.data.status === 'success') {
                 const package = res.data.package;
-                //console.log(package);
+                console.log("package view",package);
+                console.log("package view",package.total_sold); //0
 
 
                 //console.log(package);
                 const category = package.package_category || {};
-                console.log(category)
+                //console.log(category)
 
                 document.getElementById('view_title').innerText = package.title || '';
                 document.getElementById('view_slug').innerText = package.slug || '';
@@ -132,6 +141,9 @@
                 document.getElementById('view_price').innerText = package.price || '';
                 document.getElementById('view_currency').innerText = package.currency || '';
                 document.getElementById('view_duration').innerText = package.duration || '';
+                document.getElementById('view_sold_seat').innerText =  package.total_sold != null ? package.total_sold : '';
+                document.getElementById('view_application_start_date').innerText = package.start_date ? new Date(package.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : '--';
+                document.getElementById('view_application_end_date').innerText = package.end_date ? new Date(package.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : '--';
                 document.getElementById('view_inclusions').innerText = package.inclusions || '';
                 document.getElementById('view_exclusions').innerText = package.exclusions || '';
                 document.getElementById('view_visa_processing_time').innerText = package.visa_processing_time || '';

@@ -559,14 +559,14 @@ async function getadminCategoryLists() {
 
     // Show Packages Based on Selected Category
 
-document.getElementById('package_categories_dropdown')
-        .addEventListener('change', async function() {
+document.getElementById('package_categories_dropdown').addEventListener('change', async function() {
             const token = localStorage.getItem('token');
             if (!token) {
                 return window.location.href = "/admin/login";
             }
 
             const category_id = this.value;
+            const select = document.getElementById('customer_create_component_available_packages_dropdown');
 
             try {
                 const res = await axios.post('/admin/package/lists/by/category', {
@@ -579,8 +579,7 @@ document.getElementById('package_categories_dropdown')
 
                 if (res.data.status === 'success') {
                     const packages = res.data.packageListByCategory;
-                    const select = document.getElementById(
-                        'customer_create_component_available_packages_dropdown');
+                    console.log(packages);
 
                     // Efficient way to add options
                     let optionsHTML = '<option value="">Select Package</option>';
@@ -594,7 +593,7 @@ document.getElementById('package_categories_dropdown')
                 console.error("Error fetching packages:", error.response?.data || error.message);
                 alert("Package list load try again");
             }
-        });
+});
 
 
 

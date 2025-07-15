@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('packages', function (Blueprint $table) {
-            $table->date('start_date')->nullable()->after('status')->after('status');
-            $table->date('end_date')->nullable()->after('start_date')->after('start_date');
+            $table->date('start_date')->nullable()->after('status');
+            $table->date('end_date')->nullable()->after('start_date');
             $table->unsignedInteger('total_sold')->default(0)->after('end_date');
         });
     }

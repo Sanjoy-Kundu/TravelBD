@@ -13,7 +13,7 @@
         <div class="card-body">
             <form id="admin_customer_form" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3" hidden>
                         <label>Admin Id</label>
                         <input type="number" class="form-control" name="admin_id" id="customer_create_by_admin_id"
                             placeholder="Admin id" readonly>
@@ -437,8 +437,8 @@
                             onchange="admintoggleAccountField()">
                             <option value="">Select Method</option>
                             <option value="cash">Cash</option>
-                            <option value="bank">Bank</option>
-                            <option value="wallet">Wallet</option>
+                            {{-- <option value="bank">Bank</option>
+                            <option value="wallet">Wallet</option> --}}
                         </select>
                         <span class="customer_payment_method_error" style="color:red"
                             id="customer_payment_method_error_message"></span>
@@ -1054,6 +1054,7 @@ async function customerCreateUpdatePackagePrice(event) {
         let coupon_use_discounted_price = document.getElementById('coupon_use_new_price')?.value;
         let package_discount = document.getElementById('package_discount')?.value;
         let customer_slot = document.getElementById('customer_slot').value.trim();
+        let available_seat = document.getElementById('available_seat').value.trim();
 
         let error = false;
 
@@ -1188,6 +1189,15 @@ async function customerCreateUpdatePackagePrice(event) {
             error = true;
         }
 
+    //   if(customer_slot > available_seat){
+    //         Swal.fire(
+    //             '❌ ভুল হয়েছে',
+    //             `আপনি ${available_seat}টির বেশি সিট নিতে পারবেন না।`,
+    //             'error'
+    //         );
+    //         error = true;
+    //      }
+
         if (error) return; // stop if validation error
 
         // Prepare FormData for submission
@@ -1298,9 +1308,11 @@ async function customerCreateUpdatePackagePrice(event) {
                 const errors = error.response.data.errors;
                 const firstError = Object.values(errors)[0][0];
 
-                Swal.fire('❌ Error', firstError, 'error');
+                //Swal.fire('❌ Error', firstError, 'error');
+                console.log(firstError);
             } else {
                 Swal.fire('❌ Error', error.response?.data?.message || error.message, 'error');
+                //console.log(error.response?.data?.message || error.message);
             }
         }
     }</script>

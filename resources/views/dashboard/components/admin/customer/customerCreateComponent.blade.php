@@ -112,6 +112,32 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
+                                    <!--Application Date section-->
+                                    <div class="col-md-4 mb-3">
+                                        <label>Today Date</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control bg-primary text-white"  value="{{\Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4 mb-3">
+                                        <label>Applicatin Start Date</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control bg-success text-white" name="start_date" id="start_date" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label>Application End Date</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control bg-danger text-white" name="end_date" id="end_date" readonly>
+                                        </div>
+                                    </div>
+                                   <!--Application Date section-->
+
+
+
+
                                     <div class="col-md-6 mb-3">
                                         <label>Package Price</label>
                                         <div class="input-group">
@@ -132,37 +158,44 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label>Inclusions</label>
-                                        <textarea readonly name="inclusions" class="form-control" id="package_inclusions" cols="30" rows="10"></textarea>
+                                        <textarea readonly name="inclusions" class="form-control" id="package_inclusions" cols="30" rows="10" readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="inclusions"
                                             placeholder="Visa, Ticket, Insurance" readonly id="package_inclusions"> --}}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Exclusions</label>
-                                        <textarea readonly name="exclusions" class="form-control" id="package_exclusions" cols="30" rows="10"></textarea>
+                                        <textarea readonly name="exclusions" class="form-control" id="package_exclusions" cols="30" rows="10" readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="exclusions"
                                             placeholder="Personal Expenses" readonly id="package_exclusions"> --}}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Visa Processing Time</label>
-                                        <input type="text" class="form-control" name="visa_processing_time"
-                                            placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
+                                        <input type="text" class="form-control" name="visa_processing_time" placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Documents Required</label>
-                                        <textarea name="documents_required" class="form-control" id="package_documents_required" cols="30"
-                                            rows="10"></textarea>
+                                        <textarea name="documents_required" class="form-control" id="package_documents_required" cols="30" rows="10" readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="documents_required"
                                             placeholder="Passport, Photo, etc." readonly
                                             id="package_documents_required"> --}}
                                     </div>
 
                                     <div class="col-md-4 mb-3">
-                                        <label>Seat Availability</label>
-                                        <input type="text" class="form-control" name="seat_availability"
-                                            placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
+                                        <label>Total Seat</label>
+                                        <input type="number" class="form-control" name="seat_availability" placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label>Sold Seat</label>
+                                        <input type="number" class="form-control" name="total_sold" placeholder="e.g. 20 Seats Left" readonly id="total_sold">
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label>Available Seat</label>
+                                        <input type="number" class="form-control" placeholder="e.g. 20 Seats Left" readonly id="available_seat" readonly>
                                     </div>
 
                                     <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
@@ -196,12 +229,12 @@
                                             style="display: block; margin-top: 5px;"></span>
                                     </div>
 
-                                    <div class="col-md-4 mb-3" id="new_price_section">
+                                    <div class="col-md-4 mb-3" id="coupon_code_discount_section">
                                         
                                         <div class="input-group">
                                        <label>Coupon Discount</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="coupon_discount_input"
+                                            <input type="number" class="form-control" id="coupon_code_discount_input"
                                                 placeholder="Enter coupon code" name="coupon_discount">
                                         </div>
 
@@ -706,18 +739,23 @@ document.getElementById('customer_create_component_available_packages_dropdown')
         if (res.data.status !== 'success') throw new Error(res.data.message || 'Failed to fetch package details');
 
         packageDetails = res.data.packageDetails || {};
+        console.log('customer create component',packageDetails);
         const currentPrice = packageDetails.price ?? 0;
 
         // Set form fields
-        document.getElementById('customer_mrp').value = currentPrice;
-        document.getElementById('customer_passenger_price').value = currentPrice;
-        document.getElementById('admin_package_price_field').value = currentPrice;
+        document.getElementById('customer_mrp').value = parseInt(currentPrice);
+        document.getElementById('customer_passenger_price').value = parseInt(currentPrice);
+        document.getElementById('admin_package_price_field').value = parseInt(currentPrice);
         document.getElementById('package_duration').value = packageDetails.duration ?? '';
         document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
+        document.getElementById('start_date').value = packageDetails.start_date ?? '';
+        document.getElementById('end_date').value = packageDetails.end_date ?? '';
         document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
         document.getElementById('package_visa_processing_time').value = packageDetails.visa_processing_time ?? '';
         document.getElementById('package_documents_required').value = packageDetails.documents_required ?? '';
         document.getElementById('package_seat_availability').value = packageDetails.seat_availability ?? '';
+        document.getElementById('total_sold').value = packageDetails.total_sold ?? '';
+        document.getElementById('available_seat').value = packageDetails.seat_availability - packageDetails.total_sold;
 
         // Render coupons
         renderCoupons(packageDetails.discounts || [], currentPrice, packageDetails.discount ?? null);
@@ -855,7 +893,7 @@ async function customerCreateUpdatePackagePrice(event) {
                 const discount_amount = response.data.discounted_price;
                 const discount = response.data.discount_value;
                 document.getElementById('coupon_use_new_price').value = discount_amount;
-                document.getElementById('coupon_discount_input').value = discount;
+                document.getElementById('coupon_code_discount_input').value = discount;
 
                 Swal.fire({
                     icon: 'success',
@@ -907,13 +945,16 @@ async function customerCreateUpdatePackagePrice(event) {
     function toggleCouponSections(show) {
         const couponSection = document.getElementById('coupon_code_section');
         const newPriceSection = document.getElementById('new_price_section');
+        const newCouponDiscount = document.getElementById('coupon_code_discount_section');
 
         if (show) {
             couponSection.classList.remove('d-none');
             newPriceSection.classList.remove('d-none');
+            newCouponDiscount.classList.remove('d-none');
         } else {
             couponSection.classList.add('d-none');
             newPriceSection.classList.add('d-none');
+            newCouponDiscount.classList.add('d-none');
         }
     }
     //APPLY COUPON SECTION    

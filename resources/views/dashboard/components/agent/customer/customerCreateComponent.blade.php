@@ -122,8 +122,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Package Price</label>
                                         <div class="input-group">
-                                            <input type="number" class="form-control bg-danger text-white" name="price" id="admin_package_price_field" placeholder="e.g. 450000">
-                                            <button type="button" class="btn btn-warning" onclick="customerCreateUpdatePackagePrice(event)">Update</button>
+                                            <input type="number" class="form-control text-dark" name="price" id="admin_package_price_field">
                                         </div>
                                         <span class="text-danger" id="admin_package_price_error"></span>
                                     </div>
@@ -168,10 +167,10 @@
                                         <input type="number" class="form-control" placeholder="e.g. 20 Seats Left" readonly id="available_seat">
                                     </div>
 
-                                    <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
+                                    <div id="dynamic_coupon_section" class="col-12 mb-3 dynamic_coupon_section"></div>
 
                                     <!-- coupon or discount -->
-                                    <div class="col-md-4 mb-3 d-none" id="coupon_code_section">
+                                    <div class="col-md-4 mb-3 coupon_code_section">
                                         <label>Write Your Coupon Code</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="coupon_code_input" placeholder="Enter coupon code" name="coupon_code">
@@ -186,7 +185,7 @@
                                         <input type="text" class="form-control" id="coupon_use_new_price" placeholder="Discounted Price" readonly name="coupon_use_discounted_price">
                                     </div>
 
-                                    <div class="col-md-4 mb-3" id="coupon_code_discount_section">
+                                    <div class="col-md-4 mb-3 d-none" id="coupon_code_discount_section">
                                         <label>Coupon Discount</label>
                                         <input type="number" class="form-control" id="coupon_code_discount_input" placeholder="Discount Amount" name="coupon_discount">
                                     </div>
@@ -469,40 +468,12 @@ getAgentCategoryLists();
 
 
 
-document.querySelector('.package_categories_dropdown').addEventListener('change', async function() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                return window.location.href = "/admin/login";
-            }
 
-            const category_id = this.value;
-            const select = document.querySelector('.customer_create_component_available_packages_dropdown');
 
-            try {
-                const res = await axios.post('/admin/package/lists/by/category', {
-                    category_id: category_id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
 
-                if (res.data.status === 'success') {
-                    const packages = res.data.packageListByCategory;
-                    console.log(packages);
 
-                    // Efficient way to add options
-                    let optionsHTML = '<option value="">Select Package</option>';
-                    packages.forEach(pkg => {
-                        optionsHTML += `<option value="${pkg.id}">${pkg.title}</option>`;
-                    });
-                    select.innerHTML = optionsHTML;
-                }
 
-            } catch (error) {
-                console.error("Error fetching packages:", error.response?.data || error.message);
-                alert("Package list load try again");
-            }
-});
+
+
 
 </script>

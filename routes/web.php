@@ -227,6 +227,13 @@ Route::middleware(['auth:sanctum', 'staff'])->group(function () {
     Route::post('/staff/reset/password', [StaffController::class, 'staffResetPassword']);
 });
 
+
+
+
+
+
+
+
 // ====================== Agent Protected Routes ======================
 Route::middleware(['auth:sanctum', 'agent'])->group(function () {
     Route::get('/auth/agent', [AgentController::class, 'agentDetails']);
@@ -241,6 +248,7 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
 
 //customoer create by agent
    Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategory']);
+      Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategoryDetails']);
 
 
 });

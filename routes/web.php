@@ -237,6 +237,12 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
     Route::post('/agent/profile/store', [AgentProfileController::class, 'agentProfileStore']);
     Route::post('/agent/profile/details', [AgentProfileController::class, 'agentProfileDetails']);
     Route::post('/agent/reset/password', [AgentController::class, 'agentResetPassword']);
+
+
+//customoer create by agent
+   Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategory']);
+
+
 });
 
 

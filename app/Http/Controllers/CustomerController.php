@@ -126,6 +126,67 @@ public function packageListByCategory(Request $request)
 }
 
 
+
+
+
+
+/**
+ * package list by category by agent
+ */
+
+public function agentPackageListByCategory(Request $request)
+{
+    try {
+        $category_id = $request->category_id;
+        $today = Carbon::now()->format('Y-m-d');
+
+        $searchPackageByCategory = Package::where('category_id', $category_id)
+            ->where('status', 'active')
+            ->where(function($query) use ($today) {
+                $query->whereDate('end_date', '>=', $today)
+                      ->orWhereNull('end_date');
+            })
+            ->whereColumn('seat_availability', '>', 'total_sold')
+            ->get();
+
+        if ($searchPackageByCategory->isEmpty()) {
+            $seatCheck  = Package::where('category_id', $category_id)
+                ->where('status', 'active')
+                ->where(function($query) use ($today) {
+                    $query->whereDate('end_date', '>=', $today)
+                          ->orWhereNull('end_date');
+                })
+                ->whereColumn('seat_availability', '<=', 'total_sold')
+                ->exists();
+
+            if($seatCheck){
+                return response()->json(['status' => 'error','message' => 'Application Seat totally Full.'], 404); 
+            }    
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Application date is over'
+            ], 404);
+        }
+
+        return response()->json(['status' => 'success', 'packageListByCategory' => $searchPackageByCategory], 200);
+    } catch (Throwable  $ex) {
+        return response()->json(['error' => $ex->getMessage()], 500);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * admin packge list details by category
      */

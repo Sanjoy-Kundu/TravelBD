@@ -87,7 +87,7 @@
 
                     <div class="col-12 mb-3">
                         <label>Available Packages</label>
-                        <select class="form-control" name="package_id" id="customer_create_component_available_packages_dropdown">
+                        <select class="form-control customer_create_component_available_packages_dropdown" name="package_id">
                             <option value="">Choose Category First</option>
                         </select>
                         <span class="text-danger" id="customer_package_error"></span>
@@ -466,5 +466,43 @@ async function getAgentCategoryLists() {
         }
 }
 getAgentCategoryLists();    
+
+
+
+document.querySelector('.package_categories_dropdown').addEventListener('change', async function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return window.location.href = "/admin/login";
+            }
+
+            const category_id = this.value;
+            const select = document.querySelector('.customer_create_component_available_packages_dropdown');
+
+            try {
+                const res = await axios.post('/admin/package/lists/by/category', {
+                    category_id: category_id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (res.data.status === 'success') {
+                    const packages = res.data.packageListByCategory;
+                    console.log(packages);
+
+                    // Efficient way to add options
+                    let optionsHTML = '<option value="">Select Package</option>';
+                    packages.forEach(pkg => {
+                        optionsHTML += `<option value="${pkg.id}">${pkg.title}</option>`;
+                    });
+                    select.innerHTML = optionsHTML;
+                }
+
+            } catch (error) {
+                console.error("Error fetching packages:", error.response?.data || error.message);
+                alert("Package list load try again");
+            }
+});
 
 </script>

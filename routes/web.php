@@ -195,7 +195,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //admin added customer 
    Route::get('/category-all/lists', [CustomerController::class, 'allCategoryLists']);
    Route::post('/admin/package/lists/by/category', [CustomerController::class, 'packageListByCategory']);
-   Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetailsByCategory']);
+   Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetails']);
    Route::post('/admin/package/price/update', [CustomerController::class, 'packagePriceUpdateCustomer']);
    Route::post('/admin/package/apply-coupon', [CustomerController::class, 'packageApplyCoupon']);
    Route::post('/admin/customer/create', [CustomerController::class, 'customerCreateByAdmin']);
@@ -248,7 +248,8 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
 
 //customoer create by agent
    Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategory']);
-      Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategoryDetails']);
+    Route::post('/agent/package/lists/by/category/details', [CustomerController::class, 'agentPackageListByCategoryDetails']);
+    Route::post('/agent/package/lists/details', [CustomerController::class, 'packageListDetails']);
 
 
 });

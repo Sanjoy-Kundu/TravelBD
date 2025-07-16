@@ -137,14 +137,16 @@ public function agentPackageListByCategoryDetails(Request $request)
         $category_id = $request->category_id;
         $today = Carbon::now()->format('Y-m-d');
 
-        $searchPackageByCategory = Package::where('category_id', $category_id)
+       $searchPackageByCategory = Package::where('category_id', $category_id)
             ->where('status', 'active')
             ->where(function($query) use ($today) {
-                $query->whereDate('end_date', '>=', $today)
-                      ->orWhereNull('end_date');
+                $query->whereNull('end_date')
+                    ->orWhereDate('end_date', '>=', $today);
             })
             ->whereColumn('seat_availability', '>', 'total_sold')
             ->get();
+
+       
 
         if ($searchPackageByCategory->isEmpty()) {
             $seatCheck  = Package::where('category_id', $category_id)
@@ -233,9 +235,9 @@ public function agentPackageListByCategory(Request $request)
 
 
     /**
-     * admin packge list details by category
+     * admin packge list details by package id
      */
-    public function packageListDetailsByCategory(Request $request)
+    public function packageListDetails(Request $request)
     {
         try {
             $id = $request->id;

@@ -16,18 +16,21 @@
                     <!-- Agent Id (hidden) -->
                     <div class="col-12 mb-3">
                         <label>Agent Id</label>
-                        <input type="number" class="form-control customer_create_by_agent_id" name="admin_id" placeholder="Admin id" readonly>
+                        <input type="number" class="form-control customer_create_by_agent_id" name="admin_id"
+                            placeholder="Admin id" readonly>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER" id="customer_name">
+                        <input type="text" class="form-control" name="name" placeholder="e.g. MD RUBEL SARDER"
+                            id="customer_name">
                         <span class="text-danger" id="customer_name_error"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="e.g. rubelsarder@gmail.com" id="customer_email">
+                        <input type="email" class="form-control" name="email"
+                            placeholder="e.g. rubelsarder@gmail.com" id="customer_email">
                         <span class="text-danger" id="customer_email_error"></span>
                     </div>
 
@@ -38,19 +41,22 @@
 
                     <div class="col-12 mb-3">
                         <label>Phone</label>
-                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000" id="customer_phone">
+                        <input type="tel" class="form-control" name="phone" placeholder="e.g. 01700000000"
+                            id="customer_phone">
                         <span class="text-danger" id="customer_phone_error"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Passport No</label>
-                        <input type="text" class="form-control" name="passport_no" placeholder="e.g. B00588828" id="customer_passport_no">
+                        <input type="text" class="form-control" name="passport_no" placeholder="e.g. B00588828"
+                            id="customer_passport_no">
                         <span class="text-danger" id="customer_passport_no_error"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Age</label>
-                        <input type="number" class="form-control" name="age" placeholder="e.g. 28" id="customer_age">
+                        <input type="number" class="form-control" name="age" placeholder="e.g. 28"
+                            id="customer_age">
                         <span class="text-danger" id="customer_age_error"></span>
                     </div>
 
@@ -73,7 +79,8 @@
 
                     <div class="col-12 mb-3">
                         <label>NID Number</label>
-                        <input type="text" class="form-control" name="nid_number" placeholder="e.g. 1234567890" id="customer_nid_number">
+                        <input type="text" class="form-control" name="nid_number" placeholder="e.g. 1234567890"
+                            id="customer_nid_number">
                         <span class="text-danger" id="customer_nid_number_error"></span>
                     </div>
 
@@ -87,152 +94,130 @@
 
                     <div class="col-12 mb-3">
                         <label>Available Packages</label>
-                        <select class="form-control customer_create_component_available_packages_dropdown" name="package_id">
+                        <select class="form-control customer_create_component_available_packages_dropdown"
+                            name="package_id">
                             <option value="">Choose Category First</option>
                         </select>
                         <span class="text-danger" id="customer_package_error"></span>
                     </div>
 
-                    <!-- purpose wise package section -->
-                    <div class="col-12 mb-4 d-none" id="purpose_wise_package_section">
+                    <!-- category wise package section -->
+                    <div class="col-12 mb-4 d-none purpose_wise_package_section">
                         <div class="card border-info shadow-sm">
                             <div class="card-header bg-info text-white fw-bold">
                                 <i class="fas fa-box-open me-2"></i> Purpose Wise Package Details
                             </div>
                             <div class="card-body">
-                                <div class="row">
-
-                                    <!-- Application Date section -->
-                                    <div class="col-md-4 mb-3">
-                                        <label>Today Date</label>
-                                        <input type="date" class="form-control bg-primary text-white" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label>Application Start Date</label>
-                                        <input type="date" class="form-control bg-success text-white" name="start_date" id="start_date" readonly>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label>Application End Date</label>
-                                        <input type="date" class="form-control bg-danger text-white" name="end_date" id="end_date" readonly>
-                                    </div>
-                                    <!-- Application Date section end -->
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Package Price</label>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control text-dark" name="price" id="admin_package_price_field">
-                                        </div>
-                                        <span class="text-danger" id="admin_package_price_error"></span>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Package Duration</label>
-                                        <input type="text" class="form-control" name="duration" placeholder="e.g. 6 Months" readonly id="package_duration">
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Inclusions</label>
-                                        <textarea readonly name="inclusions" class="form-control" id="package_inclusions" rows="4"></textarea>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Exclusions</label>
-                                        <textarea readonly name="exclusions" class="form-control" id="package_exclusions" rows="4"></textarea>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Visa Processing Time</label>
-                                        <input type="text" class="form-control" name="visa_processing_time" placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label>Documents Required</label>
-                                        <textarea readonly name="documents_required" class="form-control" id="package_documents_required" rows="4"></textarea>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label>Total Seat</label>
-                                        <input type="number" class="form-control" name="seat_availability" placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label>Sold Seat</label>
-                                        <input type="number" class="form-control" name="total_sold" placeholder="e.g. 20 Seats Sold" readonly id="total_sold">
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label>Available Seat</label>
-                                        <input type="number" class="form-control" placeholder="e.g. 20 Seats Left" readonly id="available_seat">
-                                    </div>
-
-                                    <div id="dynamic_coupon_section" class="col-12 mb-3 dynamic_coupon_section"></div>
-
-                                    <!-- coupon or discount -->
-                                    <div class="col-md-4 mb-3 coupon_code_section">
-                                        <label>Write Your Coupon Code</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="coupon_code_input" placeholder="Enter coupon code" name="coupon_code">
-                                            <button type="button" class="btn btn-warning" onclick="applyCouponCode()">Apply Your Coupon Code</button>
-                                        </div>
-                                        <span class="text-success" id="coupon_success_message" style="margin-top:5px;"></span>
-                                        <span class="text-danger" id="coupon_error_message" style="margin-top:5px;"></span>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3 d-none" id="new_price_section">
-                                        <label>Now Your New Price</label>
-                                        <input type="text" class="form-control" id="coupon_use_new_price" placeholder="Discounted Price" readonly name="coupon_use_discounted_price">
-                                    </div>
-
-                                    <div class="col-md-4 mb-3 d-none" id="coupon_code_discount_section">
-                                        <label>Coupon Discount</label>
-                                        <input type="number" class="form-control" id="coupon_code_discount_input" placeholder="Discount Amount" name="coupon_discount">
-                                    </div>
-
-                                </div>
+                                <table class="table table-bordered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th>Today Date</th>
+                                            <td>{{ \Carbon\Carbon::now()->format('Y-m-d') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Package Name</th>
+                                            <td id="package_title"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Application Start Date</th>
+                                            <td id="start_date"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Application End Date</th>
+                                            <td id="end_date"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Package Price</th>
+                                            <td id="admin_package_price_field"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Package Duration</th>
+                                            <td id="package_duration"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Inclusions</th>
+                                            <td id="package_inclusions" style="white-space: pre-wrap;"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Exclusions</th>
+                                            <td id="package_exclusions" style="white-space: pre-wrap;"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Visa Processing Time</th>
+                                            <td id="package_visa_processing_time"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Documents Required</th>
+                                            <td id="package_documents_required" style="white-space: pre-wrap;"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Seat</th>
+                                            <td id="package_seat_availability"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sold Seat</th>
+                                            <td id="total_sold"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Available Seat</th>
+                                            <td id="available_seat"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Coupon Discount</th>
+                                            <td id="coupon_discount_info">No Discount Applied</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="col-12 card border-info shadow-sm d-none" id="admin_price_section">
                         <div class="col-12 mb-3">
                             <label>MRP (only admin)</label>
-                            <input type="number" class="form-control" name="mrp" id="customer_mrp" placeholder="e.g. 480000" readonly>
+                            <input type="number" class="form-control" name="mrp" id="customer_mrp"
+                                placeholder="e.g. 480000" readonly>
                             <span class="text-danger" id="customer_mrp_error_message"></span>
                         </div>
                         <div class="col-12 mb-3">
                             <label>Passenger Price (only admin)</label>
-                            <input type="number" class="form-control" name="passenger_price" id="customer_passenger_price" placeholder="e.g. 480000">
+                            <input type="number" class="form-control" name="passenger_price"
+                                id="customer_passenger_price" placeholder="e.g. 480000">
                             <span class="text-danger" id="customer_passenger_price_error_message"></span>
                         </div>
                         <div class="col-12 mb-3">
                             <label>Sales Discount(%) Per Passenger Price</label>
-                            <input type="number" class="form-control" name="sales_commission_discount" id="customer_sales_commission_discount" placeholder="e.g. 20">
+                            <input type="number" class="form-control" name="sales_commission_discount"
+                                id="customer_sales_commission_discount" placeholder="e.g. 20">
                             <span class="text-danger" id="customer_sales_commission_error_message"></span>
                         </div>
                         <div class="col-12 mb-3">
                             <label>Sales Commission</label>
-                            <input type="number" class="form-control" name="sales_commission" id="customer_sales_commission" placeholder="e.g. 20000" readonly>
+                            <input type="number" class="form-control" name="sales_commission"
+                                id="customer_sales_commission" placeholder="e.g. 20000" readonly>
                             <span class="text-danger" id="customer_sales_commission_error_message"></span>
                         </div>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Country</label>
-                        <input type="text" class="form-control" name="country" id="customer_country" placeholder="e.g. Malaysia-MAS">
+                        <input type="text" class="form-control" name="country" id="customer_country"
+                            placeholder="e.g. Malaysia-MAS">
                         <span class="text-danger" id="customer_country_error_message"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Company Name</label>
-                        <input type="text" class="form-control" name="company_name" id="customer_company_name" placeholder="e.g. RAMLY FOOD PROCESSING">
+                        <input type="text" class="form-control" name="company_name" id="customer_company_name"
+                            placeholder="e.g. RAMLY FOOD PROCESSING">
                         <span class="text-danger" id="customer_company_name_error_message"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>PIC</label>
-                        <input type="text" class="form-control" name="pic" id="customer_pic" placeholder="e.g. PIC001">
+                        <input type="text" class="form-control" name="pic" id="customer_pic"
+                            placeholder="e.g. PIC001">
                         <span class="text-danger" id="customer_pic_error_message"></span>
                     </div>
 
@@ -263,13 +248,15 @@
 
                     <div class="col-12 mb-3">
                         <label>Medical Center</label>
-                        <input type="text" class="form-control" name="medical_center" id="customer_medical_center" placeholder="e.g. Green Life Medical">
+                        <input type="text" class="form-control" name="medical_center"
+                            id="customer_medical_center" placeholder="e.g. Green Life Medical">
                         <span class="text-danger" id="customer_medical_center_error_message"></span>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label>Medical Result</label>
-                        <input type="text" class="form-control" name="medical_result" id="customer_medical_result" placeholder="e.g. FIT / UNFIT">
+                        <input type="text" class="form-control" name="medical_result"
+                            id="customer_medical_result" placeholder="e.g. FIT / UNFIT">
                         <span class="text-danger" id="customer_medical_result_error_message"></span>
                     </div>
 
@@ -347,7 +334,8 @@
                     <!-- Payment Method -->
                     <div class="col-12 mb-3">
                         <label>Method of Payment</label>
-                        <select class="form-control" name="payment_method" id="customer_payment_method" onchange="admintoggleAccountField()">
+                        <select class="form-control" name="payment_method" id="customer_payment_method"
+                            onchange="admintoggleAccountField()">
                             <option value="">Select Method</option>
                             <option value="cash">Cash</option>
                             <!-- <option value="bank">Bank</option> -->
@@ -358,7 +346,8 @@
 
                     <div class="col-12 mb-3 d-none" id="customer_account_number_group">
                         <label>Account Number</label>
-                        <input type="text" class="form-control" name="account_number" id="customer_account_number" placeholder="e.g. 1234567890">
+                        <input type="text" class="form-control" name="account_number"
+                            id="customer_account_number" placeholder="e.g. 1234567890">
                         <span class="text-danger" id="customer_account_number_error_message"></span>
                     </div>
 
@@ -374,7 +363,8 @@
 
                     <div class="col-12 mb-3">
                         <label>Customer Slot</label>
-                        <input type="number" class="form-control" name="customer_slot" id="customer_slot" placeholder="Enter your slot">
+                        <input type="number" class="form-control" name="customer_slot" id="customer_slot"
+                            placeholder="Enter your slot">
                         <span class="text-danger" id="customer_slot_error_message"></span>
                     </div>
 
@@ -390,27 +380,29 @@
 </div>
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     getUserInfo();
-    async function getUserInfo(){
+    async function getUserInfo() {
         let token = localStorage.getItem('token');
-        if(!token){
+        if (!token) {
             window.location.href = "/agent/login";
         }
-        try{
-          let res = await axios.get("/auth/agent",{headers:{
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }})
-   
+        try {
+            let res = await axios.get("/auth/agent", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
 
-        if(res.data.status == "success"){
-            console.log(res.data.data.id)
-            document.querySelector(".customer_create_by_agent_id").value = res.data.data.id;
-        }
-        }catch(error){
-           // middleware error check 
+
+            if (res.data.status == "success") {
+                console.log(res.data.data.id)
+                document.querySelector(".customer_create_by_agent_id").value = res.data.data.id;
+            }
+        } catch (error) {
+            // middleware error check 
             if (error.response && error.response.status === 401) {
                 alert(error.response.data.message); // "Unauthorized"
                 //  Token invalid → redirect to login
@@ -426,8 +418,8 @@
 
 
 
-//get show category lists 
-async function getAgentCategoryLists() {
+    //get show category lists 
+    async function getAgentCategoryLists() {
         const token = localStorage.getItem('token');
         if (!token) {
             return window.location.href = "/agent/login";
@@ -463,17 +455,151 @@ async function getAgentCategoryLists() {
         } catch (error) {
             console.error('Error loading categories:', error);
         }
-}
-getAgentCategoryLists();    
+    }
+    getAgentCategoryLists();
+
+    // load packge by categoy lists
+    $(document).ready(function() {
+        $('.package_categories_dropdown').on('change', async function() {
+            let category_id = $(this).val();
+            let token = localStorage.getItem('token');
+
+            //reset pakcage dropdown 
+            let packageDropdown = $('.customer_create_component_available_packages_dropdown');
+            packageDropdown.empty();
+            packageDropdown.append('<option value="">---Loading---</option>');
+
+            if (!category_id) {
+                packageDropdown.empty();
+                packageDropdown.append('<option value="">Select Category First</option>');
+            }
+            try {
+                let res = await axios.post('/agent/package/lists/by/category/details', {
+                    category_id: category_id
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                let packages = res.data.packageListByCategory;
+                packageDropdown.empty();
+                packageDropdown.append('<option value="">Select Package</option>');
+                packages.forEach(function(package) {
+                    packageDropdown.append(
+                        `<option value="${package.id}">${package.title}</option>`);
+                })
+            } catch (error) {
+                if (error.response.data.status === 'error') {
+                    packageDropdown.empty();
+                    packageDropdown.append(
+                        '<option value="" style="background-color:red;color:white">Package are not available please chose another</option>'
+                    );
+                }
+            }
+            //console.log(category_id);
+        })
+    })
 
 
+    //package details by package id
+    $(document).ready(function() {
+        $('.customer_create_component_available_packages_dropdown').on('change', async function() {
+            let id = $(this).val();
+            let token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = '/agent/login';
+            }
+
+            try {
+                let res = await axios.post('/agent/package/lists/details', {
+                    id: id
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.data.status === 'success') {
+                    $('.purpose_wise_package_section').removeClass('d-none');
+                    let packageDetails = res.data.packageDetails
+                    $('#start_date').text(packageDetails.start_date);
+                    $('#package_title').text(packageDetails.title);
+                    $('#end_date').text(packageDetails.end_date);
+                    $('#admin_package_price_field').text(parseInt(packageDetails.price));
+                    $('#package_duration').text(packageDetails.duration);
+
+                    if (packageDetails.inclusions) {
+                            let inclusionsArray = packageDetails.inclusions.split(',');
+                            let list = '<ol type="i">';
+                            inclusionsArray.forEach(function(item) {
+                                list += `<li>${item.trim()}</li>`;
+                            });
+                            list += '</ol>';
+                            $('#package_inclusions').html(list);
+                        } else {
+                            $('#package_inclusions').text('-');
+                    }
 
 
+                    if (packageDetails.exclusions) {
+                            let exclusionsArray = packageDetails.exclusions.split(',');
+                            let list = '<ol type="i">';
+                            exclusionsArray.forEach(function(item) {
+                                list += `<li>${item.trim()}</li>`;
+                            });
+                            list += '</ol>';
+                            $('#package_exclusions').html(list);
+                        } else {
+                            $('#package_exclusions').text('-');
+                    }
+
+                    $('#package_visa_processing_time').text(packageDetails.visa_processing_time);
 
 
+                      if (packageDetails.documents_required) {
+                            let documents_requiredArray = packageDetails.documents_required.split(',');
+                            let list = '<ol type="i">';
+                            documents_requiredArray.forEach(function(item) {
+                                list += `<li>${item.trim()}</li>`;
+                            });
+                            list += '</ol>';
+                            $('#package_documents_required').html(list);
+                        } else {
+                            $('#package_documents_required').text('-');
+                    }
+               
+                    $('#package_seat_availability').text(parseInt(packageDetails.seat_availability));
+                    $('#total_sold').text(parseInt(packageDetails.total_sold));
+                    $('#available_seat').text(parseInt(packageDetails.seat_availability - packageDetails.total_sold));
+                    if (packageDetails.discounts && packageDetails.discounts.length > 0) {
+                        let couponDiscounts = packageDetails.discounts.filter(discount => discount
+                            .discount_mode === 'coupon');
+                        if (couponDiscounts.length > 0) {
+                            let discountList = '<ol type="i">';
+                            couponDiscounts.forEach(discount => {
+                                discountList += `<li>
+                                    <strong>Coupon Code:</strong> ${discount.coupon_code}<br>
+                                    <strong>Discount:</strong> ${discount.discount_value}%<br>
+                                    <strong>Date Validity:</strong> ${discount.start_date} to ${discount.end_date}
+                                </li>`;
+                            });
+                            discountList += '</ol>';
+                            $('#coupon_discount_info').html(discountList);
+                        } else {
+                            $('#coupon_discount_info').text('No Coupon Discount');
+                        }
+                    } else {
+                        $('#coupon_discount_info').text('No Coupon');
+                    }
+                } 
 
 
+                //console.log(res.data);
+            } catch (error) {
+                conosle.error("error message", error);
+            }
 
 
-
+        })
+    })
 </script>

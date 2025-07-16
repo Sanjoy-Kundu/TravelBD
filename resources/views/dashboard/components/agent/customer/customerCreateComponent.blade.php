@@ -10,14 +10,14 @@
         </div>
 
         <div class="card-body">
-            <form id="admin_customer_form" enctype="multipart/form-data" onsubmit="customerCreate(event)">
+            <form id="agent_customer_form" enctype="multipart/form-data" onsubmit="customerCreate(event)">
                 <div class="row">
 
                     <!-- Agent Id (hidden) -->
                     <div class="col-12 mb-3">
                         <label>Agent Id</label>
-                        <input type="number" class="form-control customer_create_by_agent_id" name="admin_id"
-                            placeholder="Admin id" readonly>
+                        <input type="number" class="form-control customer_create_by_agent_id" name="agent_id"
+                            placeholder="" readonly>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -95,7 +95,7 @@
                     <div class="col-12 mb-3">
                         <label>Available Packages</label>
                         <select class="form-control customer_create_component_available_packages_dropdown"
-                            name="package_id">
+                            name="package_id" id="agent_package_list">
                             <option value="">Choose Category First</option>
                         </select>
                         <span class="text-danger" id="customer_package_error"></span>
@@ -173,205 +173,18 @@
                     </div>
 
 
-                    <div class="col-12 card border-info shadow-sm d-none" id="admin_price_section">
-                        <div class="col-12 mb-3">
-                            <label>MRP (only admin)</label>
-                            <input type="number" class="form-control" name="mrp" id="customer_mrp"
-                                placeholder="e.g. 480000" readonly>
-                            <span class="text-danger" id="customer_mrp_error_message"></span>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <label>Passenger Price (only admin)</label>
-                            <input type="number" class="form-control" name="passenger_price"
-                                id="customer_passenger_price" placeholder="e.g. 480000">
-                            <span class="text-danger" id="customer_passenger_price_error_message"></span>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <label>Sales Discount(%) Per Passenger Price</label>
-                            <input type="number" class="form-control" name="sales_commission_discount"
-                                id="customer_sales_commission_discount" placeholder="e.g. 20">
-                            <span class="text-danger" id="customer_sales_commission_error_message"></span>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <label>Sales Commission</label>
-                            <input type="number" class="form-control" name="sales_commission"
-                                id="customer_sales_commission" placeholder="e.g. 20000" readonly>
-                            <span class="text-danger" id="customer_sales_commission_error_message"></span>
-                        </div>
-                    </div>
+                   
 
                     <div class="col-12 mb-3">
                         <label>Country</label>
-                        <input type="text" class="form-control" name="country" id="customer_country"
+                        <input type="text" class="form-control" value="Bangladesh" readonly name="country" id="customer_country"
                             placeholder="e.g. Malaysia-MAS">
                         <span class="text-danger" id="customer_country_error_message"></span>
                     </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Company Name</label>
-                        <input type="text" class="form-control" name="company_name" id="customer_company_name"
-                            placeholder="e.g. RAMLY FOOD PROCESSING">
-                        <span class="text-danger" id="customer_company_name_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>PIC</label>
-                        <input type="text" class="form-control" name="pic" id="customer_pic"
-                            placeholder="e.g. PIC001">
-                        <span class="text-danger" id="customer_pic_error_message"></span>
-                    </div>
-
-                    <!-- Hidden Agent fields (if needed) -->
-                    <div class="col-12 mb-3 d-none">
-                        <label>Agent Name</label>
-                        <input type="text" class="form-control" name="agent_name" placeholder="e.g. RAJU-MAS">
-                        <span class="text-danger" id="customer_agent_name_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3 d-none">
-                        <label>Agent Code</label>
-                        <input type="text" class="form-control" name="agent_code" placeholder="e.g. NJ-AG-01">
-                        <span class="text-danger" id="customer_agent_code_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3 d-none">
-                        <label>Agent Price</label>
-                        <input type="text" class="form-control" name="agent_price" placeholder="e.g. 450000">
-                        <span class="text-danger" id="customer_agent_price_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Medical Date</label>
-                        <input type="date" class="form-control" name="medical_date" id="customer_medical_date">
-                        <span class="text-danger" id="customer_medical_date_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Medical Center</label>
-                        <input type="text" class="form-control" name="medical_center"
-                            id="customer_medical_center" placeholder="e.g. Green Life Medical">
-                        <span class="text-danger" id="customer_medical_center_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Medical Result</label>
-                        <input type="text" class="form-control" name="medical_result"
-                            id="customer_medical_result" placeholder="e.g. FIT / UNFIT">
-                        <span class="text-danger" id="customer_medical_result_error_message"></span>
-                    </div>
-
-                    <!-- Status Fields -->
-                    <div class="col-12 mb-3">
-                        <label>Visa Online</label>
-                        <select class="form-control" name="visa_online" id="customer_visa_online">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_visa_online_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Calling</label>
-                        <select class="form-control" name="calling" id="customer_calling">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_calling_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Training</label>
-                        <select class="form-control" name="training" id="customer_training">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_training_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>E-Vissa</label>
-                        <select class="form-control" name="e_vissa" id="customer_e_vissa">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_e_vissa_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>BMET</label>
-                        <select class="form-control" name="bmet" id="customer_bmet">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_bmet_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Fly</label>
-                        <select class="form-control" name="fly" id="customer_fly">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_fly_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Payment</label>
-                        <select class="form-control" name="payment" id="customer_payment">
-                            <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_payment_error_message"></span>
-                    </div>
-
-                    <!-- Payment Method -->
-                    <div class="col-12 mb-3">
-                        <label>Method of Payment</label>
-                        <select class="form-control" name="payment_method" id="customer_payment_method"
-                            onchange="admintoggleAccountField()">
-                            <option value="">Select Method</option>
-                            <option value="cash">Cash</option>
-                            <!-- <option value="bank">Bank</option> -->
-                            <!-- <option value="wallet">Wallet</option> -->
-                        </select>
-                        <span class="text-danger" id="customer_payment_method_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3 d-none" id="customer_account_number_group">
-                        <label>Account Number</label>
-                        <input type="text" class="form-control" name="account_number"
-                            id="customer_account_number" placeholder="e.g. 1234567890">
-                        <span class="text-danger" id="customer_account_number_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Approval</label>
-                        <select class="form-control" name="approval" id="approval">
-                            <option value="">Select approval</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Complete">Complete</option>
-                        </select>
-                        <span class="text-danger" id="customer_approval_error_message"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label>Customer Slot</label>
-                        <input type="number" class="form-control" name="customer_slot" id="customer_slot"
-                            placeholder="Enter your slot">
-                        <span class="text-danger" id="customer_slot_error_message"></span>
-                    </div>
-
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-primary px-4">Submit</button>
+                    <button type="submit" class="btn btn-primary px-4" onclick="agentSubmitCustomer(event)">Submit</button>
                 </div>
             </form>
 
@@ -596,10 +409,125 @@
 
                 //console.log(res.data);
             } catch (error) {
-                conosle.error("error message", error);
+                console.error("error message", error);
             }
 
 
         })
     })
+
+
+
+
+
+// agent sumited customer 
+function agentSubmitCustomer(event){
+    event.preventDefault();
+    let token = localStorage.getItem('token');
+    if(!token){
+        window.location.href = "/agent/login";
+    }
+    let errorFields = [
+            "customer_name_error",
+            "customer_email_error",
+            "customer_phone_error",
+            "customer_passport_no_error",
+            "customer_age_error",
+            "customer_date_of_birth_error",
+            "customer_gender_error",
+            "customer_nid_number_error",
+            "customer_purpose_error",
+            "customer_package_error",
+            "customer_country_error_message",
+    ]
+    errorFields.forEach(id => {
+            document.getElementById(id).innerText = '';
+        });
+    let agent_id = document.querySelector('.customer_create_by_agent_id').value.trim();
+    let name = document.querySelector('#customer_name').value.trim();
+    let email = document.querySelector('#customer_email').value.trim();
+    let phone = document.querySelector('#customer_phone').value.trim();
+    let passport_no = document.querySelector('#customer_passport_no').value.trim();
+    let age = document.querySelector('#customer_age').value.trim();
+    let date_of_birth = document.querySelector('#customer_date_of_birth').value.trim();
+    let gender = document.querySelector('#customer_gender').value.trim();
+    let nid_number = document.querySelector('#customer_nid_number').value.trim();
+    let package_category_id = document.querySelector('.package_categories_dropdown').value.trim();
+    let package_id = document.querySelector('#agent_package_list').value.trim();
+    let country = document.querySelector('#customer_country').value.trim();
+    let isError = false;
+
+    if(!agent_id){
+        document.querySelector('.customer_create_by_agent_id_error').innerHTML = 'Agent ID is required';
+        isError = true;
+    }
+
+    if(!name){
+        document.querySelector('#customer_name_error').innerHTML = 'Name is required';
+        isError = true;
+    }
+
+    if(!email){
+        document.querySelector('#customer_email_error').innerHTML = 'Email is required';
+        isError = true;
+    }
+
+    if(!phone){
+        document.querySelector('#customer_phone_error').innerHTML = 'Phone Number is required';
+        isError = true;
+    }
+
+    if(!passport_no){
+        document.querySelector('#customer_passport_no_error').innerHTML = 'Passport Number is required';
+        isError = true;
+    }
+
+    if(!age){
+        document.querySelector('#customer_age_error').innerHTML = 'Age is required';
+        isError = true;
+     }
+
+     if(!date_of_birth){
+        document.querySelector('#customer_date_of_birth_error').innerHTML = 'Date of Birth is required';
+        isError = true;
+     }
+     if(!gender){
+        document.querySelector('#customer_gender_error').innerHTML = 'Gender is required';
+        isError = true;
+     }
+     if(!nid_number){
+        document.querySelector('#customer_nid_number_error').innerHTML = 'NID Number is required';
+        isError = true;
+     }
+     if(!package_category_id){
+        document.querySelector('#customer_purpose_error').innerHTML = 'Package Category is required';
+        isError = true;
+    }
+    if(!package_id){
+        document.querySelector('#agent_package_list').innerHTML = 'Package is required';
+        isError = true;
+    }
+     
+    if(isError) return;
+
+    //using form data 
+    let formData = new FormData();
+    let customerImageFile = document.getElementById('customer_image')?.files?.[0];
+     if (customerImageFile) {
+            formData.append('image', customerImageFile);
+        }
+     let data = {
+        agent_id:agent_id,
+        name:name,
+        email:email,
+        phone:phone,
+        date_of_birth:date_of_birth,
+        gender:gender,
+        nid_number:nid_number,
+        package_category_id:package_category_id,
+        package_id:package_id,
+        country:country
+     }   
+     console.log(data);
+}
 </script>

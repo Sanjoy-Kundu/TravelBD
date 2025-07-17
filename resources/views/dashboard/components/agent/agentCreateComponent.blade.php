@@ -1,21 +1,41 @@
+<style>
+/* HTML: <div class="loader"></div> */
+.loader {
+  height: 5px;
+  width: 100%;
+  --c:no-repeat linear-gradient(rgba(191, 120, 226, 0.804));
+  background: var(--c),var(--c),#e6e2ea;
+  background-size: 60% 100%;
+  animation: l16 3s infinite;
+}
+@keyframes l16 {
+  0%   {background-position:-150% 0,-150% 0}
+  66%  {background-position: 250% 0,-150% 0}
+  100% {background-position: 250% 0, 250% 0}
+}
+</style>
+
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Agent Create</li>
+        <li class="breadcrumb-item active">AGENT CREATE</li>
     </ol>
 
-    <div class="card mb-4 shadow w-75 mx-auto">
-        <div class="card-header bg-primary text-white">
-            <i class="fas fa-user"></i> Agent Creation Form
+    <div class="card mb-4 shadow w-75 mx-auto position-relative" id="form_card">
+        <div class="loader d-none" id="loader"></div>
+        <div class="overlay d-none" id="form_overlay"></div>
+        <div class="card-header">
+            <i class="fas fa-user"></i> AGENT CREATION FORM
         </div>
-        <div class="card-body">
+        <div class="card-body ">
             <form action="" method="" id="agent_form">
                 <!-- Optional: CSRF Token (for Laravel or frameworks) -->
 
 
                 <!-- Hidden Admin ID (if needed) -->
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-12 mb-3" hidden>
                         <label for="admin_id">Admin ID</label>
                         <input type="text" class="form-control" id="admin_id" name="admin_id" readonly>
                     </div>
@@ -64,7 +84,7 @@
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(res.data)
+            //console.log(res.data)
 
             if (res.data.status == "success") {
                 let id = res.data.data.id
@@ -132,7 +152,12 @@
             name: name,
         }
 
-        console.log(data);
+    // 🟡 Show loader, overlay, disable button
+    document.getElementById('loader').classList.remove('d-none');
+    document.getElementById('form_overlay').classList.remove('d-none');
+    let btn = event.target;
+    btn.disabled = true;
+
         try {
             let res = await axios.post('/admin/create/agent/store', data, {
                 headers: {
@@ -172,6 +197,10 @@
                 Swal.fire('Error', 'Something went wrong!', 'error');
                 console.error(error);
             }
+        }finally{
+         document.getElementById('loader').classList.add('d-none');
+        document.getElementById('form_overlay').classList.add('d-none');
+        btn.disabled = false;
         }
     }
 </script>

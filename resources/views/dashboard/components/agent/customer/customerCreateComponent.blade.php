@@ -1,20 +1,58 @@
+<style>
+.loader {
+    width: 80px;
+    height: 80px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #007bff; /* Blue loader */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    box-shadow: 0 0 20px white;
+    display: none; /* Default off */
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Loader overlay */
+.loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(238, 245, 241, 0.7);
+    z-index: 9;
+    display: none;
+}
+</style>
+
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Customer Add</li>
     </ol>
 
-    <div class="card mb-4 shadow w-100 mx-auto">
-        <div class="card-header bg-primary text-white">
+    <div class="card mb-4 shadow w-100 mx-auto position-relative">
+        <div class="loader-overlay"></div>
+       <div class="loader"></div>
+        <div class="card-header text-dark">
             <i class="fas fa-user-plus"></i> Agent: Add New Customer
         </div>
 
         <div class="card-body">
-            <form id="agent_customer_form" enctype="multipart/form-data" onsubmit="customerCreate(event)">
+            <form id="agent_customer_form" enctype="multipart/form-data">
                 <div class="row">
 
                     <!-- Agent Id (hidden) -->
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3" hidden>
                         <label>Agent Id</label>
                         <input type="number" class="form-control customer_create_by_agent_id" name="agent_id"
                             placeholder="" readonly>
@@ -185,7 +223,7 @@
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary px-4"
-                        onclick="agentSubmitCustomer(event)">Submit</button>
+                        onclick="agentSubmitCustomer(event)" id="customer_submit_btn">Create Customer</button>
                 </div>
             </form>
 
@@ -426,10 +464,28 @@
     // agent sumited customer 
     async function agentSubmitCustomer(event) {
         event.preventDefault();
+
+        document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        const loader = document.querySelector('.loader');
+        const overlay = document.querySelector('.loader-overlay');
+        const submitBtn = document.getElementById('customer_submit_btn');
+
+        // Show loader and disable button at start
+        loader.style.display = 'block';
+        overlay.style.display = 'block';
+        submitBtn.disabled = true;
+
+
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = "/agent/login";
+            return;
         }
+
+
+
+
         let errorFields = [
             "customer_name_error",
             "customer_email_error",
@@ -511,7 +567,13 @@
             isError = true;
         }
 
-        if (isError) return;
+         if (isError) {
+        // Hide loader and enable button if validation fails
+        loader.style.display = 'none';
+        overlay.style.display = 'none';
+        submitBtn.disabled = false;
+        return;
+       }
 
         //using form data 
         let formData = new FormData();
@@ -609,5 +671,9 @@
                 console.log("agent customer error", error);
             }
         }
+    //loader off    
+    loader.style.display = 'none';
+    overlay.style.display = 'none';
+    submitBtn.disabled = false;
     }
 </script>

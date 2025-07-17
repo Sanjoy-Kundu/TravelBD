@@ -24,6 +24,10 @@ class Package extends Model
      public function discounts()
     {
         return $this->hasMany(PackageDiscount::class);
-    }   
+    }  
+    
+    
+
+   
 
 }

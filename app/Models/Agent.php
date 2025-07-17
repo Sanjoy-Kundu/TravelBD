@@ -25,4 +25,6 @@ class Agent extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(AgentProfile::class);
     }
+
+
 }

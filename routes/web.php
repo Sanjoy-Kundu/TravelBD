@@ -57,6 +57,7 @@ Route::get('/customer/payment/status', [CustomerController::class, 'paymentPage'
 Route::get('/agent/dashboard', [AgentController::class, 'agentDashboard'])->name('agent.dashboard');
 Route::get('/agent/profile/create', [AgentProfileController::class, 'agentProfileCreate'])->name('agent.profile.create');
 Route::get('/agent/view/profile', [AgentProfileController::class, 'agentProfileViewPage']);
+Route::get('/agent/customer/lists', [AgentController::class, 'agentCustomerListPage']);
 
 // ====================== Staff Dashboard Routes ======================
 Route::get('/staff/dashboard', [StaffController::class, 'staffDashboardPage']);
@@ -248,10 +249,12 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
 
 //customoer create by agent
    Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategory']);
-    Route::post('/agent/package/lists/by/category/details', [CustomerController::class, 'agentPackageListByCategoryDetails']);
-    Route::post('/agent/package/lists/details', [CustomerController::class, 'packageListDetails']);
+   Route::post('/agent/package/lists/by/category/details', [CustomerController::class, 'agentPackageListByCategoryDetails']);
+   Route::post('/agent/package/lists/details', [CustomerController::class, 'packageListDetails']);
 
    Route::post('/agent/customer/create', [CustomerController::class, 'customerCreateByAgent']);
+    Route::get('/agent/customer/my-lists', [AgentController::class, 'allAgentCustomerLists']);
+  
 });
 
 

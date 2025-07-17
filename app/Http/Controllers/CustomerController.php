@@ -531,6 +531,7 @@ Customer create by agent
             }
 
             $customer = Customer::create([
+                'agent_id' => $request->agent_id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,

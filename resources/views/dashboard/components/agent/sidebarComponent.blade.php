@@ -19,7 +19,7 @@
             Add Customer
           </a>
 
-          <a class="nav-link" href="{{ url('/agent/customers') }}">
+          <a class="nav-link" href="{{ url('/agent/customer/lists') }}" target="_blank">
             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
             Customer List
           </a>

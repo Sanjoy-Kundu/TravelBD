@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Agent;
+use App\Models\Customer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -317,26 +318,36 @@ class AgentController extends Controller
     public function customerCreatePage()
     {
         try{
-            return view('pages.backend.agentCustomerCreatePage');
+            return view('pages.backend.agent.agentCustomerCreatePage');
         }catch(Exception $ex){
             return response()->json(["status" => "error", "message" => $ex->getMessage()]);
         }
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Agent Customer Lists page
      */
-    public function store(Request $request)
+    public function agentCustomerListPage()
     {
-        //
+         try{
+            return view('pages.backend.agent.agentCustomerLists');
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Customer lists by specefic agent id
      */
-    public function show(Agent $agent)
+    public function allAgentCustomerLists(Request $request)
     {
-        //
+        try{
+            $agent_id = Auth::id();
+            $customers = Customer::with('package')->where('agent_id', $agent_id)->get();
+            return response()->json(["status" => "success", "message" => "Customer lists", "customerLists" => $customers]);
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+      }
     }
 
     /**

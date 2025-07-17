@@ -178,7 +178,7 @@
                     <div class="col-12 mb-3">
                         <label>Country</label>
                         <input type="text" class="form-control" value="Bangladesh" readonly name="country"
-                            id="customer_country" placeholder="e.g. Malaysia-MAS">
+                            id="customer_country">
                         <span class="text-danger" id="customer_country_error_message"></span>
                     </div>
                 </div>
@@ -547,6 +547,7 @@
                 }
             });
             if (res.data.status === 'success') {
+                 //await getCustomerlists(); //refresh customer list
                 Swal.fire(res.data.message, '', 'success');
                 document.querySelector('.purpose_wise_package_section').classList.add('d-none');
 
@@ -561,7 +562,8 @@
                 document.querySelector('#customer_nid_number').value = '';
                 document.querySelector('.package_categories_dropdown').value = '';
                 document.querySelector('#agent_package_list').value = '';
-                document.querySelector('#customer_country').value = '';
+               // document.querySelector('#customer_country').value = '';
+               
             } else {
                 console.log(res.data)
             }

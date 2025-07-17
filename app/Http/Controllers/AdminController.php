@@ -8,6 +8,7 @@ use App\Models\Agent;
 use App\Models\Staff;
 use App\Mail\AdminOtp;
 use App\Models\Package;
+use App\Models\Customer;
 use Illuminate\Support\Str;
 use App\Mail\AgentTrashMail;
 use Illuminate\Http\Request;
@@ -42,9 +43,37 @@ class AdminController extends Controller
         try {
             return view('pages.backend.adminListPage');
         } catch (Exception $ex) {
-            return redirect()->back()->with('error', $ex->getMessage());
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
     }
+
+ /**
+  * Admin customer list page
+  */
+    public function adminCustomerMyListPage()
+    {
+        try {
+            return view('pages.backend.admin.onlyAdminCustomerListsPage');
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+    /**
+     * Admin Customer lists api
+     */
+    public function myCustomerLists(){
+        try{
+            $admin_id = Auth::id();
+            $customers = Customer::where('admin_id', $admin_id)->get();
+            return response()->json(['status' => 'success', 'customers' => $customers]);
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+
+
 
     /**
      * Dashboard Count

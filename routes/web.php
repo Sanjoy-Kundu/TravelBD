@@ -1,5 +1,5 @@
 <?php
-
+// https://css-loaders.com/flipping/
 use App\Models\PackageCategory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
@@ -70,6 +70,7 @@ Route::get('/admin/dashboard', [AdminController::class, 'adminDashboardPage']);
 Route::get('/admin/profile/create', [AdminProfileController::class, 'adminProfilePage']);
 Route::get('/admin/view/profile', [AdminProfileController::class, 'adminProfileViewPage']);
 Route::get('/admin/lists', [AdminController::class, 'adminListsPage']);
+Route::get('/admin/customer/lists', [AdminController::class, 'adminCustomerMyListPage']);
 
 Route::get('/staffs/lists', [AdminController::class, 'staffListsPage']);
 Route::get('/staff/create', [StaffController::class, 'staffCreatePage']);
@@ -200,6 +201,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
    Route::post('/admin/package/price/update', [CustomerController::class, 'packagePriceUpdateCustomer']);
    Route::post('/admin/package/apply-coupon', [CustomerController::class, 'packageApplyCoupon']);
    Route::post('/admin/customer/create', [CustomerController::class, 'customerCreateByAdmin']);
+
+   Route::get('/admin/customer/my-lists', [AdminController::class, 'myCustomerLists']);
 });
 
 

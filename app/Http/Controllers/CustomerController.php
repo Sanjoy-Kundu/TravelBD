@@ -490,6 +490,81 @@ public function agentPackageListByCategory(Request $request)
         }
     }
 
+
+
+
+/*
+Customer create by agent
+*/
+    public function customerCreateByAgent(Request $request){
+
+                $validator = Validator::make($request->all(), [
+                'agent_id' => 'required|exists:agents,id',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:customers,email',
+                'phone' => 'required|string|max:20',
+                'passport_no' => 'required|string|max:50',
+                'package_id' => 'required|exists:packages,id',
+                'package_category_id' => 'nullable|exists:package_categories,id',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Validation failed!',
+                        'errors' => $validator->errors(),
+                    ],
+                    422,
+                );
+            }
+
+
+
+        try{
+             $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $customer_image_Name = Str::random(20) . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->move(public_path('upload/dashboard/images/customers'), $customer_image_Name);
+            }
+
+            $customer = Customer::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'passport_no' => $request->passport_no,
+                'age'=> $request->age,
+                'date_of_birth' => $request->date_of_birth,
+                'gender' => $request->gender,
+                'nid_number' => $request->nid_number,
+                'package_id' => $request->package_id,
+                'package_category_id' => $request->package_category_id,
+                'image' => $imagePath,
+                'customer_slot' => 0,
+                'created_by_ip' => $request->ip()
+            ]);
+            //sending mail
+            Mail::to($customer->email)->send(new WellComeCustomerMail($customer));
+
+             return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Customer created successfully! A confirmation email has been sent to the customer with login instruction',
+                    'data' => $customer,
+                ],
+                200,
+            );
+            
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+
+
+
     /**
      * Working For Customer Dahsboard  customer auth info
      */

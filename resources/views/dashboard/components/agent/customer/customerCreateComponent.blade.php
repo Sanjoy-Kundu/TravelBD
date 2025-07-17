@@ -173,18 +173,19 @@
                     </div>
 
 
-                   
+
 
                     <div class="col-12 mb-3">
                         <label>Country</label>
-                        <input type="text" class="form-control" value="Bangladesh" readonly name="country" id="customer_country"
-                            placeholder="e.g. Malaysia-MAS">
+                        <input type="text" class="form-control" value="Bangladesh" readonly name="country"
+                            id="customer_country" placeholder="e.g. Malaysia-MAS">
                         <span class="text-danger" id="customer_country_error_message"></span>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-primary px-4" onclick="agentSubmitCustomer(event)">Submit</button>
+                    <button type="submit" class="btn btn-primary px-4"
+                        onclick="agentSubmitCustomer(event)">Submit</button>
                 </div>
             </form>
 
@@ -342,48 +343,50 @@
                     $('#package_duration').text(packageDetails.duration);
 
                     if (packageDetails.inclusions) {
-                            let inclusionsArray = packageDetails.inclusions.split(',');
-                            let list = '<ol type="i">';
-                            inclusionsArray.forEach(function(item) {
-                                list += `<li>${item.trim()}</li>`;
-                            });
-                            list += '</ol>';
-                            $('#package_inclusions').html(list);
-                        } else {
-                            $('#package_inclusions').text('-');
+                        let inclusionsArray = packageDetails.inclusions.split(',');
+                        let list = '<ol type="i">';
+                        inclusionsArray.forEach(function(item) {
+                            list += `<li>${item.trim()}</li>`;
+                        });
+                        list += '</ol>';
+                        $('#package_inclusions').html(list);
+                    } else {
+                        $('#package_inclusions').text('-');
                     }
 
 
                     if (packageDetails.exclusions) {
-                            let exclusionsArray = packageDetails.exclusions.split(',');
-                            let list = '<ol type="i">';
-                            exclusionsArray.forEach(function(item) {
-                                list += `<li>${item.trim()}</li>`;
-                            });
-                            list += '</ol>';
-                            $('#package_exclusions').html(list);
-                        } else {
-                            $('#package_exclusions').text('-');
+                        let exclusionsArray = packageDetails.exclusions.split(',');
+                        let list = '<ol type="i">';
+                        exclusionsArray.forEach(function(item) {
+                            list += `<li>${item.trim()}</li>`;
+                        });
+                        list += '</ol>';
+                        $('#package_exclusions').html(list);
+                    } else {
+                        $('#package_exclusions').text('-');
                     }
 
                     $('#package_visa_processing_time').text(packageDetails.visa_processing_time);
 
 
-                      if (packageDetails.documents_required) {
-                            let documents_requiredArray = packageDetails.documents_required.split(',');
-                            let list = '<ol type="i">';
-                            documents_requiredArray.forEach(function(item) {
-                                list += `<li>${item.trim()}</li>`;
-                            });
-                            list += '</ol>';
-                            $('#package_documents_required').html(list);
-                        } else {
-                            $('#package_documents_required').text('-');
+                    if (packageDetails.documents_required) {
+                        let documents_requiredArray = packageDetails.documents_required.split(',');
+                        let list = '<ol type="i">';
+                        documents_requiredArray.forEach(function(item) {
+                            list += `<li>${item.trim()}</li>`;
+                        });
+                        list += '</ol>';
+                        $('#package_documents_required').html(list);
+                    } else {
+                        $('#package_documents_required').text('-');
                     }
-               
-                    $('#package_seat_availability').text(parseInt(packageDetails.seat_availability));
+
+                    $('#package_seat_availability').text(parseInt(packageDetails
+                    .seat_availability));
                     $('#total_sold').text(parseInt(packageDetails.total_sold));
-                    $('#available_seat').text(parseInt(packageDetails.seat_availability - packageDetails.total_sold));
+                    $('#available_seat').text(parseInt(packageDetails.seat_availability -
+                        packageDetails.total_sold));
                     if (packageDetails.discounts && packageDetails.discounts.length > 0) {
                         let couponDiscounts = packageDetails.discounts.filter(discount => discount
                             .discount_mode === 'coupon');
@@ -404,7 +407,7 @@
                     } else {
                         $('#coupon_discount_info').text('No Coupon');
                     }
-                } 
+                }
 
 
                 //console.log(res.data);
@@ -420,14 +423,14 @@
 
 
 
-// agent sumited customer 
-function agentSubmitCustomer(event){
-    event.preventDefault();
-    let token = localStorage.getItem('token');
-    if(!token){
-        window.location.href = "/agent/login";
-    }
-    let errorFields = [
+    // agent sumited customer 
+    async function agentSubmitCustomer(event) {
+        event.preventDefault();
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "/agent/login";
+        }
+        let errorFields = [
             "customer_name_error",
             "customer_email_error",
             "customer_phone_error",
@@ -439,95 +442,170 @@ function agentSubmitCustomer(event){
             "customer_purpose_error",
             "customer_package_error",
             "customer_country_error_message",
-    ]
-    errorFields.forEach(id => {
+        ]
+        errorFields.forEach(id => {
             document.getElementById(id).innerText = '';
         });
-    let agent_id = document.querySelector('.customer_create_by_agent_id').value.trim();
-    let name = document.querySelector('#customer_name').value.trim();
-    let email = document.querySelector('#customer_email').value.trim();
-    let phone = document.querySelector('#customer_phone').value.trim();
-    let passport_no = document.querySelector('#customer_passport_no').value.trim();
-    let age = document.querySelector('#customer_age').value.trim();
-    let date_of_birth = document.querySelector('#customer_date_of_birth').value.trim();
-    let gender = document.querySelector('#customer_gender').value.trim();
-    let nid_number = document.querySelector('#customer_nid_number').value.trim();
-    let package_category_id = document.querySelector('.package_categories_dropdown').value.trim();
-    let package_id = document.querySelector('#agent_package_list').value.trim();
-    let country = document.querySelector('#customer_country').value.trim();
-    let isError = false;
+        let agent_id = document.querySelector('.customer_create_by_agent_id').value.trim();
+        let name = document.querySelector('#customer_name').value.trim();
+        let email = document.querySelector('#customer_email').value.trim();
+        let phone = document.querySelector('#customer_phone').value.trim();
+        let passport_no = document.querySelector('#customer_passport_no').value.trim();
+        let age = document.querySelector('#customer_age').value.trim();
+        let date_of_birth = document.querySelector('#customer_date_of_birth').value.trim();
+        let gender = document.querySelector('#customer_gender').value.trim();
+        let nid_number = document.querySelector('#customer_nid_number').value.trim();
+        let package_category_id = document.querySelector('.package_categories_dropdown').value.trim();
+        let package_id = document.querySelector('#agent_package_list').value.trim();
+        let country = document.querySelector('#customer_country').value.trim();
+        let isError = false;
 
-    if(!agent_id){
-        document.querySelector('.customer_create_by_agent_id_error').innerHTML = 'Agent ID is required';
-        isError = true;
-    }
+        if (!agent_id) {
+            document.querySelector('.customer_create_by_agent_id_error').innerHTML = 'Agent ID is required';
+            isError = true;
+        }
 
-    if(!name){
-        document.querySelector('#customer_name_error').innerHTML = 'Name is required';
-        isError = true;
-    }
+        if (!name) {
+            document.querySelector('#customer_name_error').innerHTML = 'Name is required';
+            isError = true;
+        }
 
-    if(!email){
-        document.querySelector('#customer_email_error').innerHTML = 'Email is required';
-        isError = true;
-    }
+        if (!email) {
+            document.querySelector('#customer_email_error').innerHTML = 'Email is required';
+            isError = true;
+        }
 
-    if(!phone){
-        document.querySelector('#customer_phone_error').innerHTML = 'Phone Number is required';
-        isError = true;
-    }
+        if (!phone) {
+            document.querySelector('#customer_phone_error').innerHTML = 'Phone Number is required';
+            isError = true;
+        }
 
-    if(!passport_no){
-        document.querySelector('#customer_passport_no_error').innerHTML = 'Passport Number is required';
-        isError = true;
-    }
+        if (!passport_no) {
+            document.querySelector('#customer_passport_no_error').innerHTML = 'Passport Number is required';
+            isError = true;
+        }
 
-    if(!age){
-        document.querySelector('#customer_age_error').innerHTML = 'Age is required';
-        isError = true;
-     }
+        if (!age) {
+            document.querySelector('#customer_age_error').innerHTML = 'Age is required';
+            isError = true;
+        }
 
-     if(!date_of_birth){
-        document.querySelector('#customer_date_of_birth_error').innerHTML = 'Date of Birth is required';
-        isError = true;
-     }
-     if(!gender){
-        document.querySelector('#customer_gender_error').innerHTML = 'Gender is required';
-        isError = true;
-     }
-     if(!nid_number){
-        document.querySelector('#customer_nid_number_error').innerHTML = 'NID Number is required';
-        isError = true;
-     }
-     if(!package_category_id){
-        document.querySelector('#customer_purpose_error').innerHTML = 'Package Category is required';
-        isError = true;
-    }
-    if(!package_id){
-        document.querySelector('#agent_package_list').innerHTML = 'Package is required';
-        isError = true;
-    }
-     
-    if(isError) return;
+        if (!date_of_birth) {
+            document.querySelector('#customer_date_of_birth_error').innerHTML = 'Date of Birth is required';
+            isError = true;
+        }
+        if (!gender) {
+            document.querySelector('#customer_gender_error').innerHTML = 'Gender is required';
+            isError = true;
+        }
+        if (!nid_number) {
+            document.querySelector('#customer_nid_number_error').innerHTML = 'NID Number is required';
+            isError = true;
+        }
+        if (!package_category_id) {
+            document.querySelector('#customer_purpose_error').innerHTML = 'Package Category is required';
+            isError = true;
+        }
+        if (!package_id) {
+            document.querySelector('#customer_package_error').innerText = 'Package is required';
+            isError = true;
+        }
 
-    //using form data 
-    let formData = new FormData();
-    let customerImageFile = document.getElementById('customer_image')?.files?.[0];
-     if (customerImageFile) {
+        if (isError) return;
+
+        //using form data 
+        let formData = new FormData();
+        let customerImageFile = document.getElementById('customer_image')?.files?.[0];
+        if (customerImageFile) {
             formData.append('image', customerImageFile);
         }
-     let data = {
-        agent_id:agent_id,
-        name:name,
-        email:email,
-        phone:phone,
-        date_of_birth:date_of_birth,
-        gender:gender,
-        nid_number:nid_number,
-        package_category_id:package_category_id,
-        package_id:package_id,
-        country:country
-     }   
-     console.log(data);
-}
+        let data = {
+            agent_id: agent_id,
+            name: name,
+            email: email,
+            phone: phone,
+            passport_no: passport_no,
+            age: age,
+            date_of_birth: date_of_birth,
+            gender: gender,
+            nid_number: nid_number,
+            package_category_id: package_category_id,
+            package_id: package_id,
+            country: country
+        }
+        //console.log(data);
+        for (let key in data) {
+            if (data[key] !== undefined && data[key] !== null) {
+                formData.append(key, data[key]);
+            }
+        }
+        try {
+            let res = await axios.post('/agent/customer/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            if (res.data.status === 'success') {
+                Swal.fire(res.data.message, '', 'success');
+                document.querySelector('.purpose_wise_package_section').classList.add('d-none');
+
+                //refresh inpur field 
+                document.querySelector('#customer_name').value = '';
+                document.querySelector('#customer_email').value = '';
+                document.querySelector('#customer_phone').value = '';
+                document.querySelector('#customer_passport_no').value = '';
+                document.querySelector('#customer_age').value = '';
+                document.querySelector('#customer_date_of_birth').value = '';
+                document.querySelector('#customer_gender').value = '';
+                document.querySelector('#customer_nid_number').value = '';
+                document.querySelector('.package_categories_dropdown').value = '';
+                document.querySelector('#agent_package_list').value = '';
+                document.querySelector('#customer_country').value = '';
+            } else {
+                console.log(res.data)
+            }
+
+        } catch (error) {
+            if (error.response && error.response.status === 422) {
+                const errors = error.response.data.errors;
+
+                if (errors.name) {
+                    document.querySelector('#customer_name_error').innerText = errors.name[0];
+                }
+                if (errors.email) {
+                    document.querySelector('#customer_email_error').innerText = errors.email[0];
+                }
+                if (errors.phone) {
+                    document.querySelector('#customer_phone_error').innerText = errors.phone[0];
+                }
+                if (errors.passport_no) {
+                    document.querySelector('#customer_passport_no_error').innerText = errors.passport_no[0];
+                }
+                if (errors.age) {
+                    document.querySelector('#customer_age_error').innerText = errors.age[0];
+                }
+                if (errors.date_of_birth) {
+                    document.querySelector('#customer_date_of_birth_error').innerText = errors.date_of_birth[0];
+                }
+                if (errors.gender) {
+                    document.querySelector('#customer_gender_error').innerText = errors.gender[0];
+                }
+                if (errors.nid_number) {
+                    document.querySelector('#customer_nid_number_error').innerText = errors.nid_number[0];
+                }
+                if (errors.package_category_id) {
+                    document.querySelector('#customer_purpose_error').innerText = errors.package_category_id[0];
+                }
+                if (errors.package_id) {
+                    document.querySelector('#customer_package_error').innerText = errors.package_id[0];
+                }
+                if (errors.agent_id) {
+                    document.querySelector('.customer_create_by_agent_id_error').innerText = errors.agent_id[0];
+                }
+            } else {
+                console.log("agent customer error", error);
+            }
+        }
+    }
 </script>

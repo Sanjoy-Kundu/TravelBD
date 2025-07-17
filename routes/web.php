@@ -251,7 +251,7 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
     Route::post('/agent/package/lists/by/category/details', [CustomerController::class, 'agentPackageListByCategoryDetails']);
     Route::post('/agent/package/lists/details', [CustomerController::class, 'packageListDetails']);
 
-
+   Route::post('/agent/customer/create', [CustomerController::class, 'customerCreateByAgent']);
 });
 
 

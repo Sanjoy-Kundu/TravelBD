@@ -80,7 +80,7 @@ Route::get('/agent/create', [AgentController::class, 'agentCreatePage']);
 Route::get('/agent/lists', [AdminController::class, 'agentListsPage']);
 
 // ===================== customer create page =======================
-Route::get('/admin/create/customer', [AdminController::class, 'customerCreatePage']);
+Route::get('/admin/create/customer', [AdminController::class, 'adminCustomerCreatePage']);
 Route::get('agent/customer/create', [AgentController::class, 'customerCreatePage']);
 
 
@@ -253,12 +253,14 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
 
 
 //customoer create by agent
-   Route::post('/agent/package/lists/by/category', [CustomerController::class, 'agentPackageListByCategory']);
+   Route::post('/agent/package/lists/by/category', [CustomerController::class, 'packageListByCategory']);
    Route::post('/agent/package/lists/by/category/details', [CustomerController::class, 'agentPackageListByCategoryDetails']);
    Route::post('/agent/package/lists/details', [CustomerController::class, 'packageListDetails']);
 
    Route::post('/agent/customer/create', [CustomerController::class, 'customerCreateByAgent']);
-    Route::get('/agent/customer/my-lists', [AgentController::class, 'allAgentCustomerLists']);
+   Route::get('/agent/customer/my-lists', [AgentController::class, 'allAgentCustomerLists']);
+   Route::post('/agent/customer/details/by/id', [CustomerController::class, 'CustomerDetailsById']);
+
   
 });
 

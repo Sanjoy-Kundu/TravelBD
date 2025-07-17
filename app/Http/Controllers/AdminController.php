@@ -1179,7 +1179,7 @@ public function adminListsTrashData()
     Customer create page
     ================================================
     */
-    public function customerCreatePage(){
+    public function adminCustomerCreatePage(){
         try{
             return view('pages.backend.customerCreatePage');
         }catch(Exception $ex){

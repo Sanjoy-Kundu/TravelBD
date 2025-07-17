@@ -35,7 +35,7 @@
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 getCustomerlists();
@@ -122,11 +122,18 @@ async function getCustomerlists() {
     }
 
     // View Button
-    $(document).on('click', '.agent_customer_view_btn', async function () {
+    $(document).on('click', '.agent_customer_view_btn',async function () {
         let id = $(this).data('id');
+        //console.log(id);
         await fillCustomerViewModal(id);
-        const modal = new bootstrap.Modal(document.getElementById('agentCustomerViewModal'));
-        modal.show();
+        $('#viewCustomerModal').modal('show');
+    });
+
+    // Delete Button
+    $(document).on('click', '.agent_customer_delete_btn', async function () {
+        let id = $(this).data('id');
+        await deleteCustomer(id);
+       
     });
 
     // Edit Button

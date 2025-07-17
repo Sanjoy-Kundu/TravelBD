@@ -1,4 +1,4 @@
-<!-- উদাহরণ সহ placeholder যুক্ত -->
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
@@ -487,6 +487,7 @@ async function getUserInfo() {
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = "/admin/login";
+            return;
         }
         try {
             let res = await axios.get("/user/details/admin", {
@@ -602,7 +603,7 @@ document.getElementById('package_categories_dropdown').addEventListener('change'
             const select = document.getElementById('customer_create_component_available_packages_dropdown');
 
             try {
-                const res = await axios.post('/agent/package/lists/by/category', {
+                const res = await axios.post('/admin/package/lists/by/category', {
                     category_id: category_id
                 }, {
                     headers: {

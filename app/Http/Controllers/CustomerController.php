@@ -82,7 +82,7 @@ class CustomerController extends Controller
 
 
     /**
-     *Pcakge list by category admin
+     *Pcakge list by category admin and agent
      */
 public function packageListByCategory(Request $request)
 {
@@ -726,6 +726,20 @@ public function paymentPage(){
 
 
 
+/**
+ * Customer package details by admin and agent
+ */
+public function CustomerDetailsById(Request $request){
+    try{
+        $id = $request->id; 
+        $customer = Customer::where('id', $id)->first();
+        return response()->json(['status' => 'success', 'message' => 'Customer Details', 'customer' => $customer], 200);
+
+    }catch(Exception $ex){
+        return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+    }
+
+}
 
 
 

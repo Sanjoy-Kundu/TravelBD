@@ -71,6 +71,7 @@ Route::get('/admin/profile/create', [AdminProfileController::class, 'adminProfil
 Route::get('/admin/view/profile', [AdminProfileController::class, 'adminProfileViewPage']);
 Route::get('/admin/lists', [AdminController::class, 'adminListsPage']);
 Route::get('/admin/customer/lists', [AdminController::class, 'adminCustomerMyListPage']);
+Route::get('/admin/customer/all/lists', [AdminController::class, 'adminCustomerAllListPage']);
 
 Route::get('/staffs/lists', [AdminController::class, 'staffListsPage']);
 Route::get('/staff/create', [StaffController::class, 'staffCreatePage']);
@@ -203,6 +204,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
    Route::post('/admin/customer/create', [CustomerController::class, 'customerCreateByAdmin']);
 
    Route::get('/admin/customer/my-lists', [AdminController::class, 'myCustomerLists']);
+   Route::get('/admin/customers/lists', [AdminController::class, 'AllCustomerLists']);
 });
 
 

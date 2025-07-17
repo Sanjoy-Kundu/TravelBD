@@ -59,6 +59,16 @@ class AdminController extends Controller
         }
     }
 
+
+    public function adminCustomerAllListPage()
+    {
+        try {
+            return view('pages.backend.admin.adminCustomerListsPage');
+        } catch (Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
     /**
      * Admin Customer lists api
      */
@@ -66,6 +76,16 @@ class AdminController extends Controller
         try{
             $admin_id = Auth::id();
             $customers = Customer::where('admin_id', $admin_id)->get();
+            return response()->json(['status' => 'success', 'customers' => $customers]);
+        }catch(Exception $ex){
+            return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
+        }
+    }
+
+    public function AllCustomerLists(){
+        try{
+   
+            $customers = Customer::all();
             return response()->json(['status' => 'success', 'customers' => $customers]);
         }catch(Exception $ex){
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);

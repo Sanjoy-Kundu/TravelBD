@@ -78,7 +78,7 @@
                                      <a class="nav-link" href="{{ url('/admin/customer/create') }}" target="_blank">Add
                                          Customer</a>
                                      <a class="nav-link" href="{{url('/admin/customer/lists')}}">My Customer List</a>
-                                     <a class="nav-link" href="">Customer List</a>
+                                     <a class="nav-link" href="{{url('/admin/customer/all/lists')}}">Customer List</a>
                                  </nav>
                              </div>
 

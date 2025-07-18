@@ -1187,4 +1187,22 @@ public function adminListsTrashData()
         }
     }
 
+
+
+
+    /**
+     * Admin customre view
+     */
+    public function customerViewByRandom(Request $request){
+        try{
+            $customer = Customer::where('id', $request->id)->first();
+            if(!$customer){
+                return response()->json(["status" => "error", "message" => "Customer not found"]);
+            }
+            return response()->json(["status" => "success", "customer" => $customer]);
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
+    }
+
 }

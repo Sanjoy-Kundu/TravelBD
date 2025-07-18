@@ -128,50 +128,49 @@ async function adminCustomerListLoad() {
     $(document).off('click', '.customer_view_btn').on('click', '.customer_view_btn', async function () {
         const id = $(this).data('id');
         await fillCustomerViewModal(id);
-        const modal = new bootstrap.Modal(document.getElementById('customerViewModal'));
-        modal.show();
+        $('#customerViewModal').modal('show');
     });
 
     // Edit Customer
-    $(document).off('click', '.customer_edit_btn').on('click', '.customer_edit_btn', async function () {
-        const id = $(this).data('id');
-        await fillCustomerEditModal(id);
-        const modal = new bootstrap.Modal(document.getElementById('customerEditModal'));
-        modal.show();
-    });
+    // $(document).off('click', '.customer_edit_btn').on('click', '.customer_edit_btn', async function () {
+    //     const id = $(this).data('id');
+    //     await fillCustomerEditModal(id);
+    //     const modal = new bootstrap.Modal(document.getElementById('customerEditModal'));
+    //     modal.show();
+    // });
 
-    // Delete Customer
-    $(document).off('click', '.customer_delete_btn').on('click', '.customer_delete_btn', async function () {
-        const id = $(this).data('id');
+    // // Delete Customer
+    // $(document).off('click', '.customer_delete_btn').on('click', '.customer_delete_btn', async function () {
+    //     const id = $(this).data('id');
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to undo this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const res = await axios.post('/admin/customer/delete', { id }, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
+    //     Swal.fire({
+    //         title: 'Are you sure?',
+    //         text: "You won't be able to undo this!",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!',
+    //         cancelButtonText: 'Cancel'
+    //     }).then(async (result) => {
+    //         if (result.isConfirmed) {
+    //             try {
+    //                 const res = await axios.post('/admin/customer/delete', { id }, {
+    //                     headers: { Authorization: `Bearer ${token}` }
+    //                 });
 
-                    if (res.data.status === 'success') {
-                        Swal.fire('Deleted!', res.data.message, 'success');
-                        await adminCustomerListLoad();
-                    } else {
-                        Swal.fire('Failed!', res.data.message || 'Failed to delete.', 'error');
-                    }
-                } catch (error) {
-                    Swal.fire('Error!', 'Something went wrong!', 'error');
-                }
-            }
-        });
-    });
+    //                 if (res.data.status === 'success') {
+    //                     Swal.fire('Deleted!', res.data.message, 'success');
+    //                     await adminCustomerListLoad();
+    //                 } else {
+    //                     Swal.fire('Failed!', res.data.message || 'Failed to delete.', 'error');
+    //                 }
+    //             } catch (error) {
+    //                 Swal.fire('Error!', 'Something went wrong!', 'error');
+    //             }
+    //         }
+    //     });
+    // });
 }
 
 </script>

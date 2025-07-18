@@ -205,6 +205,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
    Route::get('/admin/customer/my-lists', [AdminController::class, 'myCustomerLists']);
    Route::get('/admin/customers/lists', [AdminController::class, 'AllCustomerLists']);
+
+
+
+   //admin customer view radom
+   Route::post('/admin/customer/view/by/random', [AdminController::class, 'customerViewByRandom']);
 });
 
 

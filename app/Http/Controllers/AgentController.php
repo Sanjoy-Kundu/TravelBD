@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use PhpParser\ErrorHandler\Throwing;
 
 class AgentController extends Controller
 {
@@ -353,24 +354,72 @@ class AgentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Agent $agent)
+    public function allAgentCustomerTrashLists(Agent $agent)
     {
-        //
+        try{
+            $agent_id = Auth::id();
+            $trashLists = Customer::onlyTrashed()->where('agent_id', $agent_id)->get();
+            return response()->json(["status" => "success", "message" => "Customer lists", "trashCustomerLists" => $trashLists]);
+        }catch(Exception $ex){
+            return response()->json(["status" => "error", "message" => $ex->getMessage()]);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     *Agent customre restore
      */
-    public function update(Request $request, Agent $agent)
-    {
-        //
+public function AgentCustomerTrashRestore(Request $request)
+{
+    try {
+        $customer = Customer::withTrashed()->find($request->id);
+
+        if (!$customer) {
+            return response()->json(["status" => "error", "message" => "Customer not found."]);
+        }
+
+        $customer->restore();
+
+        return response()->json(["status" => "success", "message" => "Customer restored successfully."]);
+
+    } catch (Exception $ex) {
+        return response()->json(["status" => "error", "message" => $ex->getMessage()]);
     }
+}
+
 
     /**
-     * Remove the specified resource from storage.
+     * Agent Customre Permanet delete
      */
-    public function destroy(Agent $agent)
-    {
-        //
+public function AgentCustomerPermanentDelete(Request $request)
+{
+    try {
+        $customer = Customer::onlyTrashed()->where('id', $request->id)->where('agent_id', Auth::user()->id)->first();
+
+        if (!$customer) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Customer not found in trash.'
+            ]);
+        }
+
+  
+        if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
+            unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
+        }
+
+        $customer->forceDelete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Customer permanently deleted.'
+        ]);
+
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
     }
+}
+
 }

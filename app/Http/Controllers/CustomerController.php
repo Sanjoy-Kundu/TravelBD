@@ -743,7 +743,7 @@ public function CustomerDetailsById(Request $request){
 
 
 
-
+//customer details update by id agent 
 public function agentCustomerUpdateById(Request $request)
 {
     $customerId = $request->id;
@@ -831,6 +831,28 @@ public function agentCustomerUpdateById(Request $request)
         'message' => 'Customer updated successfully',
     ]);
 }
+
+
+//customer delete by agent
+public function agentCustomerDeleteById(Request $request){
+    $customer = Customer::where('id', $request->id)
+                        ->where('agent_id', auth()->id())
+                        ->first();
+
+    if(!$customer){
+        return response()->json(['status' => 'error', 'message' => 'Customer not found or unauthorized'], 404);
+    }
+    
+    $customer->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Customer deleted successfully',
+    ]);
+}
+
+
+
 
 
 

@@ -261,6 +261,7 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
    Route::get('/agent/customer/my-lists', [AgentController::class, 'allAgentCustomerLists']);
    Route::post('/agent/customer/details/by/id', [CustomerController::class, 'CustomerDetailsById']);
    Route::post('/agent/customer/update/by/id', [CustomerController::class, 'agentCustomerUpdateById']);
+   Route::post('/agent/customer/delete/by/id', [CustomerController::class, 'agentCustomerDeleteById']);
 
   
 });

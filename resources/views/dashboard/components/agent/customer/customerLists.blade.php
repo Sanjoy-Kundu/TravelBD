@@ -5,7 +5,7 @@
     </ol>
 
     <div class="card mb-4 shadow w-100 mx-auto">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header">
             <i class="fas fa-user-plus"></i>Customer Lists
         </div>
 
@@ -130,11 +130,11 @@ async function getCustomerlists() {
     });
 
     // Delete Button
-    $(document).on('click', '.agent_customer_delete_btn', async function () {
-        let id = $(this).data('id');
-        await deleteCustomer(id);
+    // $(document).on('click', '.agent_customer_delete_btn', async function () {
+    //     let id = $(this).data('id');
+    //     await deleteCustomer(id);
        
-    });
+    // });
 
     // Edit Button
     $(document).on('click', '.agent_customer_edit_btn', async function () {
@@ -158,13 +158,14 @@ async function getCustomerlists() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.post('/agent/customer/delete', { id: id }, {
+                    const res = await axios.post('/agent/customer/delete/by/id', { id: id }, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
 
                     if (res.data.status === 'success') {
+                        await getCustomerlists(); // Reload list
                         Swal.fire('Deleted!', res.data.message, 'success');
                         await getCustomerlists(); // Reload list
                     } else {

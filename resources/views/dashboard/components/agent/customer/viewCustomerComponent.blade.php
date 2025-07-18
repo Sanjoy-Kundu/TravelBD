@@ -34,14 +34,21 @@
                             <tr>
                                 <th>Date of Birth</th>
                                 <td class="view_dob">---</td>
-                                <th>Package ID</th>
-                                <td class="view_package_id">---</td>
+                                 <th>Created At</th>
+                                <td class="view_created_at">---</td>
                             </tr>
                             <tr>
-                                <th>Package Category</th>
+                                <th>Category</th>
                                 <td class="view_package_category_id">---</td>
-                                <th>Created At</th>
-                                <td class="view_created_at">---</td>
+                                <th>Package</th>
+                                <td class="view_package_id">---</td>
+                            </tr>
+
+                            <tr>
+                                <th>Approval</th>
+                                <td class="view_package_approval_status">---</td>
+                                <th>Payment Method</th>
+                                <td class="view_package_payment_method">---</td>
                             </tr>
                         </tbody>
                     </table>
@@ -73,6 +80,8 @@
             });
             if (res.data.status === 'success') {
                 let customer = res.data.customer;
+                console.log(customer.approval)
+                console.log(customer)
                 document.querySelector('.view_name').innerText = customer.name ?? '---';
                 document.querySelector('.view_email').innerText = customer.email ?? '---';
                 document.querySelector('.view_phone').innerText = customer.phone ?? '---';
@@ -80,11 +89,13 @@
                 document.querySelector('.view_nid').innerText = customer.nid_number ?? '---';
                 document.querySelector('.view_gender').innerText = customer.gender ?? '---';
                 document.querySelector('.view_dob').innerText = customer.date_of_birth ?? '---';
-                document.querySelector('.view_package_id').innerText = customer.package_id ?? '---';
-                document.querySelector('.view_package_category_id').innerText = customer.package_category_id ?? '---';
+                document.querySelector('.view_package_id').innerText = customer.package.title ?? '---';
+                document.querySelector('.view_package_category_id').innerText = customer.package_category.name ?? '---';
+                document.querySelector('.view_package_payment_method').innerText = customer.payment_method === null ? 'Pending' : customer.payment_method;
+                document.querySelector('.view_package_approval_status').innerText = customer.approval ? customer.approval : 'N/A';
 
                 // Optional: format date
-                const createdAt = customer.created_at ? new Date(data.created_at).toLocaleString() : '---';
+                const createdAt = customer.created_at ? new Date(customer.created_at).toLocaleString() : '---';
                 document.querySelector('.view_created_at').innerText = createdAt;
             }
         } catch (error) {

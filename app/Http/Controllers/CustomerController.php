@@ -732,7 +732,7 @@ public function paymentPage(){
 public function CustomerDetailsById(Request $request){
     try{
         $id = $request->id; 
-        $customer = Customer::where('id', $id)->first();
+        $customer = Customer::with('packageCategory','package')->where('id', $id)->first();
         return response()->json(['status' => 'success', 'message' => 'Customer Details', 'customer' => $customer], 200);
 
     }catch(Exception $ex){

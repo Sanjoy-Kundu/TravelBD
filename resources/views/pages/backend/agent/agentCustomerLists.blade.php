@@ -6,4 +6,5 @@
     @include('dashboard.components.agent.footerComponent')
         {{-- modal --}}
     @include('dashboard.components.agent.customer.viewCustomerComponent')
+    @include('dashboard.components.agent.customer.customreEditComponent')
 @endsection

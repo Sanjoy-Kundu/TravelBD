@@ -140,8 +140,7 @@ async function getCustomerlists() {
     $(document).on('click', '.agent_customer_edit_btn', async function () {
         let id = $(this).data('id');
         await fillCustomerEditModal(id);
-        const modal = new bootstrap.Modal(document.getElementById('agentCustomerEditModal'));
-        modal.show();
+        $('#agentCustomerEditModal').modal('show');
     });
 
     // Delete Button (with confirmation)

@@ -744,6 +744,100 @@ public function CustomerDetailsById(Request $request){
 
 
 
+public function agentCustomerUpdateById(Request $request)
+{
+    $customerId = $request->id;
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'required|string|max:20',
+        'email' => 'nullable|email|max:255|unique:customers,email,' . $customerId, 
+        'passport_no' => 'required|string|max:50',
+        'age' => 'nullable|integer',
+        'date_of_birth' => 'nullable|date',
+        'gender' => 'nullable|in:male,female,other',
+        'nid_number' => 'nullable|string|max:255',
+        'package_category_id' => 'required|exists:package_categories,id',
+        'package_id' => 'required|exists:packages,id',
+        'country' => 'nullable|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $customer = Customer::where('id', $customerId)
+                        ->where('agent_id', auth()->id())
+                        ->first();
+
+    if (!$customer) {
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'Customer not found or unauthorized'
+        ], 404);
+    }
+
+
+    $noChange = true;
+
+    $fieldsToCheck = [
+        'name', 'phone', 'email', 'passport_no', 'age', 'date_of_birth', 'gender',
+        'nid_number', 'package_category_id', 'package_id', 'country'
+    ];
+
+    foreach ($fieldsToCheck as $field) {
+        if ($request->input($field) != $customer->$field) {
+            $noChange = false;
+            break;
+        }
+    }
+
+    if ($request->hasFile('image')) {
+        $noChange = false;
+    }
+
+    if ($noChange) {
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'No changes detected. Please update any field before submitting.'
+        ], 422);
+    }
+
+    // ডাটা আপডেট করো
+    $customer->name = $request->name;
+    $customer->phone = $request->phone;
+    $customer->email = $request->email;
+    $customer->passport_no = $request->passport_no;
+    $customer->age = $request->age;
+    $customer->date_of_birth = $request->date_of_birth;
+    $customer->gender = $request->gender;
+    $customer->nid_number = $request->nid_number;
+    $customer->package_category_id = $request->package_category_id;
+    $customer->package_id = $request->package_id;
+    $customer->country = $request->country;
+
+    if ($request->hasFile('image')) {
+        if ($customer->image && file_exists(public_path('upload/dashboard/images/customers/' . $customer->image))) {
+            unlink(public_path('upload/dashboard/images/customers/' . $customer->image));
+        }
+
+        $image = $request->file('image');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('upload/dashboard/images/customers/'), $imageName);
+        $customer->image = $imageName;
+    }
+
+    $customer->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Customer updated successfully',
+    ]);
+}
+
+
+
+
+
+
+
 
 
 }

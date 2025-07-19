@@ -5,4 +5,5 @@
     @include('dashboard.components.admin.customer.adminCustomerListsComponent')
     @include('dashboard.components.admin.footerComponent')
     @include('dashboard.components.admin.customer.customerViewModalComponent')
+    @include('dashboard.components.admin.customer.customerEditModalComponent')
 @endsection

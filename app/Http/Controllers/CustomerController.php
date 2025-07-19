@@ -110,7 +110,7 @@ public function packageListByCategory(Request $request)
                 ->exists();
 
             if($seatCheck){
-                return response()->json(['status' => 'error','message' => 'Application Seat totally Full.'], 404); 
+                return response()->json(['status' => 'error','message' => 'Application Seat totally Full. So You Can not Apply'], 404); 
             }    
 
             return response()->json([

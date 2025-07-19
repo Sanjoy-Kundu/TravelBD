@@ -11,10 +11,12 @@
           <table class="table table-bordered table-striped">
             <tbody>
               <tr>
-                <th>ID</th>
-                <td class="id">---</td>
-                <th>Name</th>
+                 <th>Name</th>
                 <td class="name">---</td>
+                <th>Image</th>
+                <td colspan="3" class="image">
+                  <img src="" alt="Customer Image" class="img-fluid rounded customer_image" style="max-height: 150px; max-width: 150px; border:1px solid grey; padding:5px; border-radius:50%;" />
+                </td>
               </tr>
               <tr>
                 <th>Email</th>
@@ -112,12 +114,7 @@
                 <th>Created IP</th>
                 <td class="created_by_ip">---</td>
               </tr>
-              <tr>
-                <th>Image</th>
-                <td colspan="3" class="image">
-                  <img src="" alt="Customer Image" class="img-fluid rounded" style="max-height: 200px;" />
-                </td>
-              </tr>
+
             </tbody>
           </table>
         </div>
@@ -143,6 +140,11 @@
             let res = await axios.post('/admin/customer/view/by/random',{id:id},{headers:{Authorization: `Bearer ${token}`}})
             if(res.data.status == 'success'){
                 console.log(res.data.customer)
+                if(res.data.customer.image){
+                  document.querySelector('.customer_image').src = `/upload/dashboard/images/customers/${res.data.customer.image}`
+                }else{
+                  document.querySelector('.customer_image').src = `/upload/dashboard/images/customers/default.jpg`
+                }
                 document.querySelector('.name').innerHTML = res.data.customer.name || 'N/A'
 
                 document.querySelector('.email').innerHTML = res.data.customer.email || 'N/A'
@@ -155,9 +157,9 @@
                 document.querySelector('.date_of_birth').innerHTML = res.data.customer.date_of_birth || 'N/A'
 
                 document.querySelector('.customer_slot').innerHTML = parseInt(res.data.customer.customer_slot) || 'N/A'
-                document.querySelector('.package_category_id').innerHTML = res.data.customer.package_category_id || 'N/A'
+                document.querySelector('.package_category_id').innerHTML = res.data.customer.package_category.name || 'N/A'
 
-                document.querySelector('.package_id').innerHTML = res.data.customer.package_id || 'N/A'
+                document.querySelector('.package_id').innerHTML = res.data.customer.package.title || 'N/A'
                 document.querySelector('.approval').innerHTML = res.data.customer.approval || 'N/A'
 
                 document.querySelector('.payment_method').innerHTML = res.data.customer.payment_method || 'N/A'
@@ -178,10 +180,10 @@
                 document.querySelector('.duration').innerHTML = res.data.customer.duration || 'N/A'
                 document.querySelector('.seat_availability').innerHTML = res.data.customer.seat_availability || 'N/A'
 
-                document.querySelector('.mrp').innerHTML = res.data.customer.mrp || 'N/A'
-                document.querySelector('.package_discounted_price').innerHTML = res.data.customer.package_discounted_price || 'N/A'
+                document.querySelector('.mrp').innerHTML = parseInt(res.data.customer.mrp) || 'N/A'
+                document.querySelector('.package_discounted_price').innerHTML = parseInt(res.data.customer.package_discounted_price) || 'N/A'
 
-                document.querySelector('.passenger_price').innerHTML = res.data.customer.passenger_price || 'N/A'
+                document.querySelector('.passenger_price').innerHTML = parseInt(res.data.customer.passenger_price) || 'N/A'
                 document.querySelector('.coupon_code').innerHTML = res.data.customer.coupon_code || 'N/A'
 
                 document.querySelector('.inclusions').innerHTML = res.data.customer.inclusions || 'N/A'
@@ -189,11 +191,7 @@
 
                 document.querySelector('.documents_required').innerHTML = res.data.customer.documents_required || 'N/A'
                 document.querySelector('.payment').innerHTML = res.data.customer.payment || 'N/A'
-
                 document.querySelector('.created_by_ip').innerHTML = res.data.customer.created_by_ip || 'N/A'
-
-
-
             }else{
                 consolee.log('error',res.data)
             }

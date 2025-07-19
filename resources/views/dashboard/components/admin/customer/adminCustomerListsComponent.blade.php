@@ -86,8 +86,8 @@ async function adminCustomerListLoad() {
                 customers.forEach((cus, index) => {
                     console.log(cus);
                         const imgSrc = cus.image
-                            ? `/uploads/customer/${cus.image}`
-                            : `/upload/dashboard/images/customer/default.png`;
+                            ? `/upload/dashboard/images/customers/${cus.image}`
+                            : `/upload/dashboard/images/customers/default.jpg`;
 
                         const tr = `
                             <tr>
@@ -132,12 +132,11 @@ async function adminCustomerListLoad() {
     });
 
     // Edit Customer
-    // $(document).off('click', '.customer_edit_btn').on('click', '.customer_edit_btn', async function () {
-    //     const id = $(this).data('id');
-    //     await fillCustomerEditModal(id);
-    //     const modal = new bootstrap.Modal(document.getElementById('customerEditModal'));
-    //     modal.show();
-    // });
+    $(document).off('click', '.customer_edit_btn').on('click', '.customer_edit_btn', async function () {
+        const id = $(this).data('id');
+        await fillCustomerEditModal(id);
+        $('#customerEditModal').modal('show');
+    });
 
     // // Delete Customer
     // $(document).off('click', '.customer_delete_btn').on('click', '.customer_delete_btn', async function () {

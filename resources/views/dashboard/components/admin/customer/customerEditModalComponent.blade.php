@@ -14,10 +14,36 @@
                     <div class="row g-3">
 
                         <!-- Name -->
-                        <div class="col-md-6">
+                        <div class="col-md-12" hidden>
                             <label for="customer_name" class="form-label fw-semibold">Customer Id <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="customer_id" name="id" required>
+                            <div class="invalid-feedback" id="customer_id_error"></div>
+                        </div>
+
+                        <div class="col-md-12" hidden>
+                            <label for="customer_name" class="form-label fw-semibold">Admin Id <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="admin_id" name="admin_id" required>
+                            <div class="invalid-feedback" id="customer_id_error"></div>
+                        </div>
+                        <div class="col-md-12" hidden>
+                            <label for="customer_name" class="form-label fw-semibold">Agent Id <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="agent_id" name="agent_id" required>
+                            <div class="invalid-feedback" id="customer_id_error"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="customer_name" class="form-label fw-semibold">Customer Added By <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="added_by_name" name="" required readonly>
+                            <div class="invalid-feedback" id="customer_id_error"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customer_name" class="form-label fw-semibold">Code <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="added_by_code" readonly>
                             <div class="invalid-feedback" id="customer_id_error"></div>
                         </div>
 
@@ -315,7 +341,7 @@
             });
             if (res.data.status == 'success') {
                 let customer = res.data.customer;
-                // console.log(customer);
+                console.log(customer);
                 // Image
                 if (customer.image) {
                     document.querySelector('.customer_image').src =
@@ -327,6 +353,16 @@
 
                 // Set form input values
                 document.querySelector('#customer_id').value = customer.id || '';
+                document.querySelector('#admin_id').value = customer.admin_id || '';
+                document.querySelector('#agent_id').value = customer.agent_id || '';
+                document.querySelector('#added_by_name').value = customer.admin_id ? customer.admin.name :
+                                                                 customer.agent_id ? customer.agent.name : '';
+
+                document.querySelector('#added_by_code').value =customer.admin_id ? '--NO CODE--': 
+                                                                customer.agent_id ? customer.agent.agent_code : '';
+
+                
+
                 document.querySelector('#customer_name').value = customer.name || '';
                 document.querySelector('#customer_email').value = customer.email || '';
                 document.querySelector('#customer_phone').value = customer.phone || '';
@@ -337,8 +373,7 @@
                 document.querySelector('#customer_date_of_birth').value = customer.date_of_birth || '';
                 document.querySelector('#customer_slot').value = customer.customer_slot ?? '';
                 document.querySelector('#package_categories_dropdown').value = customer.package_category_id || '';
-                document.querySelector('#customer_create_component_available_packages_dropdown').value = customer
-                    .package_id || '';
+                document.querySelector('#customer_create_component_available_packages_dropdown').value = customer.package_id || '';
                 document.querySelector('#approval').value = customer.approval || '';
                 document.querySelector('#customer_payment_method').value = customer.payment_method || '';
                 document.querySelector('#customer_company_name').value = customer.company_name || '';

@@ -16,7 +16,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Passport</th>
+                            <th>Added By</th>
                             <th>Medical</th>
                             <th>Visa</th>
                             <th>Payment</th>
@@ -82,8 +82,14 @@ async function adminCustomerListLoad() {
             let customers = res.data.customers;
             //console.log(customers);
             document.querySelector('.total_customer').textContent = customers.length?customers.length:0;
+            let addedBy = ""
             if (customers.length > 0) {
                 customers.forEach((cus, index) => {
+                    if(cus.admin_id){
+                        addedBy = `<span class="badge bg-primary">ADMIN</span>`;
+                    }else if(cus.agent_id){
+                        addedBy = `<span class="badge bg-success">AGENT</span>`;
+                    }
                     console.log(cus);
                         const imgSrc = cus.image
                             ? `/upload/dashboard/images/customers/${cus.image}`
@@ -95,7 +101,7 @@ async function adminCustomerListLoad() {
                                 <td>${cus.name}</td>
                                 <td>${cus.email}</td>
                                 <td>${cus.phone}</td>
-                                <td>${cus.passport_no}</td>
+                                <td>${addedBy}</td>
                                 <td><span class="badge bg-info">${cus.medical_result || 'Pending'}</span></td>
                                 <td><span class="badge bg-warning">${cus.e_vissa || 'Pending'}</span></td>
                                 <td><span class="badge bg-success">${cus.payment || 'Pending'}</span></td>

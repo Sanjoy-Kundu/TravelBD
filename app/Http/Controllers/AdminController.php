@@ -1195,7 +1195,7 @@ public function adminListsTrashData()
      */
     public function customerViewByRandom(Request $request){
         try{
-            $customer = Customer::with('package','packageCategory')->where('id', $request->id)->first();
+            $customer = Customer::with('package','packageCategory','admin','agent')->where('id', $request->id)->first();
             if(!$customer){
                 return response()->json(["status" => "error", "message" => "Customer not found"]);
             }

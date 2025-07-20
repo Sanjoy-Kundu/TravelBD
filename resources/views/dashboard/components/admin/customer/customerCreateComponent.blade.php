@@ -1255,7 +1255,7 @@ async function customerCreateUpdatePackagePrice(event) {
         }
 
         try {
-            const response = await axios.post('/admin/customer/create', formData, {
+            const response = await axios.post('/admin/customer/store', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

@@ -100,7 +100,7 @@ Route::get('/coupon/lists', [PackageDiscountController::class, 'couponDiscountLi
 
 
 // ====================== Admin Protected Routes ======================
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum','admin'])->group(function () {
     //Admin all data cont
       Route::get('/admin/dashboard/counts', [AdminController::class, 'dashboardCounts']);
     // Admin list
@@ -201,7 +201,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
    Route::post('/admin/package/lists/details/by/catgory', [CustomerController::class, 'packageListDetails']);
    Route::post('/admin/package/price/update', [CustomerController::class, 'packagePriceUpdateCustomer']);
    Route::post('/admin/package/apply-coupon', [CustomerController::class, 'packageApplyCoupon']);
-   Route::post('/admin/customer/create', [CustomerController::class, 'customerCreateByAdmin']);
+   Route::post('/admin/customer/store', [CustomerController::class, 'customerCreateByAdmin']);
 
    Route::get('/admin/customer/my-lists', [AdminController::class, 'myCustomerLists']);
    Route::get('/admin/customers/lists', [AdminController::class, 'AllCustomerLists']);

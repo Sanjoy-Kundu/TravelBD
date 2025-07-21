@@ -515,13 +515,16 @@
 
 
 <script>
+    // ==============================
+    // Fill Customer Edit Modal
+    // ==============================
     async function fillCustomerEditModal(id) {
-        console.log(id);
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = '/admin/login';
             return;
         }
+
         try {
             let res = await axios.post('/admin/customer/view/by/random', {
                 id: id
@@ -530,167 +533,191 @@
                     Authorization: `Bearer ${token}`
                 }
             });
-            if (res.data.status == 'success') {
+
+            if (res.data.status === 'success') {
                 let customer = res.data.customer;
-                console.log("specefic customer",customer);
-                // Image
-                if (customer.image) {
-                    document.querySelector('.customer_image').src =
-                        `/upload/dashboard/images/customers/${customer.image}`;
-                } else {
-                    document.querySelector('.customer_image').src =
-                        `/upload/dashboard/images/customers/default.jpg`;
-                }
 
-                // Set form input values
-                document.querySelector('.customer_id').value = customer.id || '';
-                document.querySelector('.admin_id').value = customer.admin_id || '';
-                document.querySelector('.agent_id').value = customer.agent_id || '';
+                // Set customer image
+                document.querySelector('.customer_image').src =
+                    customer.image
+                        ? `/upload/dashboard/images/customers/${customer.image}`
+                        : `/upload/dashboard/images/customers/default.jpg`;
 
-                document.querySelector('.customer_name').value = customer.name ? customer.name : 'N/A';
-                document.querySelector('.customer_email').value = customer.email? customer.email : 'N/A';
+                // Set form values
+                const setField = (selector, value, fallback = '') => {
+                    document.querySelector(selector).value = value || fallback;
+                };
 
-                document.querySelector('.customer_phone').value = customer.phone? customer.phone : '*****';
-                document.querySelector('.customer_passport_no').value = customer.passport_no?customer.passport_no:'N/A';
-                document.querySelector('.customer_age').value = customer.age?customer.age:'N/A';
+                setField('.customer_id', customer.id);
+                setField('.admin_id', customer.admin_id);
+                setField('.agent_id', customer.agent_id);
+                setField('.customer_name', customer.name, 'N/A');
+                setField('.customer_email', customer.email, 'N/A');
+                setField('.customer_phone', customer.phone, '*****');
+                setField('.customer_passport_no', customer.passport_no, 'N/A');
+                setField('.customer_age', customer.age, 'N/A');
+                setField('.customer_date_of_birth', customer.date_of_birth, 'N/A');
+                setField('.customer_gender', customer.gender, 'N/A');
+                setField('.customer_nid_number', customer.nid_number, 'N/A');
+                setField('.customer_company_name', customer.company_name);
+                setField('.customer_pic', customer.pic);
+                setField('.customer_approval', customer.approval);
+                setField('.customer_bmet', customer.bmet);
+                setField('.customer_calling', customer.calling);
+                setField('.customer_fly', customer.fly);
+                setField('.customer_training', customer.training);
+                setField('.customer_visa_online', customer.visa_online);
+                setField('.customer_e_vissa', customer.e_vissa);
+                setField('.customer_payment', customer.payment);
+                setField('.customer_payment_method', customer.payment_method);
+                setField('.customer_slot_input', parseInt(customer.customer_slot) || '');
 
-                document.querySelector('.customer_date_of_birth').value = customer.date_of_birth?customer.date_of_birth:'N/A';
-                document.querySelector('.customer_gender').value = customer.gender?customer.gender:'N/A';
-                document.querySelector('.customer_nid_number').value = customer.nid_number?customer.nid_number:'N/A';
-
-
-                document.querySelector('.customer_company_name').value = customer.company_name?customer.company_name:'';
-                document.querySelector('.customer_pic').value = customer.pic?customer.pic:'';
-
-                document.querySelector('.customer_approval').value = customer.approval?customer.approval:'';
-                document.querySelector('.customer_bmet').value = customer.bmet?customer.bmet:'';
-                document.querySelector('.customer_calling').value = customer.calling?customer.calling:'';
-                document.querySelector('.customer_fly').value = customer.fly?customer.fly:'';
-                document.querySelector('.customer_training').value = customer.training?customer.training:'';
-                document.querySelector('.customer_visa_online').value = customer.visa_online?customer.visa_online:'';
-                document.querySelector('.customer_e_vissa').value = customer.e_vissa?customer.e_vissa:'';
-                document.querySelector('.customer_payment').value = customer.payment?customer.payment:'';
-                document.querySelector('.customer_payment_method').value = customer.payment_method?customer.payment_method:'';
-                document.querySelector('.customer_slot_input').value = customer.customer_slot?parseInt(customer.customer_slot):'';
-                
-            
-                await loadCategoryLists(customer.package_category_id);
-               await loadPackagesByCategoryId(customer.package_category_id, customer.package_id);
+                // Load category and package
+                await loadCategoryLists(customer.package_category_id, customer.package_id);
 
             } else {
-                console.log('error', res.data);
+                console.error('Error fetching customer:', res.data);
             }
+
         } catch (error) {
-            console.log('error', error);
+            console.error('Exception:', error);
         }
     }
 
-    
-// Load category list and optionally select a category by ID
-async function loadCategoryLists(selectedCategoryId = null, selectedPackageId = null) {
-    let token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/admin/login';
-        return;
-    }
-
-    try {
-        let res = await axios.get('/category-all/lists', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        let categories = res.data.PackageCategories;
-        let dropdown = document.querySelector('#package_categories_dropdown');
-        dropdown.innerHTML = '<option value="">Select Purpose</option>';
-
-        categories.forEach(category => {
-            let option = document.createElement('option');
-            option.value = category.id;
-            option.text = category.name;
-
-            if (parseInt(selectedCategoryId) === category.id) {
-                option.selected = true;
-            }
-
-            dropdown.appendChild(option);
-        });
-
-        //load category
-        if (selectedCategoryId) {
-            await loadPackagesByCategoryId(selectedCategoryId, selectedPackageId);
+    // ==============================
+    // Load Categories & Selected Package
+    // ==============================
+    async function loadCategoryLists(selectedCategoryId = null, selectedPackageId = null) {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
         }
 
-    } catch (error) {
-        console.error("Error loading categories:", error);
-    }
-}
+        try {
+            let res = await axios.get('/category-all/lists', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
+            let categories = res.data.PackageCategories;
+            let dropdown = document.querySelector('#package_categories_dropdown');
+            dropdown.innerHTML = '<option value="">Select Purpose</option>';
 
-// Load packages when category is changed
-document.querySelector('#package_categories_dropdown').addEventListener('change', function () {
-    let selectedCategoryId = this.value;
-    if (selectedCategoryId) {
-        loadPackagesByCategoryId(selectedCategoryId);
-    } else {
-        clearPackageDropdown();
-    }
-});
-
-// Load packages by selected category ID
-async function loadPackagesByCategoryId(categoryId, selectedPackageId = null) {
-    let token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/admin/login';
-        return;
-    }
-
-    try {
-        let res = await axios.post('/admin/package/lists/by/category', {
-            category_id: categoryId
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        if (res.data.status === 'success') {
-            let packages = res.data.packageListByCategory;
-            let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
-
-            packageDropdown.innerHTML = '<option value="">Select Package</option>';
-            packageDropdown.disabled = false;
-
-            packages.forEach(pkg => {
+            categories.forEach(category => {
                 let option = document.createElement('option');
-                option.value = pkg.id;
-                option.text = pkg.title;
-
-                if (parseInt(pkg.id) === parseInt(selectedPackageId)) {
+                option.value = category.id;
+                option.text = category.name;
+                if (parseInt(selectedCategoryId) === category.id) {
                     option.selected = true;
                 }
-
-                packageDropdown.appendChild(option);
+                dropdown.appendChild(option);
             });
+
+            if (selectedCategoryId) {
+                await loadPackagesByCategoryId(selectedCategoryId, selectedPackageId);
+            } else {
+                clearPackageDropdown();
+            }
+
+        } catch (error) {
+            console.error("Error loading categories:", error);
+        }
+    }
+
+    // ==============================
+    // Load Packages by Category
+    // ==============================
+    async function loadPackagesByCategoryId(categoryId, selectedPackageId = null) {
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
         }
 
-    } catch (error) {
-        console.error('Error loading packages:', error);
+        let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
+        let errorSpan = document.getElementById('customer_package_error');
+        errorSpan.innerText = '';
+
+        try {
+            let res = await axios.post('/admin/package/lists/by/category', {
+                category_id: categoryId
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.data.status === 'success') {
+                let packages = res.data.packageListByCategory;
+
+                if (!packages.length) {
+                    handlePackageError("এই ক্যাটাগরির প্যাকেজগুলো এখন উপলব্ধ নেই।");
+                    return;
+                }
+
+                packageDropdown.innerHTML = '<option value="">Select Package</option>';
+                packageDropdown.disabled = false;
+
+                packages.forEach(pkg => {
+                    let option = document.createElement('option');
+                    option.value = pkg.id;
+                    option.text = pkg.title;
+                    if (parseInt(pkg.id) === parseInt(selectedPackageId)) {
+                        option.selected = true;
+                    }
+                    packageDropdown.appendChild(option);
+                });
+
+            } else {
+                handlePackageError(res.data.message);
+            }
+
+        } catch (error) {
+            if (error.response?.status === 404) {
+                handlePackageError(error.response.data.message);
+            } else {
+                handlePackageError('কিছু সমস্যা হয়েছে, পরে চেষ্টা করুন।');
+            }
+            clearPackageDropdown();
+        }
+    }
+
+    // ==============================
+    // Handle Error Display
+    // ==============================
+    function handlePackageError(message) {
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'কিছু সমস্যা হয়েছে, পরে চেষ্টা করুন।',
+            icon: 'warning',
+            title: 'দুঃখিত!',
+            text: message || 'কোনো প্যাকেজ পাওয়া যায়নি।',
             confirmButtonText: 'ঠিক আছে'
         });
+
+        let errorSpan = document.getElementById('customer_package_error');
+        if (errorSpan) {
+            errorSpan.innerText = message;
+        }
+
+        clearPackageDropdown();
     }
-}
 
-// Clear packages if no category selected
-function clearPackageDropdown() {
-    let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
-    packageDropdown.innerHTML = '<option value="">Select Package</option>';
-    packageDropdown.disabled = true;
-}
+    // ==============================
+    // Clear Package Dropdown
+    // ==============================
+    function clearPackageDropdown() {
+        let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
+        packageDropdown.innerHTML = '<option value="">Select Package</option>';
+        packageDropdown.disabled = true;
+    }
 
+    // ==============================
+    // On Category Dropdown Change
+    // ==============================
+    document.querySelector('#package_categories_dropdown').addEventListener('change', function () {
+        let selectedCategoryId = this.value;
+        if (selectedCategoryId) {
+            loadPackagesByCategoryId(selectedCategoryId);
+        } else {
+            clearPackageDropdown();
+            document.getElementById('customer_package_error').innerText = '';
+        }
+    });
 </script>

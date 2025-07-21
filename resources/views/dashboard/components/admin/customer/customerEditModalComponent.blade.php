@@ -89,9 +89,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>Purpose / Categories</label>
-                                <select class="form-control" name="package_category_id"
-                                    id="package_categories_dropdown">
-                                    <option value="">Select Purpose</option>
+                                <select class="form-control" name="package_category_id"id="package_categories_dropdown">
                                 </select>
                                 <span class="customer_purpose_error" style="color:red"
                                     id="customer_purpose_error"></span>
@@ -99,7 +97,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>Available Packages</label>
-                                <select class="form-control" name="package_id"
+                                <select class="form-control customer_create_component_available_packages_dropdown" name="package_id"
                                     id="customer_create_component_available_packages_dropdown">
                                     <option value="">Choose Category First</option>
                                 </select>
@@ -379,7 +377,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>Visa Online</label>
-                                <select class="form-control" name="visa_online" id="customer_visa_online">
+                                <select class="form-control customer_visa_online" name="visa_online" id="customer_visa_online">
                                     <option value="">Select Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -412,7 +410,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>E-Vissa</label>
-                                <select class="form-control" name="e_vissa" id="customer_e_vissa">
+                                <select class="form-control customer_e_vissa" name="e_vissa" id="customer_e_vissa">
                                     <option value="">Select Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -445,7 +443,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>Payment</label>
-                                <select class="form-control" name="payment" id="customer_payment">
+                                <select class="form-control customer_payment" name="payment" id="customer_payment">
                                     <option value="">Select Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -458,7 +456,7 @@
 
                             <div class="col-6 mb-3">
                                 <label>Method of Payment</label>
-                                <select class="form-control" name="payment_method" id="customer_payment_method"
+                                <select class="form-control customer_payment_method" name="payment_method" id="customer_payment_method"
                                     onchange="admintoggleAccountField()">
                                     <option value="">Select Method</option>
                                     <option value="cash">Cash</option>
@@ -490,14 +488,14 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label>Customer Slot</label>
-                            <input type="number" class="form-control" name="customer_slot" id="customer_slot"
+                            <input type="number" class="form-control customer_slot_input" name="customer_slot" id="customer_slot"
                                 placeholder="Enter your slot">
                             <span class="customer_slot_error" style="color:red"
                                 id="customer_slot_error_message"></span>
                         </div>
 
                         <div class="text-end">
-                            <button class="btn btn-primary px-4" onclick="customerCreate(event)">Submit</button>
+                            <button class="btn btn-primary px-4" onclick="customerUpdate(event)" id="customer_button_update">Update Customer</button>
                         </div>
                     </form>
                 </div>
@@ -534,7 +532,7 @@
             });
             if (res.data.status == 'success') {
                 let customer = res.data.customer;
-                console.log(customer);
+                console.log("specefic customer",customer);
                 // Image
                 if (customer.image) {
                     document.querySelector('.customer_image').src =
@@ -569,42 +567,15 @@
                 document.querySelector('.customer_calling').value = customer.calling?customer.calling:'';
                 document.querySelector('.customer_fly').value = customer.fly?customer.fly:'';
                 document.querySelector('.customer_training').value = customer.training?customer.training:'';
-                // document.querySelector('#added_by_name').value = customer.admin_id ? customer.admin.name :
-                //     customer.agent_id ? customer.agent.name : '';
-
-                // document.querySelector('#added_by_code').value = customer.admin_id ? '--NO CODE--' :
-                //     customer.agent_id ? customer.agent.agent_code : '';
-
-
-
-
+                document.querySelector('.customer_visa_online').value = customer.visa_online?customer.visa_online:'';
+                document.querySelector('.customer_e_vissa').value = customer.e_vissa?customer.e_vissa:'';
+                document.querySelector('.customer_payment').value = customer.payment?customer.payment:'';
+                document.querySelector('.customer_payment_method').value = customer.payment_method?customer.payment_method:'';
+                document.querySelector('.customer_slot_input').value = customer.customer_slot?parseInt(customer.customer_slot):'';
                 
-                
-                
-                
-                
-                // document.querySelector('#customer_slot').value = customer.customer_slot ?? '';
-                // document.querySelector('#customer_package_category_id').value = customer.package_category_id || '';
-                // document.querySelector('#customer_package_id').value = customer.package_id || '';
-                // document.querySelector('#customer_approval').value = customer.approval || '';
-                // document.querySelector('#customer_payment_method').value = customer.payment_method || '';
-                // document.querySelector('#customer_company_name').value = customer.company_name || '';
-                // document.querySelector('#customer_country').value = customer.country || '';
-                // document.querySelector('#customer_medical_center').value = customer.medical_center || '';
-                // document.querySelector('#customer_medical_date').value = customer.medical_date || '';
-                // document.querySelector('#customer_medical_result').value = customer.medical_result || '';
-                // document.querySelector('#customer_training').value = customer.training || '';
-                // document.querySelector('#customer_fly').value = customer.fly || '';
-                // document.querySelector('#customer_visa_online').value = customer.visa_online || '';
-                // document.querySelector('#customer_calling').value = customer.calling || '';
-                // document.querySelector('#customer_e_visa').value = customer.e_vissa || '';
-                // document.querySelector('#customer_bmet').value = customer.bmet || '';
-                // document.querySelector('#customer_payment').value = customer.payment || '';
-                // document.querySelector('#customer_account_number').value = customer.account_number || '';
-                // document.querySelector('#customer_pic').value = customer.pic || '';
-
-                // await loadCategoryListSelectedByCustomerCategoryId(customer.package_category_id);
-                // await loadPackagesByCategoryId(customer.package_category_id, customer.package_id);
+            
+                await loadCategoryLists(customer.package_category_id);
+               await loadPackagesByCategoryId(customer.package_category_id, customer.package_id);
 
             } else {
                 console.log('error', res.data);
@@ -614,111 +585,112 @@
         }
     }
 
+    
+// Load category list and optionally select a category by ID
+async function loadCategoryLists(selectedCategoryId = null, selectedPackageId = null) {
+    let token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/admin/login';
+        return;
+    }
 
-    //load categories list and selecte by value
-    async function loadCategoryListSelectedByCustomerCategoryId(selectedCategoryId) {
-        let token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/admin/login';
-            return;
+    try {
+        let res = await axios.get('/category-all/lists', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        let categories = res.data.PackageCategories;
+        let dropdown = document.querySelector('#package_categories_dropdown');
+        dropdown.innerHTML = '<option value="">Select Purpose</option>';
+
+        categories.forEach(category => {
+            let option = document.createElement('option');
+            option.value = category.id;
+            option.text = category.name;
+
+            if (parseInt(selectedCategoryId) === category.id) {
+                option.selected = true;
+            }
+
+            dropdown.appendChild(option);
+        });
+
+        //load category
+        if (selectedCategoryId) {
+            await loadPackagesByCategoryId(selectedCategoryId, selectedPackageId);
         }
 
-        try {
-            let res = await axios.get('/category-all/lists', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+    } catch (error) {
+        console.error("Error loading categories:", error);
+    }
+}
 
-            let categories = res.data.PackageCategories;
-            let dropdown = document.getElementById('customer_package_category_id');
 
-            dropdown.innerHTML = '<option value="">Select Purpose</option>'; // Default option
+// Load packages when category is changed
+document.querySelector('#package_categories_dropdown').addEventListener('change', function () {
+    let selectedCategoryId = this.value;
+    if (selectedCategoryId) {
+        loadPackagesByCategoryId(selectedCategoryId);
+    } else {
+        clearPackageDropdown();
+    }
+});
 
-            categories.forEach(category => {
+// Load packages by selected category ID
+async function loadPackagesByCategoryId(categoryId, selectedPackageId = null) {
+    let token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/admin/login';
+        return;
+    }
+
+    try {
+        let res = await axios.post('/admin/package/lists/by/category', {
+            category_id: categoryId
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (res.data.status === 'success') {
+            let packages = res.data.packageListByCategory;
+            let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
+
+            packageDropdown.innerHTML = '<option value="">Select Package</option>';
+            packageDropdown.disabled = false;
+
+            packages.forEach(pkg => {
                 let option = document.createElement('option');
-                option.value = category.id;
-                option.text = category.name;
+                option.value = pkg.id;
+                option.text = pkg.title;
 
-                if (parseInt(selectedCategoryId) === category.id) {
+                if (parseInt(pkg.id) === parseInt(selectedPackageId)) {
                     option.selected = true;
                 }
 
-                dropdown.appendChild(option);
+                packageDropdown.appendChild(option);
             });
-
-        } catch (error) {
-            console.error("Error loading categories:", error);
         }
+
+    } catch (error) {
+        console.error('Error loading packages:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'কিছু সমস্যা হয়েছে, পরে চেষ্টা করুন।',
+            confirmButtonText: 'ঠিক আছে'
+        });
     }
+}
 
+// Clear packages if no category selected
+function clearPackageDropdown() {
+    let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
+    packageDropdown.innerHTML = '<option value="">Select Package</option>';
+    packageDropdown.disabled = true;
+}
 
-
-    //load package by category id
-    async function loadPackagesByCategoryId(categoryId, packageId) {
-        let token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/admin/login';
-            return;
-        }
-        let submitBtn = document.querySelector('#customer_submit_btn');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'SUBMIT';
-        //console.log('categoryId', categoryId);
-        //console.log('package_id', packageId);
-        try {
-            let res = await axios.post(`/admin/package/lists/by/category`, {
-                category_id: categoryId
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log('package lists by category', res.data);
-
-            if (res.data.status === 'success') {
-                let packages = res.data.packageListByCategory;
-                let packageDropdown = document.getElementById('customer_package_id');
-
-                packageDropdown.innerHTML = '<option value="">Select Package</option>';
-                packageDropdown.disabled = false;
-
-                packages.forEach(pkg => {
-                    console.log(pkg)
-                    let option = document.createElement('option');
-                    option.value = pkg.id;
-                    option.text = pkg.title;
-
-                    if (parseInt(pkg.id) === parseInt(packageId)) {
-                        option.selected = true;
-                    }
-
-                    packageDropdown.appendChild(option);
-                });
-            }
-
-
-        } catch (error) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = error.response.data.message || 'Fail to Submit';
-
-
-            if (error.response && error.response.data && error.response.data.status === 'error') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: error.response.data.message,
-                    confirmButtonText: 'ঠিক আছে'
-                });
-
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'কিছু সমস্যা হয়েছে, পরে চেষ্টা করুন।',
-                    confirmButtonText: 'ঠিক আছে'
-                });
-            }
-        }
-    }
 </script>

@@ -278,7 +278,7 @@
         }
 
         try {
-            const res = await axios.get('/category-all/lists', {
+            const res = await axios.get('/category-all/lists-agent', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

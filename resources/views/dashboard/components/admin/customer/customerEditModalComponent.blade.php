@@ -1,7 +1,7 @@
 <div class="modal fade" id="customerEditModal" tabindex="-1" aria-labelledby="customerEditModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <h5 class="modal-title" id="customerEditModalLabel">Customer Edit (Admin Only)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -39,8 +39,8 @@
 
                             <div class="col-4 mb-3">
                                 <label>Phone</label>
-                                <input type="tel" class="form-control customer_phone" name="phone" placeholder="e.g. 01700000000"
-                                    id="customer_phone">
+                                <input type="tel" class="form-control customer_phone" name="phone"
+                                    placeholder="e.g. 01700000000" id="customer_phone">
                                 <span class="customer_phone_error" style="color:red" id="customer_phone_error"></span>
                             </div>
 
@@ -55,8 +55,8 @@
 
                             <div class="col-4 mb-3">
                                 <label>Age</label>
-                                <input type="number" class="form-control customer_age" name="age" placeholder="e.g. 28"
-                                    id="customer_age">
+                                <input type="number" class="form-control customer_age" name="age"
+                                    placeholder="e.g. 28" id="customer_age">
                                 <span class="customer_age_error" style="color:red" id="customer_age_error"></span>
                             </div>
 
@@ -76,7 +76,8 @@
                                     <option value="female">Female</option>
                                     <option value="other">Other</option>
                                 </select>
-                                <span class="customer_gender_error" style="color:red" id="customer_gender_error"></span>
+                                <span class="customer_gender_error" style="color:red"
+                                    id="customer_gender_error"></span>
                             </div>
 
                             <div class="col-4 mb-3">
@@ -89,7 +90,8 @@
 
                             <div class="col-6 mb-3">
                                 <label>Purpose / Categories</label>
-                                <select class="form-control" name="package_category_id"id="package_categories_dropdown">
+                                <select class="form-control"
+                                    name="package_category_id"id="package_categories_dropdown">
                                 </select>
                                 <span class="customer_purpose_error" style="color:red"
                                     id="customer_purpose_error"></span>
@@ -97,8 +99,8 @@
 
                             <div class="col-6 mb-3">
                                 <label>Available Packages</label>
-                                <select class="form-control customer_create_component_available_packages_dropdown" name="package_id"
-                                    id="customer_create_component_available_packages_dropdown">
+                                <select class="form-control customer_create_component_available_packages_dropdown"
+                                    name="package_id" id="customer_create_component_available_packages_dropdown">
                                     <option value="">Choose Category First</option>
                                 </select>
                                 <span class="customer_package_error" style="color:red"
@@ -108,8 +110,8 @@
                             <!-- purpose wise package section -->
 
                             <div class="col-12 mb-4 d-none" id="purpose_wise_package_section">
-                                <div class="card border-info shadow-sm">
-                                    <div class="card-header bg-info text-white fw-bold">
+                                <div class="card border-dark shadow-sm">
+                                    <div class="card-header fw-bold">
                                         <i class="fas fa-box-open me-2"></i>Purpose Wise Package Details
                                     </div>
                                     <div class="card-body">
@@ -118,7 +120,7 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>Today Date</label>
                                                 <div class="input-group">
-                                                    <input type="date" class="form-control bg-primary text-white"
+                                                    <input type="date" class="form-control"
                                                         value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
                                                 </div>
                                             </div>
@@ -126,16 +128,16 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>Applicatin Start Date</label>
                                                 <div class="input-group">
-                                                    <input type="date" class="form-control bg-success text-white"
-                                                        name="start_date" id="start_date" readonly>
+                                                    <input type="date" class="form-control" name="start_date"
+                                                        id="start_date" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4 mb-3">
                                                 <label>Application End Date</label>
                                                 <div class="input-group">
-                                                    <input type="date" class="form-control bg-danger text-white"
-                                                        name="end_date" id="end_date" readonly>
+                                                    <input type="date" class="form-control" name="end_date"
+                                                        id="end_date" readonly>
                                                 </div>
                                             </div>
                                             <!--Application Date section-->
@@ -215,7 +217,7 @@
 
                                             <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
                                             {{-- coupon or discount --}}
-                                            <div class="col-md-4 mb-3 d-none" id="coupon_code_section">
+                                            <div class="col-md-4 mb-3" id="coupon_code_section">
                                                 <label>Write Your Coupon Code</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="coupon_code_input"
@@ -230,7 +232,7 @@
                                                     style="display: block; margin-top: 5px;"></span>
                                             </div>
 
-                                            <div class="col-md-4 mb-3 d-none" id="new_price_section">
+                                            <div class="col-md-4 mb-3" id="new_price_section">
                                                 <label>Now Your New Price</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control"
@@ -244,7 +246,50 @@
                                                     style="display: block; margin-top: 5px;"></span>
                                             </div>
 
-                                            <div class="col-md-4 mb-3" id="coupon_code_discount_section">
+                                               <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
+                                    {{-- coupon or discount --}}
+                                    <div class="col-md-4 mb-3" id="coupon_code_section">
+                                        <label>Write Your Coupon Code</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="coupon_code_input"
+                                                placeholder="Enter coupon code" name="coupon_code">
+                                            <button type="button" class="btn btn-warning"
+                                                onclick="applyCouponCode()">Apply Your Coupon Code</button>
+                                        </div>
+                                        
+                                        <span class="text-success" id="coupon_success_message"
+                                            style="display: block; margin-top: 5px;"></span>
+                                        <span class="text-danger" id="coupon_error_message"
+                                            style="display: block; margin-top: 5px;"></span>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3" id="new_price_section">
+                                        <label>Now Your New Price</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="coupon_use_new_price"
+                                                placeholder="Enter coupon code" readonly
+                                                name="coupon_use_discounted_price">
+
+                                        </div>
+                                        <span class="text-success" id="coupon_success_message"
+                                            style="display: block; margin-top: 5px;"></span>
+                                        <span class="text-danger" id="coupon_error_message"
+                                            style="display: block; margin-top: 5px;"></span>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3" id="coupon_code_discount_section">
+                                        
+                                        <div class="input-group">
+                                       <label>Coupon Discount</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="coupon_code_discount_input"
+                                                placeholder="Enter coupon code" name="coupon_discount">
+                                        </div>
+
+                                        </div>
+                                     
+                                    </div>
+                                            {{-- <div class="col-md-4 mb-3" id="coupon_code_discount_section">
 
                                                 <div class="input-group">
                                                     <label>Coupon Discount</label>
@@ -256,43 +301,50 @@
 
                                                 </div>
 
-                                            </div>
+                                            </div> --}}
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-6 card border-info shadow-sm d-none" id="admin_price_section">
-                                <div class="col-12 mb-3">
-                                    <label>MRP (only admin)</label>
-                                    <input type="number" class="form-control" name="mrp" id="customer_mrp"
-                                        placeholder="e.g. 480000" readonly>
-                                    <span class="customer_mrp_error" style="color:red"
-                                        id="customer_mrp_error_message"></span>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label>Passenger Price (only admin)</label>
-                                    <input type="number" class="form-control" name="passenger_price"
-                                        id="customer_passenger_price" placeholder="e.g. 480000">
-                                    <span class="customer_passenger_price_error" style="color:red"
-                                        id="customer_passenger_price_error_message"></span>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label>Sales Discount(%) Per Passenger Price</label>
-                                    <input type="number" class="form-control" name="sales_commission_discount"
-                                        id="customer_sales_commission_discount" placeholder="e.g. 20,000">
-                                    <span class="customer_sales_commission_discount_error" style="color:red"
-                                        id="customer_sales_commission_error_message"></span>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label>Sales Commission</label>
-                                    <input type="number" class="form-control" name="sales_commission"
-                                        id="customer_sales_commission" placeholder="e.g. 20,000" readonly>
-                                    <span class="customer_sales_commission_error" style="color:red"
-                                        id="customer_sales_commission_error_message"></span>
+                            <div class="card border-info shadow-sm p-4 d-none" id="admin_price_section">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="customer_mrp" class="form-label fw-bold text-primary">MRP (Only Admin)</label>
+                                        <input type="number" class="form-control" name="mrp" id="customer_mrp"
+                                            placeholder="e.g. 480000" readonly>
+                                        <span class="text-danger small" id="customer_mrp_error_message"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="customer_passenger_price" class="form-label fw-bold">Passenger Price (Only Admin)</label>
+                                        <input type="number" class="form-control" name="passenger_price"
+                                            id="customer_passenger_price" placeholder="e.g. 480000">
+                                        <span class="text-danger small"
+                                            id="customer_passenger_price_error_message"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="customer_sales_commission_discount"
+                                            class="form-label fw-bold">Sales Discount (%) Per Passenger</label>
+                                        <input type="number" class="form-control" name="sales_commission_discount"
+                                            id="customer_sales_commission_discount" placeholder="e.g. 20000">
+                                        <span class="text-danger small"
+                                            id="customer_sales_commission_error_message"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="customer_sales_commission" class="form-label fw-bold">Sales
+                                            Commission</label>
+                                        <input type="number" class="form-control" name="sales_commission"
+                                            id="customer_sales_commission" placeholder="e.g. 20000" readonly>
+                                        <span class="text-danger small"
+                                            id="customer_sales_commission_error_message"></span>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="col-4 mb-3">
                                 <label>Country</label>
                                 <input type="text" class="form-control" name="country" id="customer_country"
@@ -311,23 +363,23 @@
 
                             <div class="col-4 mb-3">
                                 <label>PIC</label>
-                                <input type="text" class="form-control customer_pic" name="pic" id="customer_pic"
-                                    placeholder="e.g. PIC001">
+                                <input type="text" class="form-control customer_pic" name="pic"
+                                    id="customer_pic" placeholder="e.g. PIC001">
                                 <span class="customer_pic_error" style="color:red"
                                     id="customer_pic_error_message"></span>
                             </div>
 
 
 
-                            <div class="col-4 mb-3 d-none">
-                                <label>Agent Name</label>
+                            <div class="col-4 mb-3">
+                                <label>Added By Name</label>
                                 <input type="text" class="form-control" name="agent_name"
                                     placeholder="e.g. RAJU-MAS">
                                 <span class="customer_agent_name_error" style="color:red"
                                     id="customer_agent_name_error_message"></span>
                             </div>
 
-                            <div class="col-4 mb-3 d-none">
+                            <div class="col-4 mb-3">
                                 <label>Agent Code</label>
                                 <input type="text" class="form-control" name="agent_code"
                                     placeholder="e.g. NJ-AG-01">
@@ -335,7 +387,7 @@
                                     id="customer_agent_code_error_message"></span>
                             </div>
 
-                            <div class="col-4 mb-3 d-none">
+                            <div class="col-4 mb-3">
                                 <label>Agent Price</label>
                                 <input type="text" class="form-control" name="agent_price"
                                     placeholder="e.g. 450000">
@@ -377,7 +429,8 @@
 
                             <div class="col-6 mb-3">
                                 <label>Visa Online</label>
-                                <select class="form-control customer_visa_online" name="visa_online" id="customer_visa_online">
+                                <select class="form-control customer_visa_online" name="visa_online"
+                                    id="customer_visa_online">
                                     <option value="">Select Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -399,7 +452,8 @@
 
                             <div class="col-6 mb-3">
                                 <label>Training</label>
-                                <select class="form-control customer_training" name="training" id="customer_training">
+                                <select class="form-control customer_training" name="training"
+                                    id="customer_training">
                                     <option value="">Select Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -456,8 +510,8 @@
 
                             <div class="col-6 mb-3">
                                 <label>Method of Payment</label>
-                                <select class="form-control customer_payment_method" name="payment_method" id="customer_payment_method"
-                                    onchange="admintoggleAccountField()">
+                                <select class="form-control customer_payment_method" name="payment_method"
+                                    id="customer_payment_method" onchange="admintoggleAccountField()">
                                     <option value="">Select Method</option>
                                     <option value="cash">Cash</option>
                                     {{-- <option value="bank">Bank</option>
@@ -477,7 +531,8 @@
 
                             <div class="col-12 mb-3">
                                 <label>Approval</label>
-                                <select class="form-control customer_approval" name="approval" id="customer_approval">
+                                <select class="form-control customer_approval" name="approval"
+                                    id="customer_approval">
                                     <option value="">Select approval</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Complete">Complete</option>
@@ -488,14 +543,15 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label>Customer Slot</label>
-                            <input type="number" class="form-control customer_slot_input" name="customer_slot" id="customer_slot"
-                                placeholder="Enter your slot">
+                            <input type="number" class="form-control customer_slot_input" name="customer_slot"
+                                id="customer_slot" placeholder="Enter your slot">
                             <span class="customer_slot_error" style="color:red"
                                 id="customer_slot_error_message"></span>
                         </div>
 
                         <div class="text-end">
-                            <button class="btn btn-primary px-4" onclick="customerUpdate(event)" id="customer_button_update">Update Customer</button>
+                            <button class="btn btn-primary px-4" onclick="customerUpdate(event)"
+                                id="customer_button_update">Update Customer</button>
                         </div>
                     </form>
                 </div>
@@ -539,13 +595,14 @@
 
                 // Set customer image
                 document.querySelector('.customer_image').src =
-                    customer.image
-                        ? `/upload/dashboard/images/customers/${customer.image}`
-                        : `/upload/dashboard/images/customers/default.jpg`;
+                    customer.image ?
+                    `/upload/dashboard/images/customers/${customer.image}` :
+                    `/upload/dashboard/images/customers/default.jpg`;
 
                 // Set form values
                 const setField = (selector, value, fallback = '') => {
-                    document.querySelector(selector).value = value || fallback;
+                    const el = document.querySelector(selector);
+                    if (el) el.value = value || fallback;
                 };
 
                 setField('.customer_id', customer.id);
@@ -572,8 +629,13 @@
                 setField('.customer_payment_method', customer.payment_method);
                 setField('.customer_slot_input', parseInt(customer.customer_slot) || '');
 
-                // Load category and package
+                // Load categories and packages
                 await loadCategoryLists(customer.package_category_id, customer.package_id);
+
+                // Load package details
+                if (customer.package_id) {
+                    await loadPackageDetailsById(customer.package_id);
+                }
 
             } else {
                 console.error('Error fetching customer:', res.data);
@@ -585,7 +647,7 @@
     }
 
     // ==============================
-    // Load Categories & Selected Package
+    // Load Category Lists
     // ==============================
     async function loadCategoryLists(selectedCategoryId = null, selectedPackageId = null) {
         let token = localStorage.getItem('token');
@@ -596,7 +658,9 @@
 
         try {
             let res = await axios.get('/category-all/lists', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             let categories = res.data.PackageCategories;
@@ -625,7 +689,7 @@
     }
 
     // ==============================
-    // Load Packages by Category
+    // Load Packages by Category ID
     // ==============================
     async function loadPackagesByCategoryId(categoryId, selectedPackageId = null) {
         let token = localStorage.getItem('token');
@@ -633,6 +697,8 @@
             window.location.href = '/admin/login';
             return;
         }
+
+        //document.querySelector('#purpose_wise_package_section').classList.remove('d-none');
 
         let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
         let errorSpan = document.getElementById('customer_package_error');
@@ -642,7 +708,9 @@
             let res = await axios.post('/admin/package/lists/by/category', {
                 category_id: categoryId
             }, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             if (res.data.status === 'success') {
@@ -666,6 +734,11 @@
                     packageDropdown.appendChild(option);
                 });
 
+                // Load details if package is already selected
+                if (selectedPackageId) {
+                    await loadPackageDetailsById(selectedPackageId);
+                }
+
             } else {
                 handlePackageError(res.data.message);
             }
@@ -681,7 +754,52 @@
     }
 
     // ==============================
-    // Handle Error Display
+    // Load Package Details By ID
+    // ==============================
+    async function loadPackageDetailsById(packageId) {
+        //console.log('loadPackageDetailsById', packageId);
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
+        }
+
+        try {
+            let res = await axios.post('/admin/package/lists/details/by/catgory', {
+                id: packageId
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (res.data.status === 'success') {
+                let pkg = res.data.packageDetails;
+                console.log(pkg);
+                // Set details
+                document.getElementById('start_date').value = pkg.start_date || '';
+                document.getElementById('end_date').value = pkg.end_date || '';
+                document.getElementById('admin_package_price_field').value = pkg.price || '';
+                document.getElementById('package_duration').value = pkg.duration || '';
+                document.getElementById('package_inclusions').value = pkg.inclusions || '';
+                document.getElementById('package_exclusions').value = pkg.exclusions || '';
+                document.getElementById('package_visa_processing_time').value = pkg.visa_processing_time || '';
+                document.getElementById('package_documents_required').value = pkg.documents_required || '';
+                document.getElementById('package_seat_availability').value = pkg.seat_availability;
+                document.getElementById('total_sold').value = pkg.total_sold;
+                document.getElementById('available_seat').value = pkg.seat_availability - pkg.total_sold;
+
+                document.getElementById('admin_price_section').classList.remove('d-none');
+                document.querySelector('#purpose_wise_package_section').classList.remove('d-none');
+            }
+
+        } catch (err) {
+            console.error("Package details fetch error:", err);
+        }
+    }
+
+    // ==============================
+    // Handle Package Error
     // ==============================
     function handlePackageError(message) {
         Swal.fire({
@@ -706,12 +824,13 @@
         let packageDropdown = document.querySelector('.customer_create_component_available_packages_dropdown');
         packageDropdown.innerHTML = '<option value="">Select Package</option>';
         packageDropdown.disabled = true;
+        document.querySelector('#purpose_wise_package_section').classList.add('d-none');
     }
 
     // ==============================
     // On Category Dropdown Change
     // ==============================
-    document.querySelector('#package_categories_dropdown').addEventListener('change', function () {
+    document.querySelector('#package_categories_dropdown').addEventListener('change', function() {
         let selectedCategoryId = this.value;
         if (selectedCategoryId) {
             loadPackagesByCategoryId(selectedCategoryId);
@@ -720,4 +839,15 @@
             document.getElementById('customer_package_error').innerText = '';
         }
     });
+
+    // ==============================
+    // On Package Dropdown Change
+    // ==============================
+    document.querySelector('.customer_create_component_available_packages_dropdown').addEventListener('change',
+        function() {
+            let selectedPackageId = this.value;
+            if (selectedPackageId) {
+                loadPackageDetailsById(selectedPackageId);
+            }
+        });
 </script>

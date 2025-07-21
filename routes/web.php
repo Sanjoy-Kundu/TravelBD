@@ -272,6 +272,7 @@ Route::middleware(['auth:sanctum', 'agent'])->group(function () {
   Route::get('/agent/customer/trash-lists', [AgentController::class, 'allAgentCustomerTrashLists']);
   Route::post('/agent/customer/trsh/restore/by/id', [AgentController::class, 'AgentCustomerTrashRestore']);
   Route::post('/agent/customer/permanent/delete/by/id', [AgentController::class, 'AgentCustomerPermanentDelete']);
+   Route::get('/category-all/lists-agent', [CustomerController::class, 'allCategoryLists']);
 });
 
 

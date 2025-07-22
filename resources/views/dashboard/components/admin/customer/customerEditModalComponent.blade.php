@@ -147,9 +147,6 @@
                                             </div>
                                             <!--Application Date section-->
 
-
-
-
                                             <div class="col-md-6 mb-3">
                                                 <label>Package Price</label>
                                                 <div class="input-group">
@@ -224,54 +221,51 @@
                                                     readonly>
                                             </div>
 
-                                            <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
+                                            <div id="dynamic_coupon_section"
+                                                class="col-12 mb-3 dynamic_coupon_section"></div>
                                             {{-- coupon or discount --}}
-                                            <section class="d-none" id="coupon_section">
-                                                <div class="col-md-4 mb-3" id="coupon_code_section">
-                                                    <label>Write Your Coupon Code</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control"
-                                                            id="coupon_code_input" placeholder="Enter coupon code"
-                                                            name="coupon_code">
-                                                        <button type="button" class="btn btn-warning"
-                                                            onclick="applyCouponCode()">Apply Your Coupon Code</button>
+                                            <section id="coupon_section" class="coupon_section d-none">
+                                                <div class="row">
+                                                    <!-- Coupon Code Input -->
+                                                    <div class="col-md-4 mb-3" id="coupon_code_section">
+                                                        <label>Write Your Coupon Code</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control"
+                                                                id="coupon_code_input" placeholder="Enter coupon code"
+                                                                name="coupon_code">
+                                                            <button type="button" class="btn btn-warning"
+                                                                onclick="applyCouponCode()">Apply
+                                                                Code</button>
+                                                        </div>
+                                                        <span class="text-success" id="coupon_success_message"
+                                                            style="display: block; margin-top: 5px;"></span>
+                                                        <span class="text-danger" id="coupon_error_message"
+                                                            style="display: block; margin-top: 5px;"></span>
                                                     </div>
 
-                                                    <span class="text-success" id="coupon_success_message"
-                                                        style="display: block; margin-top: 5px;"></span>
-                                                    <span class="text-danger" id="coupon_error_message"
-                                                        style="display: block; margin-top: 5px;"></span>
-                                                </div>
-
-                                                <div class="col-md-4 mb-3" id="new_price_section">
-                                                    <label>Now Your New Price</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control"
-                                                            id="coupon_use_new_price" placeholder="Enter coupon code"
-                                                            readonly name="coupon_use_discounted_price">
-
+                                                    <!-- New Price Display -->
+                                                    <div class="col-md-4 mb-3" id="new_price_section">
+                                                        <label>Now Your New Price</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control"
+                                                                id="coupon_use_new_price"
+                                                                placeholder="New discounted price" readonly
+                                                                name="coupon_use_discounted_price">
+                                                        </div>
                                                     </div>
-                                                    <span class="text-success" id="coupon_success_message"
-                                                        style="display: block; margin-top: 5px;"></span>
-                                                    <span class="text-danger" id="coupon_error_message"
-                                                        style="display: block; margin-top: 5px;"></span>
-                                                </div>
 
-                                                <div class="col-md-4 mb-3" id="coupon_code_discount_section">
-
-                                                    <div class="input-group">
+                                                    <!-- Coupon Discount Input -->
+                                                    <div class="col-md-4 mb-3" id="coupon_code_discount_section">
                                                         <label>Coupon Discount</label>
                                                         <div class="input-group">
                                                             <input type="number" class="form-control"
                                                                 id="coupon_code_discount_input"
-                                                                placeholder="Enter coupon code"
-                                                                name="coupon_discount">
+                                                                placeholder="Enter discount %" name="coupon_discount">
                                                         </div>
-
                                                     </div>
-
                                                 </div>
                                             </section>
+
 
                                         </div>
                                     </div>
@@ -740,7 +734,9 @@
 
             if (res.data.status === 'success') {
                 let pkg = res.data.packageDetails;
+                let couponLists = pkg.discounts || []; //coupon list from package
                 console.log(pkg);
+                console.log(couponLists);
                 // Set details
                 document.querySelector('.start_date').value = pkg.start_date || '';
                 document.querySelector('.end_date').value = pkg.end_date || '';
@@ -759,6 +755,16 @@
                 document.querySelector('.customer_passenger_price').value = parseInt(pkg.price) || '';
                 //document.querySelector('.customer_discounted_price').value = dicountedPrice;
                 comissoinCalculator();
+
+
+                //show coupon 
+                let couponSection = document.querySelector('.coupon_section');
+                let dynamicCuponSection = document.querySelector('.dynamic_coupon_section');
+
+                if (couponLists.length > 0) {
+                    couponSection.classList.remove('d-none');
+                }
+
             }
 
 
@@ -779,13 +785,27 @@
         let inputCommissionDiscount = parseFloat(document.querySelector('.customer_sales_commission_discount').value) ||
             0;
         let customerPrice = parseFloat(document.querySelector('.customer_passenger_price').value) || 0;
+
+        if (inputCommissionDiscount >= 100) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Commission!',
+                text: 'Commission discount must be less than or equal to 100!',
+                confirmButtonText: 'OK'
+            });
+
+            document.querySelector('.customer_sales_commission_discount').value = '';
+            document.querySelector('#customer_sales_commission').value = '';
+            return;
+        }
+
         let agentCommissionAmount = (customerPrice * inputCommissionDiscount) / 100;
-        // agent commison amount
         document.querySelector('#customer_sales_commission').value = agentCommissionAmount.toFixed(2);
     }
 
     document.querySelector('.customer_passenger_price').addEventListener('input', comissoinCalculator);
     document.querySelector('.customer_sales_commission_discount').addEventListener('input', comissoinCalculator);
+
 
 
     // ==============================

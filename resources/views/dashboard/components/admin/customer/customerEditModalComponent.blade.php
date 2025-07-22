@@ -10,7 +10,7 @@
                 <!-- Full Customer Form copied from Create -->
                 <div class="container-fluid px-4">
                     <form id="admin_customer_form" enctype="multipart/form-data">
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="col-12 mb-3">
 
                                 <input type="number" class="form-control admin_id" name="admin_id"
@@ -20,27 +20,27 @@
                                     id="">
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Name</label>
                                 <input type="text" class="form-control customer_name" name="name"
                                     placeholder="Customer name .." id="customer_name">
                                 <span class="customer_name_error" style="color:red" id="customer_name_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Email</label>
                                 <input type="email" class="form-control customer_email" name="email"
                                     placeholder="e.g. rubelsarder@gmail.com" id="customer_email">
                                 <span class="customer_email_error" style="color:red" id="customer_email_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Upload Image</label>
                                 <input type="file" class="form-control customer_image" name="image"
                                     id="customer_image">
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Phone</label>
                                 <input type="tel" class="form-control customer_phone" name="phone"
                                     placeholder="e.g. 01700000000" id="customer_phone">
@@ -48,7 +48,7 @@
                             </div>
 
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Passport No</label>
                                 <input type="text" class="form-control customer_passport_no" name="passport_no"
                                     placeholder="e.g. B00588828" id="customer_passport_no">
@@ -56,14 +56,14 @@
                                     id="customer_passport_no_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Age</label>
                                 <input type="number" class="form-control customer_age" name="age"
                                     placeholder="e.g. 28" id="customer_age">
                                 <span class="customer_age_error" style="color:red" id="customer_age_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Date Of Birth</label>
                                 <input type="date" class="form-control customer_date_of_birth" name="date_of_birth"
                                     id="customer_date_of_birth">
@@ -71,7 +71,7 @@
                                     id="customer_date_of_birth_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Gender</label>
                                 <select class="form-control customer_gender" name="gender" id="customer_gender">
                                     <option value="">-- Select Gender --</option>
@@ -82,7 +82,7 @@
                                 <span class="customer_gender_error" style="color:red" id="customer_gender_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>NID Number</label>
                                 <input type="text" class="form-control customer_nid_number" name="nid_number"
                                     placeholder="e.g. 1234567890" id="customer_nid_number">
@@ -90,7 +90,7 @@
                                     id="customer_nid_number_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Purpose / Categories</label>
                                 <select class="form-control" name="package_category_id"
                                     id="package_categories_dropdown">
@@ -100,7 +100,7 @@
                                     id="customer_purpose_error"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Available Packages</label>
                                 <select class="form-control customer_create_component_available_packages_dropdown"
                                     name="package_id" id="customer_create_component_available_packages_dropdown">
@@ -114,7 +114,7 @@
 
                             <div class="col-12 mb-4 d-none" id="purpose_wise_package_section">
                                 <div class="card border-info shadow-sm">
-                                    <div class="card-header bg-info text-white fw-bold">
+                                    <div class="card-header fw-bold">
                                         <i class="fas fa-box-open me-2"></i>Purpose Wise Package Details
                                     </div>
                                     <div class="card-body">
@@ -123,7 +123,7 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>Today Date</label>
                                                 <div class="input-group">
-                                                    <input type="date" class="form-control bg-primary text-white"
+                                                    <input type="date" class="form-control"
                                                         value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
                                                 </div>
                                             </div>
@@ -131,8 +131,7 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>Applicatin Start Date</label>
                                                 <div class="input-group">
-                                                    <input type="date"
-                                                        class="form-control bg-success text-white start_date"
+                                                    <input type="date" class="form-control start_date"
                                                         name="start_date" id="start_date" readonly>
                                                 </div>
                                             </div>
@@ -140,8 +139,7 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>Application End Date</label>
                                                 <div class="input-group">
-                                                    <input type="date"
-                                                        class="form-control bg-danger text-white end_date"
+                                                    <input type="date" class="form-control end_date"
                                                         name="end_date" id="end_date" readonly>
                                                 </div>
                                             </div>
@@ -151,9 +149,8 @@
                                                 <label>Package Price</label>
                                                 <div class="input-group">
                                                     <input type="number"
-                                                        class="form-control bg-danger text-white admin_package_price_field"
-                                                        name="price" id="admin_package_price_field"
-                                                        placeholder="e.g. 450000">
+                                                        class="form-control admin_package_price_field" name="price"
+                                                        id="admin_package_price_field" placeholder="e.g. 450000">
                                                     <button type="button" class="btn btn-warning"
                                                         onclick="customerCreateUpdatePackagePrice(event)">Update</button>
                                                 </div>
@@ -284,39 +281,76 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 card border-info shadow-sm d-none" id="admin_price_section">
-                                <div class="col-12 mb-3">
-                                    <label>MRP (only admin)</label>
-                                    <input type="number" class="form-control customer_mrp" name="mrp"
-                                        id="customer_mrp" placeholder="e.g. 480000" readonly>
-                                    <span class="customer_mrp_error" style="color:red"
-                                        id="customer_mrp_error_message"></span>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label>Passenger Price (only admin)</label>
-                                    <input type="number" class="form-control customer_passenger_price"
-                                        name="passenger_price" id="customer_passenger_price"
-                                        placeholder="e.g. 480000">
-                                    <span class="customer_passenger_price_error" style="color:red"
-                                        id="customer_passenger_price_error_message"></span>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label>Sales Discount(%) Per Passenger Price</label>
-                                    <input type="number" class="form-control customer_sales_commission_discount"
-                                        name="sales_commission_discount" id="customer_sales_commission_discount"
-                                        placeholder="e.g. 20,000">
-                                    <span class="customer_sales_commission_discount_error" style="color:red"
-                                        id="customer_sales_commission_error_message"></span>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label>Sales Commission</label>
-                                    <input type="number" class="form-control" name="sales_commission"
-                                        id="customer_sales_commission" placeholder="e.g. 20,000" readonly>
-                                    <span class="customer_sales_commission_error" style="color:red"
-                                        id="customer_sales_commission_error_message"></span>
+                            <div class="card border-info shadow-sm d-none" id="admin_price_section">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label for="customer_mrp" class="form-label fw-semibold">MRP (only
+                                                admin)</label>
+                                            <input type="number" class="form-control customer_mrp" name="mrp"
+                                                id="customer_mrp" placeholder="e.g. 480000" readonly>
+                                            <div class="text-danger customer_mrp_error"
+                                                id="customer_mrp_error_message"></div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="customer_passenger_price"
+                                                class="form-label fw-semibold">Passenger Price (only admin)</label>
+                                            <input type="number" class="form-control customer_passenger_price"
+                                                name="passenger_price" id="customer_passenger_price"
+                                                placeholder="e.g. 480000">
+                                            <div class="text-danger customer_passenger_price_error"
+                                                id="customer_passenger_price_error_message"></div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="customer_sales_commission_discount"
+                                                class="form-label fw-semibold">Sales Discount (%) Per Passenger
+                                                Price</label>
+                                            <input type="number"
+                                                class="form-control customer_sales_commission_discount"
+                                                name="sales_commission_discount"
+                                                id="customer_sales_commission_discount" placeholder="e.g. 20">
+                                            <div class="text-danger customer_sales_commission_discount_error"
+                                                id="customer_sales_commission_discount_error_message"></div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="customer_sales_commission"
+                                                class="form-label fw-semibold">Sales Commission</label>
+                                            <input type="number" class="form-control" name="sales_commission"
+                                                id="customer_sales_commission" placeholder="e.g. 20000" readonly>
+                                            <div class="text-danger customer_sales_commission_error"
+                                                id="customer_sales_commission_error_message"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+
+                            {{-- agent price --}}
+                            <section class="agent_details">
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label>Added By Name</label>
+                                        <input type="text" class="form-control customer_added_by_name"
+                                             placeholder="e.g. RAJU-MAS">
+                                        <span class="customer_agent_name_error" style="color:red"
+                                            id="customer_agent_name_error_message"></span>
+                                    </div>
+
+                                    <div class="col-6 mb-3">
+                                        <label>Code</label>
+                                        <input type="text" class="form-control customer_added_by_code"
+                                            name="" placeholder="e.g. NJ-AG-01">
+                                        <span class="customer_agent_code_error" style="color:red"
+                                            id="customer_agent_code_error_message"></span>
+                                    </div>
+
+    
+                                </div>
+                            </section>
+
+                            <div class="col-6 mb-3">
                                 <label>Country</label>
                                 <input type="text" class="form-control customer_country" name="country"
                                     id="customer_country" placeholder="e.g. Malaysia-MAS">
@@ -324,7 +358,7 @@
                                     id="customer_country_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Company Name</label>
                                 <input type="text" class="form-control customer_company_name" name="company_name"
                                     id="customer_company_name" placeholder="e.g. RAMLY FOOD PROCESSING">
@@ -332,47 +366,14 @@
                                     id="customer_company_name_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>PIC</label>
                                 <input type="text" class="form-control customer_pic" name="pic"
                                     id="customer_pic" placeholder="e.g. PIC001">
                                 <span class="customer_pic_error" style="color:red"
                                     id="customer_pic_error_message"></span>
                             </div>
-
-
-
-                            <div class="col-12 mb-3 d-none">
-                                <label>Agent Name</label>
-                                <input type="text" class="form-control customer_agent_name" name="agent_name"
-                                    placeholder="e.g. RAJU-MAS">
-                                <span class="customer_agent_name_error" style="color:red"
-                                    id="customer_agent_name_error_message"></span>
-                            </div>
-
-                            <div class="col-12 mb-3 d-none">
-                                <label>Agent Code</label>
-                                <input type="text" class="form-control customer_agent_code" name="agent_code"
-                                    placeholder="e.g. NJ-AG-01">
-                                <span class="customer_agent_code_error" style="color:red"
-                                    id="customer_agent_code_error_message"></span>
-                            </div>
-
-                            <div class="col-12 mb-3 d-none">
-                                <label>Agent Price</label>
-                                <input type="text" class="form-control customer_agent_price" name="agent_price"
-                                    placeholder="e.g. 450000">
-                                <span class="customer_agent_price_error" style="color:red"
-                                    id="customer_agent_price_error_message"></span>
-                            </div>
-
-
-
-
-
-
-
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Medical Date</label>
                                 <input type="date" class="form-control customer_medical_date" name="medical_date"
                                     id="customer_medical_date">
@@ -380,7 +381,7 @@
                                     id="customer_medical_date_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Medical Center</label>
                                 <input type="text" class="form-control customer_medical_center"
                                     name="medical_center" id="customer_medical_center"
@@ -389,7 +390,7 @@
                                     id="customer_medical_center_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Medical Result</label>
                                 <input type="text" class="form-control customer_medical_result"
                                     name="medical_result" id="customer_medical_result"
@@ -400,7 +401,7 @@
 
                             <!-- Status Fields -->
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Visa Online</label>
                                 <select class="form-control customer_visa_online" name="visa_online"
                                     id="customer_visa_online">
@@ -412,7 +413,7 @@
                                     id="customer_visa_online_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Calling</label>
                                 <select class="form-control customer_calling" name="calling" id="customer_calling">
                                     <option value="">Select Status</option>
@@ -423,7 +424,7 @@
                                     id="customer_calling_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Training</label>
                                 <select class="form-control customer_training" name="training"
                                     id="customer_training">
@@ -435,7 +436,7 @@
                                     id="customer_training_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>E-Vissa</label>
                                 <select class="form-control customer_e_vissa" name="e_vissa" id="customer_e_vissa">
                                     <option value="">Select Status</option>
@@ -446,7 +447,7 @@
                                     id="customer_e_vissa_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>BMET</label>
                                 <select class="form-control customer_bmet" name="bmet" id="customer_bmet">
                                     <option value="">Select Status</option>
@@ -457,7 +458,7 @@
                                     id="customer_bmet_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Fly</label>
                                 <select class="form-control customer_fly" name="fly" id="customer_fly">
                                     <option value="">Select Status</option>
@@ -468,7 +469,7 @@
                                     id="customer_fly_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Payment</label>
                                 <select class="form-control customer_payment" name="payment" id="customer_payment">
                                     <option value="">Select Status</option>
@@ -481,7 +482,7 @@
 
                             <!-- Payment Method -->
 
-                            <div class="col-12 mb-3">
+                            <div class="col-6 mb-3">
                                 <label>Method of Payment</label>
                                 <select class="form-control customer_payment_method" name="payment_method"
                                     id="customer_payment_method" onchange="admintoggleAccountField()">
@@ -494,7 +495,7 @@
                                     id="customer_payment_method_error_message"></span>
                             </div>
 
-                            <div class="col-12 mb-3 d-none" id="customer_account_number_group">
+                            <div class="col-6 mb-3 d-none" id="customer_account_number_group">
                                 <label>Account Number</label>
                                 <input type="text" class="form-control" name="account_number"
                                     id="customer_account_number" placeholder="e.g. 1234567890">
@@ -562,7 +563,7 @@
 
             if (res.data.status === 'success') {
                 let customer = res.data.customer;
-
+                console.log("==",customer);
                 // Set customer image
                 document.querySelector('.customer_image').src =
                     customer.image ?
@@ -574,6 +575,23 @@
                     const el = document.querySelector(selector);
                     if (el) el.value = value || fallback;
                 };
+
+        
+
+
+                if (customer.admin && customer.admin.id) {
+                    setField('.customer_added_by_name', customer.admin.name || 'N/A');
+                    setField('.customer_added_by_code', customer.admin.admin_code || 'ADMIN-CODE');
+                } else if (customer.agent && customer.agent.id) {
+                    setField('.customer_added_by_name', customer.agent.name || 'N/A');
+                    setField('.customer_added_by_code', customer.agent.agent_code || 'AGENT-CODE');
+                } else {
+                    setField('.customer_added_by_name', 'N/A');
+                    setField('.customer_added_by_code', 'N/A');
+                }
+                                
+
+
 
                 setField('.customer_id', customer.id); //done
                 setField('.admin_id', customer.admin_id); //done
@@ -916,8 +934,8 @@
                 renderCoupons(packageDetails.discounts || [], Number(new_price), packageDetails.discount ?? null);
 
                 //refresh all field 
-                document.querySelector('#coupon_code_input').value= ""
-                document.querySelector('#coupon_use_new_price').value= ""
+                document.querySelector('#coupon_code_input').value = ""
+                document.querySelector('#coupon_use_new_price').value = ""
 
             } else {
                 Swal.fire({
@@ -1051,12 +1069,12 @@
             if (response.data.status === 'success') {
                 const discount_amount = response.data.discounted_price;
                 const discount = response.data.discount_value;
-              document.getElementById('coupon_use_new_price').value = discount_amount;
-              document.getElementById('coupon_code_discount_input').value = discount;
+                document.getElementById('coupon_use_new_price').value = discount_amount;
+                document.getElementById('coupon_code_discount_input').value = discount;
 
                 // ✅ Add these two lines to reflect changes
-              document.querySelector('.customer_mrp').value = discount_amount;
-              document.querySelector('.customer_passenger_price').value = discount_amount;
+                document.querySelector('.customer_mrp').value = discount_amount;
+                document.querySelector('.customer_passenger_price').value = discount_amount;
 
                 Swal.fire({
                     icon: 'success',
@@ -1136,6 +1154,9 @@
     document.querySelector('.customer_create_component_available_packages_dropdown').addEventListener('change',
         function() {
             let selectedPackageId = this.value;
+            // document.getElementById('purpose_wise_package_section').classList.add('d-none');
+            // document.querySelector('.coupon_section')?.classList.add('d-none');
+            // document.querySelector('#coupon_section')?.classList.add('d-none');
             if (selectedPackageId) {
                 loadPackageDetailsById(selectedPackageId);
             }

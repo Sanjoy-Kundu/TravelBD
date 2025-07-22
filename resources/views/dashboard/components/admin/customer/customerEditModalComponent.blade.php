@@ -227,7 +227,7 @@
                                             <section id="coupon_section" class="coupon_section d-none">
                                                 <div class="row">
                                                     <!-- Coupon Code Input -->
-                                                    <div class="col-md-4 mb-3" id="coupon_code_section">
+                                                    <div class="col-md-3 mb-3" id="coupon_code_section">
                                                         <label>Write Your Coupon Code</label>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
@@ -244,7 +244,18 @@
                                                     </div>
 
                                                     <!-- New Price Display -->
-                                                    <div class="col-md-4 mb-3" id="new_price_section">
+                                                    <div class="col-md-3 mb-3" id="current_price_section">
+                                                        <label>Now Your Current Price</label>
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control coupon_use_current_price"
+                                                                id="coupon_use_current_price"
+                                                                placeholder="Current price" readonly
+                                                                name="coupon_use_current_price">
+                                                        </div>
+                                                    </div>
+                                                    <!-- New Price Display -->
+                                                    <div class="col-md-3 mb-3" id="new_price_section">
                                                         <label>Now Your New Price</label>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
@@ -255,12 +266,13 @@
                                                     </div>
 
                                                     <!-- Coupon Discount Input -->
-                                                    <div class="col-md-4 mb-3" id="coupon_code_discount_section">
+                                                    <div class="col-md-3 mb-3" id="coupon_code_discount_section">
                                                         <label>Coupon Discount</label>
                                                         <div class="input-group">
                                                             <input type="number" class="form-control"
                                                                 id="coupon_code_discount_input"
-                                                                placeholder="Enter discount %" name="coupon_discount">
+                                                                placeholder="Enter discount %" name="coupon_discount"
+                                                                readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -650,6 +662,7 @@
     // ==============================
     // Load Packages by Category ID
     // ==============================
+
     async function loadPackagesByCategoryId(categoryId, selectedPackageId = null) {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -715,8 +728,8 @@
     // ==============================
     // Load Package Details By ID
     // ==============================
+    let packageDetails = {};
     async function loadPackageDetailsById(packageId) {
-        //console.log('loadPackageDetailsById', packageId);
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = '/admin/login';
@@ -733,49 +746,86 @@
             });
 
             if (res.data.status === 'success') {
-                let pkg = res.data.packageDetails;
-                let couponLists = pkg.discounts || []; //coupon list from package
-                console.log(pkg);
-                console.log(couponLists);
+                packageDetails = res.data.packageDetails;
+                let couponLists = packageDetails.discounts || []; //coupon list from package
+
                 // Set details
-                document.querySelector('.start_date').value = pkg.start_date || '';
-                document.querySelector('.end_date').value = pkg.end_date || '';
-                document.querySelector('.admin_package_price_field').value = parseInt(pkg.price) || '';
-                document.querySelector('.package_duration').value = pkg.duration || '';
-                document.querySelector('.package_inclusions').value = pkg.inclusions || '';
-                document.querySelector('.package_exclusions').value = pkg.exclusions || '';
-                document.querySelector('.package_visa_processing_time').value = pkg.visa_processing_time || '';
-                document.querySelector('.package_documents_required').value = pkg.documents_required || '';
-                document.querySelector('.package_seat_availability').value = pkg.seat_availability;
-                document.querySelector('.total_sold').value = pkg.total_sold;
-                document.querySelector('.available_seat').value = pkg.seat_availability - pkg.total_sold;
+                document.querySelector('.start_date').value = packageDetails.start_date || '';
+                document.querySelector('.end_date').value = packageDetails.end_date || '';
+                document.querySelector('.admin_package_price_field').value = parseInt(packageDetails.price) || '';
+                document.querySelector('.package_duration').value = packageDetails.duration || '';
+                document.querySelector('.package_inclusions').value = packageDetails.inclusions || '';
+                document.querySelector('.package_exclusions').value = packageDetails.exclusions || '';
+                document.querySelector('.package_visa_processing_time').value = packageDetails
+                    .visa_processing_time || '';
+                document.querySelector('.package_documents_required').value = packageDetails.documents_required ||
+                    '';
+                document.querySelector('.package_seat_availability').value = packageDetails.seat_availability;
+                document.querySelector('.total_sold').value = packageDetails.total_sold;
+                document.querySelector('.available_seat').value = packageDetails.seat_availability - packageDetails
+                    .total_sold;
 
-
-                document.querySelector('.customer_mrp').value = parseInt(pkg.price) || '';
-                document.querySelector('.customer_passenger_price').value = parseInt(pkg.price) || '';
-                //document.querySelector('.customer_discounted_price').value = dicountedPrice;
+                document.querySelector('.customer_mrp').value = parseInt(packageDetails.price) || '';
+                document.querySelector('.customer_passenger_price').value = parseInt(packageDetails.price) || '';
+                document.querySelector('.coupon_use_current_price').value = parseInt(packageDetails.price) || '';
                 comissoinCalculator();
 
-
-                //show coupon 
+                // Show coupon section and table
                 let couponSection = document.querySelector('.coupon_section');
                 let dynamicCuponSection = document.querySelector('.dynamic_coupon_section');
 
                 if (couponLists.length > 0) {
                     couponSection.classList.remove('d-none');
+
+                    const currentPrice = parseFloat(packageDetails.price) || 0;
+
+                    dynamicCuponSection.innerHTML = `
+                        <div class="table-responsive">
+                            <h3>Available Coupon Lists</h3>
+                            <table class="table table-bordered table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Coupon Code</th>
+                                        <th>Discount (%)</th>
+                                        <th>Validity</th>
+                                        <th>Current Price</th>
+                                        <th>Discounted Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${couponLists.map((coupon, index) => {
+                                        const discountValue = coupon.discount_value || 0;
+                                        const discountedPrice = currentPrice - (currentPrice * discountValue / 100);
+                                        return `
+                                            <tr>
+                                                <td>${index + 1}</td>
+                                                <td>${coupon.coupon_code}</td>
+                                                <td>${discountValue}%</td>
+                                                <td>${coupon.start_date} to ${coupon.end_date}</td>
+                                                <td>${currentPrice.toFixed(2)}</td>
+                                                <td>${discountedPrice.toFixed(2)}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                } else {
+                    couponSection.classList.add('d-none'); // Hide coupon section
+                    dynamicCuponSection.innerHTML = `<div class="alert alert-warning">No coupon found</div>`;
                 }
-
             }
-
 
             document.getElementById('admin_price_section').classList.remove('d-none');
             document.querySelector('#purpose_wise_package_section').classList.remove('d-none');
-
 
         } catch (err) {
             console.error("Package details fetch error:", err);
         }
     }
+
 
 
     //===============================
@@ -805,6 +855,236 @@
 
     document.querySelector('.customer_passenger_price').addEventListener('input', comissoinCalculator);
     document.querySelector('.customer_sales_commission_discount').addEventListener('input', comissoinCalculator);
+
+
+
+
+
+
+    //========================
+    //update package price
+    //========================
+    async function customerCreateUpdatePackagePrice(event) {
+        event.preventDefault();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Unauthorized. Please login again.");
+            return window.location.href = "/admin/login";
+        }
+
+        const id = document.querySelector(".customer_create_component_available_packages_dropdown").value;
+        const new_price = document.querySelector(".admin_package_price_field").value.trim();
+
+        if (!id) return alert("Please select a package first.");
+        if (!new_price || isNaN(new_price) || Number(new_price) <= 0) return alert("Enter a valid price.");
+
+        try {
+            const res = await axios.post("/admin/package/price/update", {
+                id,
+                price: Number(new_price)
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.data.status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Updated!',
+                    text: res.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Update price on all fields
+                document.querySelector('.admin_package_price_field').value = new_price;
+                document.querySelector('.customer_mrp').value = new_price;
+                document.querySelector('.customer_passenger_price').value = new_price;
+
+                // Update all rendered coupon "current price"
+                document.querySelectorAll('.coupon_use_current_price').forEach(input => {
+                    input.value = new_price;
+                });
+
+                // update packageDetails object
+                packageDetails.price = Number(new_price);
+
+                // Re-render coupons
+                renderCoupons(packageDetails.discounts || [], Number(new_price), packageDetails.discount ?? null);
+
+                //refresh all field 
+                document.querySelector('#coupon_code_input').value= ""
+                document.querySelector('#coupon_use_new_price').value= ""
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update failed',
+                    text: res.data.message
+                });
+            }
+        } catch (error) {
+            const msg = error?.response?.data?.message || "An error occurred. Please try again.";
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: msg
+            });
+            console.error("Update error:", error);
+        }
+    }
+
+
+
+
+    function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null) {
+        const section = document.getElementById('dynamic_coupon_section');
+        section.innerHTML = '';
+
+        const today = new Date().toISOString().slice(0, 10);
+        const validCoupons = discounts.filter(d => d.start_date <= today && d.end_date >= today);
+        const hasCoupon = validCoupons.some(d => d.coupon_code);
+        toggleCouponSections(hasCoupon);
+
+        if (validCoupons.length) {
+            section.innerHTML = `
+            <div class="table-responsive">
+                <h4>Available Coupon Lists</h4>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Coupon Code</th>
+                            <th>Discount (%)</th>
+                            <th>Validity</th>
+                            <th>Current Price</th>
+                            <th>Discounted Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${validCoupons.map((coupon, index) => {
+                            const discountedPrice = currentPrice - (currentPrice * (coupon.discount_value || 0) / 100);
+                            return `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${coupon.coupon_code || 'Only Discount'}</td>
+                                    <td>${coupon.discount_value || 'N/A'}%</td>
+                                    <td>${coupon.start_date} to ${coupon.end_date}</td>
+                                    <td>${currentPrice.toFixed(2)}</td>
+                                    <td>${discountedPrice.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        } else if (fallbackDiscount) {
+            const discountedPrice = currentPrice - (currentPrice * fallbackDiscount / 100);
+            toggleCouponSections(false);
+            section.innerHTML = `
+            <div class="alert alert-info">
+                <p><strong>Only Discount:</strong> ${fallbackDiscount}%</p>
+                <p><strong>Current Price:</strong> ${currentPrice.toFixed(2)}</p>
+                <p><strong>Discounted Price:</strong> ${discountedPrice.toFixed(2)}</p>
+            </div>
+        `;
+        } else {
+            toggleCouponSections(false);
+            section.innerHTML = `<div class="alert alert-warning">No Discount Available</div>`;
+        }
+    }
+
+
+    function toggleCouponSections(show) {
+        ['coupon_code_section', 'new_price_section', 'coupon_code_discount_section'].forEach(id => {
+            const el = document.getElementById(id);
+            if (show) el.classList.remove('d-none');
+            else el.classList.add('d-none');
+        });
+    }
+
+
+    // Apply coupon code function
+    async function applyCouponCode() {
+        const token = localStorage.getItem('token');
+        const couponSuccess = document.getElementById('coupon_success_message');
+        const couponError = document.getElementById('coupon_error_message');
+        const couponInput = document.getElementById('coupon_code_input');
+        const packageSelect = document.getElementById('customer_create_component_available_packages_dropdown');
+        const couponDiscount = document.getElementById('coupon_discount_input');
+
+        couponSuccess.innerText = '';
+        couponError.innerText = '';
+
+        if (!token) {
+            alert("Unauthorized. Please login.");
+            return window.location.href = "/admin/login";
+        }
+
+        const coupon_code = couponInput.value.trim();
+        const package_id = packageSelect.value;
+
+        if (!coupon_code) {
+            couponError.innerText = "Please enter a coupon code.";
+            return;
+        }
+
+        if (!package_id) {
+            couponError.innerText = "Please select a package first.";
+            return;
+        }
+
+        try {
+            const response = await axios.post("/admin/package/apply-coupon", {
+                coupon_code,
+                package_id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.data.status === 'success') {
+                const discount_amount = response.data.discounted_price;
+                const discount = response.data.discount_value;
+              document.getElementById('coupon_use_new_price').value = discount_amount;
+              document.getElementById('coupon_code_discount_input').value = discount;
+
+                // ✅ Add these two lines to reflect changes
+              document.querySelector('.customer_mrp').value = discount_amount;
+              document.querySelector('.customer_passenger_price').value = discount_amount;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Coupon Applied!',
+                    text: `${response.data.message}: ${discount_amount} Tk`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                toggleCouponSections(true);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: response.data.message || 'Invalid coupon'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.response?.data?.message || 'Something went wrong!'
+            });
+        }
+    }
+
+
+
 
 
 

@@ -1,4 +1,3 @@
-
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
@@ -116,24 +115,27 @@
                                     <div class="col-md-4 mb-3">
                                         <label>Today Date</label>
                                         <div class="input-group">
-                                            <input type="date" class="form-control bg-primary text-white"  value="{{\Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
+                                            <input type="date" class="form-control bg-primary text-white"
+                                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-4 mb-3">
                                         <label>Applicatin Start Date</label>
                                         <div class="input-group">
-                                            <input type="date" class="form-control bg-success text-white" name="start_date" id="start_date" readonly>
+                                            <input type="date" class="form-control bg-success text-white"
+                                                name="start_date" id="start_date" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4 mb-3">
                                         <label>Application End Date</label>
                                         <div class="input-group">
-                                            <input type="date" class="form-control bg-danger text-white" name="end_date" id="end_date" readonly>
+                                            <input type="date" class="form-control bg-danger text-white"
+                                                name="end_date" id="end_date" readonly>
                                         </div>
                                     </div>
-                                   <!--Application Date section-->
+                                    <!--Application Date section-->
 
 
 
@@ -158,26 +160,30 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label>Inclusions</label>
-                                        <textarea readonly name="inclusions" class="form-control" id="package_inclusions" cols="30" rows="10" readonly></textarea>
+                                        <textarea readonly name="inclusions" class="form-control" id="package_inclusions" cols="30" rows="10"
+                                            readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="inclusions"
                                             placeholder="Visa, Ticket, Insurance" readonly id="package_inclusions"> --}}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Exclusions</label>
-                                        <textarea readonly name="exclusions" class="form-control" id="package_exclusions" cols="30" rows="10" readonly></textarea>
+                                        <textarea readonly name="exclusions" class="form-control" id="package_exclusions" cols="30" rows="10"
+                                            readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="exclusions"
                                             placeholder="Personal Expenses" readonly id="package_exclusions"> --}}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Visa Processing Time</label>
-                                        <input type="text" class="form-control" name="visa_processing_time" placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
+                                        <input type="text" class="form-control" name="visa_processing_time"
+                                            placeholder="e.g. 15 Days" readonly id="package_visa_processing_time">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label>Documents Required</label>
-                                        <textarea name="documents_required" class="form-control" id="package_documents_required" cols="30" rows="10" readonly></textarea>
+                                        <textarea name="documents_required" class="form-control" id="package_documents_required" cols="30"
+                                            rows="10" readonly></textarea>
                                         {{-- <input type="text" class="form-control" name="documents_required"
                                             placeholder="Passport, Photo, etc." readonly
                                             id="package_documents_required"> --}}
@@ -185,17 +191,20 @@
 
                                     <div class="col-md-4 mb-3">
                                         <label>Total Seat</label>
-                                        <input type="number" class="form-control" name="seat_availability" placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
+                                        <input type="number" class="form-control" name="seat_availability"
+                                            placeholder="e.g. 20 Seats Left" readonly id="package_seat_availability">
                                     </div>
 
                                     <div class="col-md-4 mb-3">
                                         <label>Sold Seat</label>
-                                        <input type="number" class="form-control" name="total_sold" placeholder="e.g. 20 Seats Left" readonly id="total_sold">
+                                        <input type="number" class="form-control" name="total_sold"
+                                            placeholder="e.g. 20 Seats Left" readonly id="total_sold">
                                     </div>
 
                                     <div class="col-md-4 mb-3">
                                         <label>Available Seat</label>
-                                        <input type="number" class="form-control" placeholder="e.g. 20 Seats Left" readonly id="available_seat" readonly>
+                                        <input type="number" class="form-control" placeholder="e.g. 20 Seats Left"
+                                            readonly id="available_seat" readonly>
                                     </div>
 
                                     <div id="dynamic_coupon_section" class="col-12 mb-3"></div>
@@ -208,7 +217,7 @@
                                             <button type="button" class="btn btn-warning"
                                                 onclick="applyCouponCode()">Apply Your Coupon Code</button>
                                         </div>
-                                        
+
                                         <span class="text-success" id="coupon_success_message"
                                             style="display: block; margin-top: 5px;"></span>
                                         <span class="text-danger" id="coupon_error_message"
@@ -230,16 +239,17 @@
                                     </div>
 
                                     <div class="col-md-4 mb-3" id="coupon_code_discount_section">
-                                        
+
                                         <div class="input-group">
-                                       <label>Coupon Discount</label>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="coupon_code_discount_input"
-                                                placeholder="Enter coupon code" name="coupon_discount">
-                                        </div>
+                                            <label>Coupon Discount</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control"
+                                                    id="coupon_code_discount_input" placeholder="Enter coupon code"
+                                                    name="coupon_discount">
+                                            </div>
 
                                         </div>
-                                     
+
                                     </div>
 
                                 </div>
@@ -483,7 +493,7 @@
 <script>
     //set admin id 
     getUserInfo();
-async function getUserInfo() {
+    async function getUserInfo() {
         let token = localStorage.getItem('token');
         if (!token) {
             window.location.href = "/admin/login";
@@ -520,11 +530,11 @@ async function getUserInfo() {
                 console.error("Unexpected error:", error);
             }
         }
-}
+    }
 
 
     //account filed form
-function admintoggleAccountField() {
+    function admintoggleAccountField() {
         const method = document.getElementById('customer_payment_method').value;
         const accountField = document.getElementById('customer_account_number_group');
         const inputField = document.getElementById('customer_account_number');
@@ -548,7 +558,7 @@ function admintoggleAccountField() {
 
 
     //set category 
-async function getadminCategoryLists() {
+    async function getadminCategoryLists() {
         const token = localStorage.getItem('token');
         if (!token) {
             return window.location.href = "/admin/login";
@@ -593,41 +603,41 @@ async function getadminCategoryLists() {
 
     // Show Packages Based on Selected Category
 
-document.getElementById('package_categories_dropdown').addEventListener('change', async function() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                return window.location.href = "/admin/login";
-            }
+    document.getElementById('package_categories_dropdown').addEventListener('change', async function() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return window.location.href = "/admin/login";
+        }
 
-            const category_id = this.value;
-            const select = document.getElementById('customer_create_component_available_packages_dropdown');
+        const category_id = this.value;
+        const select = document.getElementById('customer_create_component_available_packages_dropdown');
 
-            try {
-                const res = await axios.post('/admin/package/lists/by/category', {
-                    category_id: category_id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (res.data.status === 'success') {
-                    const packages = res.data.packageListByCategory;
-                    console.log(packages);
-
-                    // Efficient way to add options
-                    let optionsHTML = '<option value="">Select Package</option>';
-                    packages.forEach(pkg => {
-                        optionsHTML += `<option value="${pkg.id}">${pkg.title}</option>`;
-                    });
-                    select.innerHTML = optionsHTML;
+        try {
+            const res = await axios.post('/admin/package/lists/by/category', {
+                category_id: category_id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
+            });
 
-            } catch (error) {
-                console.error("Error fetching packages:", error.response?.data || error.message);
-                alert("Package list load try again");
+            if (res.data.status === 'success') {
+                const packages = res.data.packageListByCategory;
+                console.log(packages);
+
+                // Efficient way to add options
+                let optionsHTML = '<option value="">Select Package</option>';
+                packages.forEach(pkg => {
+                    optionsHTML += `<option value="${pkg.id}">${pkg.title}</option>`;
+                });
+                select.innerHTML = optionsHTML;
             }
-});
+
+        } catch (error) {
+            console.error("Error fetching packages:", error.response?.data || error.message);
+            alert("Package list load try again");
+        }
+    });
 
 
 
@@ -636,35 +646,35 @@ document.getElementById('package_categories_dropdown').addEventListener('change'
 
 
 
-//packge updata value randering
-// global variable to hold current package details
-let packageDetails = {};
+    //packge updata value randering
+    // global variable to hold current package details
+    let packageDetails = {};
 
-// Show/hide coupon section
-function toggleCouponSections(show) {
-    const section = document.getElementById('coupon_section_wrapper');
-    if (section) {
-        section.classList.toggle('d-none', !show);
+    // Show/hide coupon section
+    function toggleCouponSections(show) {
+        const section = document.getElementById('coupon_section_wrapper');
+        if (section) {
+            section.classList.toggle('d-none', !show);
+        }
     }
-}
 
 
-// Coupon Render Function
-function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null) {
-    const couponSection = document.getElementById('dynamic_coupon_section');
-    couponSection.innerHTML = '';
+    // Coupon Render Function
+    function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null) {
+        const couponSection = document.getElementById('dynamic_coupon_section');
+        couponSection.innerHTML = '';
 
-    const today = new Date().toISOString().slice(0, 10);
-    const validCoupons = discounts.filter(discount => discount.start_date <= today && discount.end_date >= today);
-    const hasCoupon = validCoupons.some(discount => discount.coupon_code);
-    toggleCouponSections(hasCoupon);
+        const today = new Date().toISOString().slice(0, 10);
+        const validCoupons = discounts.filter(discount => discount.start_date <= today && discount.end_date >= today);
+        const hasCoupon = validCoupons.some(discount => discount.coupon_code);
+        toggleCouponSections(hasCoupon);
 
-    if (validCoupons.length > 0) {
-        validCoupons.forEach((discount, index) => {
-            const isOnlyDiscount = !discount.coupon_code;
-            const discountedPrice = currentPrice - (currentPrice * (discount.discount_value ?? 0) / 100);
+        if (validCoupons.length > 0) {
+            validCoupons.forEach((discount, index) => {
+                const isOnlyDiscount = !discount.coupon_code;
+                const discountedPrice = currentPrice - (currentPrice * (discount.discount_value ?? 0) / 100);
 
-            couponSection.innerHTML += `
+                couponSection.innerHTML += `
             <div class="row border p-2 mb-2 rounded bg-light">
                 <div class="col-md-3 mb-2">
                     <label>${isOnlyDiscount ? 'Discount % ' + (index + 1) : 'Coupon ' + (index + 1)}</label>
@@ -687,11 +697,11 @@ function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null
                     <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
                 </div>
             </div>`;
-        });
-    } else if (fallbackDiscount) {
-        const discountedPrice = currentPrice - (currentPrice * fallbackDiscount / 100);
-        toggleCouponSections(false);
-        couponSection.innerHTML = `
+            });
+        } else if (fallbackDiscount) {
+            const discountedPrice = currentPrice - (currentPrice * fallbackDiscount / 100);
+            toggleCouponSections(false);
+            couponSection.innerHTML = `
         <div class="row border p-2 mb-2 rounded bg-light">
             <div class="col-md-3 mb-2">
                 <label>Discount</label>
@@ -710,137 +720,147 @@ function renderCoupons(discounts = [], currentPrice = 0, fallbackDiscount = null
                 <input type="text" class="form-control" value="${discountedPrice.toFixed(2)}" readonly>
             </div>
         </div>`;
-    } else {
-        toggleCouponSections(false);
-        couponSection.innerHTML = `
+        } else {
+            toggleCouponSections(false);
+            couponSection.innerHTML = `
         <div class="row border p-2 mb-2 rounded bg-light">
             <div class="col-md-12 mb-2">
                 <label>No Discount Available</label>
                 <input type="text" class="form-control" value="N/A" readonly>
             </div>
         </div>`;
-    }
-}
-
-
-// Fetch package details on dropdown change
-document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change', async function () {
-    const id = this.value;
-    const token = localStorage.getItem('token');
-
-    document.getElementById('admin_package_price_error').innerHTML = '';
-    document.getElementById('purpose_wise_package_section').classList.remove('d-none');
-    document.getElementById('admin_price_section').classList.remove('d-none');
-
-    try {
-        const res = await axios.post('/admin/package/lists/details/by/catgory', { id }, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (res.data.status !== 'success') throw new Error(res.data.message || 'Failed to fetch package details');
-
-        packageDetails = res.data.packageDetails || {};
-        console.log('customer create component',packageDetails);
-        const currentPrice = packageDetails.price ?? 0;
-
-        // Set form fields
-        document.getElementById('customer_mrp').value = parseInt(currentPrice);
-        document.getElementById('customer_passenger_price').value = parseInt(currentPrice);
-        document.getElementById('admin_package_price_field').value = parseInt(currentPrice);
-        document.getElementById('package_duration').value = packageDetails.duration ?? '';
-        document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
-        document.getElementById('start_date').value = packageDetails.start_date ?? '';
-        document.getElementById('end_date').value = packageDetails.end_date ?? '';
-        document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
-        document.getElementById('package_visa_processing_time').value = packageDetails.visa_processing_time ?? '';
-        document.getElementById('package_documents_required').value = packageDetails.documents_required ?? '';
-        document.getElementById('package_seat_availability').value = packageDetails.seat_availability ?? '';
-        document.getElementById('total_sold').value = packageDetails.total_sold ?? '';
-        document.getElementById('available_seat').value = packageDetails.seat_availability - packageDetails.total_sold;
-
-        // Render coupons
-        renderCoupons(packageDetails.discounts || [], currentPrice, packageDetails.discount ?? null);
-
-    } catch (error) {
-        console.error("Error fetching packages:", error);
-        alert("Failed to load package details. Please try again.");
-    }
-});
-
-//packge updata value randering end
-
-
-
-// price update function with coupon re-rendering
-// Update package price
-async function customerCreateUpdatePackagePrice(event) {
-    event.preventDefault();
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert("Unauthorized. Please login again.");
-        return window.location.href = "/admin/login";
+        }
     }
 
-    const id = document.getElementById("customer_create_component_available_packages_dropdown").value;
-    const new_price = document.getElementById("admin_package_price_field").value.trim();
 
-    if (!id) return alert("Please select a package first.");
-    if (!new_price || isNaN(new_price) || Number(new_price) <= 0) return alert("Enter a valid price.");
+    // Fetch package details on dropdown change
+    document.getElementById('customer_create_component_available_packages_dropdown').addEventListener('change',
+    async function() {
+            const id = this.value;
+            const token = localStorage.getItem('token');
 
-    try {
-        const res = await axios.post("/admin/package/price/update", {
-            id,
-            price: Number(new_price)
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            document.getElementById('admin_package_price_error').innerHTML = '';
+            document.getElementById('purpose_wise_package_section').classList.remove('d-none');
+            document.getElementById('admin_price_section').classList.remove('d-none');
+
+            try {
+                const res = await axios.post('/admin/package/lists/details/by/catgory', {
+                    id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (res.data.status !== 'success') throw new Error(res.data.message ||
+                    'Failed to fetch package details');
+
+                packageDetails = res.data.packageDetails || {};
+                console.log('customer create component', packageDetails);
+                const currentPrice = packageDetails.price ?? 0;
+
+                // Set form fields
+                document.getElementById('customer_mrp').value = parseInt(currentPrice);
+                document.getElementById('customer_passenger_price').value = parseInt(currentPrice);
+                document.getElementById('admin_package_price_field').value = parseInt(currentPrice);
+                document.getElementById('package_duration').value = packageDetails.duration ?? '';
+                document.getElementById('package_inclusions').value = packageDetails.inclusions ?? '';
+                document.getElementById('start_date').value = packageDetails.start_date ?? '';
+                document.getElementById('end_date').value = packageDetails.end_date ?? '';
+                document.getElementById('package_exclusions').value = packageDetails.exclusions ?? '';
+                document.getElementById('package_visa_processing_time').value = packageDetails
+                    .visa_processing_time ?? '';
+                document.getElementById('package_documents_required').value = packageDetails
+                    .documents_required ?? '';
+                document.getElementById('package_seat_availability').value = packageDetails.seat_availability ??
+                    '';
+                document.getElementById('total_sold').value = packageDetails.total_sold ?? '';
+                document.getElementById('available_seat').value = packageDetails.seat_availability -
+                    packageDetails.total_sold;
+
+                // Render coupons
+                renderCoupons(packageDetails.discounts || [], currentPrice, packageDetails.discount ?? null);
+
+            } catch (error) {
+                console.error("Error fetching packages:", error);
+                alert("Failed to load package details. Please try again.");
             }
         });
 
-        if (res.data.status === "success") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Updated!',
-                text: res.data.message,
-                timer: 2000,
-                showConfirmButton: false
+    //packge updata value randering end
+
+
+
+    // price update function with coupon re-rendering
+    // Update package price
+    async function customerCreateUpdatePackagePrice(event) {
+        event.preventDefault();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Unauthorized. Please login again.");
+            return window.location.href = "/admin/login";
+        }
+
+        const id = document.getElementById("customer_create_component_available_packages_dropdown").value;
+        const new_price = document.getElementById("admin_package_price_field").value.trim();
+
+        if (!id) return alert("Please select a package first.");
+        if (!new_price || isNaN(new_price) || Number(new_price) <= 0) return alert("Enter a valid price.");
+
+        try {
+            const res = await axios.post("/admin/package/price/update", {
+                id,
+                price: Number(new_price)
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
-            // Update price on all fields
-            document.getElementById('admin_package_price_field').value = new_price;
-            document.getElementById('customer_mrp').value = new_price;
-            document.getElementById('customer_passenger_price').value = new_price;
+            if (res.data.status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Updated!',
+                    text: res.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
 
-            // Update all rendered coupon "current price"
-            document.querySelectorAll('.customer_current_price').forEach(input => {
-                input.value = new_price;
-            });
+                // Update price on all fields
+                document.getElementById('admin_package_price_field').value = new_price;
+                document.getElementById('customer_mrp').value = new_price;
+                document.getElementById('customer_passenger_price').value = new_price;
 
-            // update packageDetails object
-            packageDetails.price = Number(new_price);
+                // Update all rendered coupon "current price"
+                document.querySelectorAll('.customer_current_price').forEach(input => {
+                    input.value = new_price;
+                });
 
-            // Re-render coupons
-            renderCoupons(packageDetails.discounts || [], Number(new_price), packageDetails.discount ?? null);
+                // update packageDetails object
+                packageDetails.price = Number(new_price);
 
-        } else {
+                // Re-render coupons
+                renderCoupons(packageDetails.discounts || [], Number(new_price), packageDetails.discount ?? null);
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update failed',
+                    text: res.data.message
+                });
+            }
+        } catch (error) {
+            const msg = error?.response?.data?.message || "An error occurred. Please try again.";
             Swal.fire({
                 icon: 'error',
-                title: 'Update failed',
-                text: res.data.message
+                title: 'Error',
+                text: msg
             });
+            console.error("Update error:", error);
         }
-    } catch (error) {
-        const msg = error?.response?.data?.message || "An error occurred. Please try again.";
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: msg
-        });
-        console.error("Update error:", error);
     }
-}
 
 
 
@@ -856,7 +876,7 @@ async function customerCreateUpdatePackagePrice(event) {
         const couponError = document.getElementById('coupon_error_message');
         const couponInput = document.getElementById('coupon_code_input');
         const packageSelect = document.getElementById('customer_create_component_available_packages_dropdown');
-        const couponDiscount = document.getElementById('coupon_discount_input') 
+        const couponDiscount = document.getElementById('coupon_discount_input')
 
         couponSuccess.innerText = '';
         couponError.innerText = '';
@@ -1190,14 +1210,14 @@ async function customerCreateUpdatePackagePrice(event) {
             error = true;
         }
 
-    //   if(customer_slot > available_seat){
-    //         Swal.fire(
-    //             '❌ ভুল হয়েছে',
-    //             `আপনি ${available_seat}টির বেশি সিট নিতে পারবেন না।`,
-    //             'error'
-    //         );
-    //         error = true;
-    //      }
+        //   if(customer_slot > available_seat){
+        //         Swal.fire(
+        //             '❌ ভুল হয়েছে',
+        //             `আপনি ${available_seat}টির বেশি সিট নিতে পারবেন না।`,
+        //             'error'
+        //         );
+        //         error = true;
+        //      }
 
         if (error) return; // stop if validation error
 
@@ -1283,7 +1303,8 @@ async function customerCreateUpdatePackagePrice(event) {
                 let company_name = document.getElementById('customer_company_name').value = "";
                 let pic = document.getElementById('customer_pic').value = "";
                 let sales_commission = document.getElementById('customer_sales_commission').value = "";
-                let sales_commission_discount = document.getElementById('customer_sales_commission_discount').value = "";
+                let sales_commission_discount = document.getElementById('customer_sales_commission_discount')
+                    .value = "";
                 let mrp = document.getElementById('customer_mrp').value = "";
                 let customer_price = document.getElementById('customer_passenger_price').value = "";
                 let medical_date = document.getElementById('customer_medical_date').value = "";
@@ -1316,4 +1337,5 @@ async function customerCreateUpdatePackagePrice(event) {
                 //console.log(error.response?.data?.message || error.message);
             }
         }
-    }</script>
+    }
+</script>

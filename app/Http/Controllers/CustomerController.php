@@ -542,7 +542,7 @@ Customer create by agent
                 'nid_number' => $request->nid_number,
                 'package_id' => $request->package_id,
                 'package_category_id' => $request->package_category_id,
-                'image' => $imagePath,
+                'image' => $customer_image_Name,
                 'customer_slot' => 0,
                 'created_by_ip' => $request->ip()
             ]);

@@ -86,7 +86,8 @@ class AdminController extends Controller
         try{
    
             $customers = Customer::all();
-            return response()->json(['status' => 'success', 'customers' => $customers]);
+            $trashedCustomers = Customer::onlyTrashed()->get();
+            return response()->json(['status' => 'success', 'customers' => $customers,'trashedCustomers'=>$trashedCustomers]);
         }catch(Exception $ex){
             return response()->json(['status' => 'error', 'message' => $ex->getMessage()]);
         }
@@ -1300,6 +1301,94 @@ public function CustomerUpdateByAdmin(Request $request)
 }
 
 
+
+/**
+ * Customer Delete By Admin
+ */
+public function customerDeleteById(Request $request){
+    try {
+        $id = $request->id;
+        $customer = Customer::find($id);
+
+        if (!$customer) {
+            return response()->json(['status' => 'error', 'message' => 'Customer not found']);
+        }
+
+        $customer->delete();
+        return response()->json(['status' => 'success', 'message' => 'Customer deleted successfully']);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
+
+
+/**
+ * Customer Restore By admin
+ */
+public function restoreCustomerById(Request $request) {
+    try {
+        $id = $request->id;
+        $customer = Customer::withTrashed()->find($id);
+
+        if (!$customer) {
+            return response()->json(['status' => 'error', 'message' => 'Customer not found']);
+        }
+
+        if ($customer->trashed()) {
+            $customer->restore();
+            return response()->json(['status' => 'success', 'message' => 'Customer restored successfully']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Customer is not trashed']);
+        }
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
+
+
+/**
+ * Customer Permanet Delete by admin
+ */
+public function permanentDeleteCustomer(Request $request) {
+    try {
+        $id = $request->id;
+        $customer = Customer::onlyTrashed()->find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Customer not found or not in trash'
+            ]);
+        }
+
+        // Delete image from public folder
+        if ($customer->image) {
+            $imagePath = public_path('upload/dashboard/images/customers/' . $customer->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // Permanently delete from database
+        $customer->forceDelete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Customer permanently deleted'
+        ]);
+    } catch (Exception $ex) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $ex->getMessage()
+        ]);
+    }
+}
 
 
 

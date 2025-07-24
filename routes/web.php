@@ -208,9 +208,14 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
 
 
 
-   //admin customer view radom
+   //admin customer Edit restore view p delete
    Route::post('/admin/customer/view/by/random', [AdminController::class, 'customerViewByRandom']);
    Route::post('/customer/update/by-admin', [AdminController::class, 'CustomerUpdateByAdmin']);
+   Route::post('/admin/customer/delete-by-id',[AdminController::class, 'customerDeleteById']);
+   Route::post('/admin/customer/restore-by-id', [AdminController::class, 'restoreCustomerById']);
+   Route::post('/admin/customer/permanent-delete', [AdminController::class, 'permanentDeleteCustomer']);
+
+
 });
 
 

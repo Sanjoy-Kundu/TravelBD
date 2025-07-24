@@ -1205,4 +1205,102 @@ public function adminListsTrashData()
         }
     }
 
+
+    /**
+     * customre edited by admin
+     */
+public function CustomerUpdateByAdmin(Request $request)
+{
+    try {
+        // Step 1: Find Customer
+        $customer = Customer::find($request->id);
+
+        if (!$customer) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Customer not found"
+            ]);
+        }
+
+        // Step 2: Handle Image Upload (if exists)
+        if ($request->hasFile('image')) {
+            // old image delete path
+            $oldImage = public_path('upload/dashboard/images/customers/' . $customer->image);
+
+            if (file_exists($oldImage) && is_file($oldImage)) {
+                unlink($oldImage);  // omd image delete
+            }
+
+            // new image upload
+            $image = $request->file('image');
+            $customer_image_Name = Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('upload/dashboard/images/customers'), $customer_image_Name);
+
+            // db name
+            $customer->image = $customer_image_Name;
+        }
+
+        // Step 3: Update other fields as you wrote
+        $customer->admin_id = $request->admin_id;
+        $customer->agent_id = $request->agent_id;
+        $customer->package_id = $request->package_id;
+        $customer->package_category_id = $request->package_category_id;
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->passport_no = $request->passport_no;
+        $customer->age = $request->age;
+        $customer->gender = $request->gender;
+        $customer->date_of_birth = $request->date_of_birth;
+        $customer->nid_number = $request->nid_number;
+        $customer->price = $request->price;
+        $customer->duration = $request->duration;
+        $customer->inclusions = $request->inclusions;
+        $customer->exclusions = $request->exclusions;
+        $customer->visa_processing_time = $request->visa_processing_time;
+        $customer->documents_required = $request->documents_required;
+        $customer->seat_availability = $request->seat_availability;
+        $customer->customer_slot = $request->customer_slot;
+        $customer->coupon_code = $request->coupon_code;
+        $customer->coupon_discount = $request->coupon_discount;
+        $customer->coupon_use_discounted_price = $request->coupon_use_discounted_price;
+        $customer->country = $request->country;
+        $customer->company_name = $request->company_name;
+        $customer->pic = $request->pic;
+        $customer->sales_commission_discount = $request->sales_commission_discount;
+        $customer->sales_commission = $request->sales_commission;
+        $customer->mrp = $request->mrp;
+        $customer->passenger_price = $request->passenger_price;
+        $customer->medical_date = $request->medical_date;
+        $customer->medical_center = $request->medical_center;
+        $customer->medical_result = $request->medical_result;
+        $customer->visa_online = $request->visa_online;
+        $customer->calling = $request->calling;
+        $customer->training = $request->training;
+        $customer->e_vissa = $request->e_vissa;
+        $customer->bmet = $request->bmet;
+        $customer->fly = $request->fly;
+        $customer->payment = $request->payment;
+        $customer->payment_method = $request->payment_method;
+        $customer->approval = $request->approval;
+
+        $customer->save();
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Customer updated successfully"
+        ]);
+
+    } catch (\Exception $ex) {
+        return response()->json([
+            "status" => "error",
+            "message" => $ex->getMessage()
+        ]);
+    }
+}
+
+
+
+
+
 }

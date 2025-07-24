@@ -210,6 +210,7 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
 
    //admin customer view radom
    Route::post('/admin/customer/view/by/random', [AdminController::class, 'customerViewByRandom']);
+   Route::post('/customer/update/by-admin', [AdminController::class, 'CustomerUpdateByAdmin']);
 });
 
 

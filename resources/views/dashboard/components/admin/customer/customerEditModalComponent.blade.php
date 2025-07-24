@@ -16,8 +16,7 @@
                                 <input type="number" class="form-control admin_id" name="admin_id"
                                     id="admin_id"readonly>
                                 <input type="number" class="form-control agent_id" name="agent_id" id="agent_id">
-                                <input type="number" class="form-control customer_id" name="id"
-                                    id="customer_id">
+                                <input type="number" class="form-control customer_id" name="id" id="customer_id">
                             </div>
 
                             <div class="col-6 mb-3">
@@ -172,7 +171,8 @@
 
                                             <div class="col-md-6 mb-3">
                                                 <label>Inclusions</label>
-                                                <textarea readonly name="inclusions" class="form-control package_inclusions" id="package_inclusions" cols="30" rows="10" readonly></textarea>
+                                                <textarea readonly name="inclusions" class="form-control package_inclusions" id="package_inclusions" cols="30"
+                                                    rows="10" readonly></textarea>
                                                 {{-- <input type="text" class="form-control" name="inclusions"
                                             placeholder="Visa, Ticket, Insurance" readonly id="package_inclusions"> --}}
                                             </div>
@@ -527,15 +527,16 @@
                                 id="customer_slot_error_message"></span>
                         </div>
 
-                        <div class="text-end">
-                            <button class="btn btn-primary px-4" onclick="customerUpdate(event)">UPDATE CUSTOMER</button>
-                        </div>
+                        {{-- <div class="text-end">
+                            
+                        </div> --}}
                     </form>
                 </div>
 
             </div>
 
             <div class="modal-footer">
+                <button class="btn btn-primary px-4" onclick="customerUpdate(event)">UPDATE CUSTOMER</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -1198,267 +1199,358 @@
             if (selectedPackageId) {
                 loadPackageDetailsById(selectedPackageId);
             }
-    });
+        });
 
 
 
 
 
-//customer Update 
+    //customer Update 
 
 
 
-function customerUpdate(event){
-    event.preventDefault();
+    async function customerUpdate(event) {
+        event.preventDefault();
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
+        }
+
+
+        //initialize error message
+        document.getElementById('customer_name_error').innerText = '';
+        document.getElementById('customer_email_error').innerText = '';
+
+        document.getElementById('customer_phone_error').innerText = '';
+        document.getElementById('customer_passport_no_error').innerText = '';
+
+        document.getElementById('customer_age_error').innerText = '';
+        document.getElementById('customer_date_of_birth_error').innerText = '';
+
+        document.getElementById('customer_gender_error').innerText = '';
+        document.getElementById('customer_nid_number_error').innerText = '';
+
+        document.getElementById('customer_purpose_error').innerText = '';
+        document.getElementById('customer_package_error').innerText = '';
+
+        document.getElementById('customer_sales_commission_discount_error_message').innerText = '';
+
+        document.getElementById('customer_country_error_message').innerText = '';
+        document.getElementById('customer_company_name_error_message').innerText = '';
+
+        document.getElementById('customer_pic_error_message').innerText = '';
+
+        document.getElementById('customer_medical_date_error_message').innerText = '';
+        document.getElementById('customer_medical_center_error_message').innerText = '';
+        document.getElementById('customer_medical_result_error_message').innerText = '';
+
+        document.getElementById('customer_visa_online_error_message').innerText = '';
+        document.getElementById('customer_calling_error_message').innerText = '';
+        document.getElementById('customer_training_error_message').innerText = '';
+        document.getElementById('customer_e_vissa_error_message').innerText = '';
+        document.getElementById('customer_bmet_error_message').innerText = '';
+        document.getElementById('customer_fly_error_message').innerText = '';
+        document.getElementById('customer_payment_error_message').innerText = '';
+        document.getElementById('customer_payment_method_error_message').innerText = '';
+        document.getElementById('customer_approval_error_message').innerText = '';
+        document.getElementById('customer_slot_error_message').innerText = '';
 
 
 
-    //initialize error message
-    document.getElementById('customer_name_error').innerText = '';
-    document.getElementById('customer_email_error').innerText = '';
 
-    document.getElementById('customer_phone_error').innerText = '';
-    document.getElementById('customer_passport_no_error').innerText = '';
-
-    document.getElementById('customer_age_error').innerText = '';
-    document.getElementById('customer_date_of_birth_error').innerText = '';
-
-    document.getElementById('customer_gender_error').innerText = '';
-    document.getElementById('customer_nid_number_error').innerText = '';
-
-    document.getElementById('customer_purpose_error').innerText = '';
-    document.getElementById('customer_package_error').innerText = '';
-
-    document.getElementById('customer_sales_commission_discount_error_message').innerText = '';
-
-    document.getElementById('customer_country_error_message').innerText = '';
-    document.getElementById('customer_company_name_error_message').innerText = '';
-
-    document.getElementById('customer_pic_error_message').innerText = '';
-
-    document.getElementById('customer_medical_date_error_message').innerText = '';
-    document.getElementById('customer_medical_center_error_message').innerText = '';
-    document.getElementById('customer_medical_result_error_message').innerText = '';
-
-    document.getElementById('customer_visa_online_error_message').innerText = '';
-    document.getElementById('customer_calling_error_message').innerText = '';
-    document.getElementById('customer_training_error_message').innerText = '';
-    document.getElementById('customer_e_vissa_error_message').innerText = '';
-    document.getElementById('customer_bmet_error_message').innerText = '';
-    document.getElementById('customer_fly_error_message').innerText = '';
-    document.getElementById('customer_payment_error_message').innerText = '';
-    document.getElementById('customer_payment_method_error_message').innerText = '';
-    document.getElementById('customer_approval_error_message').innerText = '';
-    document.getElementById('customer_slot_error_message').innerText = '';
-
-    
-
-
-    //get input value
-    let id = document.getElementById('customer_id').value.trim();
-    let admin_id = document.getElementById('admin_id').value.trim();
-    let agent_id = document.getElementById('agent_id').value.trim();
-    let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value.trim();
-    let package_category_id = document.getElementById('package_categories_dropdown').value.trim();
-    let name = document.getElementById('customer_name').value.trim();
-    let email = document.getElementById('customer_email').value.trim();
-    let image = document.getElementById('customer_image').value.trim();
-    let phone = document.getElementById('customer_phone').value.trim();
-    let passport_no = document.getElementById('customer_passport_no').value.trim();
-    let age = document.getElementById('customer_age').value.trim();
-    let gender = document.getElementById('customer_gender').value.trim();
-    let date_of_birth = document.getElementById('customer_date_of_birth').value.trim();
-    let nid_number = document.getElementById('customer_nid_number').value.trim();
-    let price = document.getElementById('admin_package_price_field').value.trim();
-    let duration = document.getElementById('package_duration').value.trim();
-    let inclusions = document.getElementById('package_inclusions').value.trim();
-    let exclusions = document.getElementById('package_exclusions').value.trim();
-    let visa_processing_time = document.getElementById('package_visa_processing_time').value.trim();
-    let documents_required = document.getElementById('package_documents_required').value.trim();
-    let seat_availability = document.getElementById('package_seat_availability').value.trim();
-    let customer_slot = document.getElementById('customer_slot').value.trim();
-    let coupon_code = document.getElementById('coupon_code_input').value.trim();
-    let coupon_discount = document.getElementById('coupon_code_discount_input').value.trim();
-    let coupon_use_discounted_price = document.getElementById('coupon_use_new_price').value.trim();
-    // let package_discount = document.getElementById('package_discount').value.trim();
-    // let package_discounted_price = document.getElementById('package_discounted_price').value.trim();
-    let country = document.getElementById('customer_country').value.trim();
-    let company_name = document.getElementById('customer_company_name').value.trim();
-    let pic = document.getElementById('customer_pic').value.trim();
-    let sales_commission_discount = document.getElementById('customer_sales_commission_discount').value.trim();
-    let sales_commission = document.getElementById('customer_sales_commission').value.trim();
-    let mrp = document.getElementById('customer_mrp').value.trim();
-    // let agent_name = document.getElementById('agent_name').value.trim();
-    // let agent_code = document.getElementById('agent_code').value.trim();
-    // let agent_price = document.getElementById('agent_price').value.trim();
-    // let passenger_price = document.getElementById('passenger_price').value.trim();
-    // let staff_name = document.getElementById('staff_name').value.trim();
-    // let staff_code = document.getElementById('staff_code').value.trim();
-    // let staff_price = document.getElementById('staff_price').value.trim();
-    let medical_date = document.getElementById('customer_medical_date').value.trim();
-    let medical_center = document.getElementById('customer_medical_center').value.trim();
-    let medical_result = document.getElementById('customer_medical_result').value.trim();
-    let visa_online = document.getElementById('customer_visa_online').value.trim();
-    let calling = document.getElementById('customer_calling').value.trim();
-    let training = document.getElementById('customer_training').value.trim();
-    let e_vissa = document.getElementById('customer_e_vissa').value.trim();
-    let bmet = document.getElementById('customer_bmet').value.trim();
-    let fly = document.getElementById('customer_fly').value.trim();
-    let payment = document.getElementById('customer_payment').value.trim();
-    let payment_method = document.getElementById('customer_payment_method').value.trim();
-    //let account_number = document.getElementById('account_number').value.trim();
-    let approval = document.getElementById('approval').value.trim();
-    let isError = false;
+        //get input value
+        let id = document.getElementById('customer_id').value.trim();
+        let admin_id = document.getElementById('admin_id').value.trim();
+        let agent_id = document.getElementById('agent_id').value.trim();
+        let package_id = document.getElementById('customer_create_component_available_packages_dropdown').value
+            .trim();
+        let package_category_id = document.getElementById('package_categories_dropdown').value.trim();
+        let name = document.getElementById('customer_name').value.trim();
+        let email = document.getElementById('customer_email').value.trim();
+        let image = document.getElementById('customer_image').files[0];
+        let phone = document.getElementById('customer_phone').value.trim();
+        let passport_no = document.getElementById('customer_passport_no').value.trim();
+        let age = document.getElementById('customer_age').value.trim();
+        let gender = document.getElementById('customer_gender').value.trim();
+        let date_of_birth = document.getElementById('customer_date_of_birth').value.trim();
+        let nid_number = document.getElementById('customer_nid_number').value.trim();
+        let price = document.getElementById('admin_package_price_field').value.trim();
+        let passenger_price = document.getElementById('customer_passenger_price').value.trim();
+        let duration = document.getElementById('package_duration').value.trim();
+        let inclusions = document.getElementById('package_inclusions').value.trim();
+        let exclusions = document.getElementById('package_exclusions').value.trim();
+        let visa_processing_time = document.getElementById('package_visa_processing_time').value.trim();
+        let documents_required = document.getElementById('package_documents_required').value.trim();
+        let seat_availability = document.getElementById('package_seat_availability').value.trim();
+        let customer_slot = document.getElementById('customer_slot').value.trim();
+        let coupon_code = document.getElementById('coupon_code_input').value.trim();
+        let coupon_discount = document.getElementById('coupon_code_discount_input').value.trim();
+        let coupon_use_discounted_price = document.getElementById('coupon_use_new_price').value.trim();
+        // let package_discount = document.getElementById('package_discount').value.trim();
+        // let package_discounted_price = document.getElementById('package_discounted_price').value.trim();
+        let country = document.getElementById('customer_country').value.trim();
+        let company_name = document.getElementById('customer_company_name').value.trim();
+        let pic = document.getElementById('customer_pic').value.trim();
+        let sales_commission_discount = document.getElementById('customer_sales_commission_discount').value.trim();
+        let sales_commission = document.getElementById('customer_sales_commission').value.trim();
+        let mrp = document.getElementById('customer_mrp').value.trim();
+        // let agent_name = document.getElementById('agent_name').value.trim();
+        // let agent_code = document.getElementById('agent_code').value.trim();
+        // let agent_price = document.getElementById('agent_price').value.trim();
+        // let passenger_price = document.getElementById('passenger_price').value.trim();
+        // let staff_name = document.getElementById('staff_name').value.trim();
+        // let staff_code = document.getElementById('staff_code').value.trim();
+        // let staff_price = document.getElementById('staff_price').value.trim();
+        let medical_date = document.getElementById('customer_medical_date').value.trim();
+        let medical_center = document.getElementById('customer_medical_center').value.trim();
+        let medical_result = document.getElementById('customer_medical_result').value.trim();
+        let visa_online = document.getElementById('customer_visa_online').value.trim();
+        let calling = document.getElementById('customer_calling').value.trim();
+        let training = document.getElementById('customer_training').value.trim();
+        let e_vissa = document.getElementById('customer_e_vissa').value.trim();
+        let bmet = document.getElementById('customer_bmet').value.trim();
+        let fly = document.getElementById('customer_fly').value.trim();
+        let payment = document.getElementById('customer_payment').value.trim();
+        let payment_method = document.getElementById('customer_payment_method').value.trim();
+        //let account_number = document.getElementById('account_number').value.trim();
+        let approval = document.getElementById('approval').value.trim();
+        let isError = false;
 
 
-    if(!package_id){
-        document.getElementById('customer_package_error').innerText = 'Please Choose a valid Category Package';
-        isError = true
+        if (!package_id) {
+            document.getElementById('customer_package_error').innerText = 'Please Choose a valid Category Package';
+            isError = true
+        }
+
+        if (!package_category_id) {
+            document.getElementById('customer_purpose_error').innerText = 'Please Choose Category';
+            isError = true
+        }
+
+        if (!name) {
+            document.getElementById('customer_name_error').innerText = 'Please Enter Name';
+            isError = true
+        }
+
+        if (!email) {
+            document.getElementById('customer_email_error').innerText = 'Please Enter Email';
+            isError = true
+        }
+
+        if (!phone) {
+            document.getElementById('customer_phone_error').innerText = 'Please Enter Phone Number';
+            isError = true
+        }
+
+        if (!passport_no) {
+            document.getElementById('customer_passport_no_error').innerText = 'Please Enter Passport Number';
+            isError = true
+        }
+
+        if (!age) {
+            document.getElementById('customer_age_error').innerText = 'Please Enter Passport Number';
+            isError = true
+        }
+
+        if (!gender) {
+            document.getElementById('customer_gender_error').innerText = 'Please Enter Passport Number';
+            isError = true
+        }
+
+        if (!date_of_birth) {
+            document.getElementById('customer_date_of_birth_error').innerText = 'Please Enter Your Bith Date';
+            isError = true
+        }
+
+        if (!nid_number) {
+            document.getElementById('customer_nid_number_error').innerText = 'Please Enter Your NID Number';
+            isError = true
+        }
+
+        if (!price) {
+            document.getElementById('admin_package_price_error').innerText = 'Package Price is required';
+            isError = true
+        }
+
+        if (!country) {
+            document.getElementById('customer_country_error_message').innerText = 'Country is required';
+            isError = true
+        }
+
+        if (!company_name) {
+            document.getElementById('customer_company_name_error_message').innerText = 'Company name is required';
+            isError = true
+        }
+
+        if (!pic) {
+            document.getElementById('customer_pic_error_message').innerText = 'PIC is required';
+            isError = true
+        }
+
+        if (!medical_date) {
+            document.getElementById('customer_medical_date_error_message').innerText = 'Medical Date  is required';
+            isError = true
+        }
+
+        if (!medical_center) {
+            document.getElementById('customer_medical_center_error_message').innerText =
+                'Medical Center  is required';
+            isError = true
+        }
+
+        if (!medical_result) {
+            document.getElementById('customer_medical_result_error_message').innerText =
+                'Medical Result  is required';
+            isError = true
+        }
+
+        if (!visa_online) {
+            document.getElementById('customer_visa_online_error_message').innerText = 'Visa Online  is required';
+            isError = true
+        }
+
+        if (!calling) {
+            document.getElementById('customer_calling_error_message').innerText = 'Calling  is required';
+            isError = true
+        }
+
+        if (!training) {
+            document.getElementById('customer_training_error_message').innerText = 'Training  is required';
+            isError = true
+        }
+
+        if (!e_vissa) {
+            document.getElementById('customer_e_vissa_error_message').innerText = 'E-Visa  is required';
+            isError = true
+        }
+
+        if (!bmet) {
+            document.getElementById('customer_bmet_error_message').innerText = 'BMET  is required';
+            isError = true
+        }
+
+        if (!fly) {
+            document.getElementById('customer_fly_error_message').innerText = 'FLY  is required';
+            isError = true
+        }
+
+        if (!payment) {
+            document.getElementById('customer_payment_error_message').innerText = 'Payment  is required';
+            isError = true
+        }
+
+        if (!payment_method) {
+            document.getElementById('customer_payment_method_error_message').innerText =
+                'Payment Method is required';
+            isError = true
+        }
+
+        if (!approval) {
+            document.getElementById('customer_approval_error_message').innerText = 'Approval is required';
+            isError = true
+        }
+
+
+
+        if (!customer_slot) {
+            document.getElementById('customer_slot_error_message').innerText = 'Slot is required';
+            isError = true
+        }
+
+        if (isError) return;
+
+        let formData = new FormData();
+        if (image) {
+            formData.append('image', image)
+        }
+
+        const data = {
+            id,
+            admin_id,
+            agent_id,
+            package_id,
+            package_category_id,
+            name,
+            email,
+            phone,
+            passport_no,
+            age,
+            gender,
+            date_of_birth,
+            nid_number,
+            price,
+            duration,
+            inclusions,
+            exclusions,
+            visa_processing_time,
+            documents_required,
+            seat_availability,
+            customer_slot,
+            coupon_code,
+            coupon_discount,
+            coupon_use_discounted_price,
+            country,
+            company_name,
+            pic,
+            sales_commission_discount,
+            sales_commission,
+            mrp,
+            passenger_price,
+            medical_date,
+            medical_center,
+            medical_result,
+            visa_online,
+            calling,
+            training,
+            e_vissa,
+            bmet,
+            fly,
+            payment,
+            payment_method,
+            approval
+        };
+
+        for (let key in data) {
+            formData.append(key, data[key]);
+        }
+
+        // Console output
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        // Send request
+        try {
+            const response = await axios.post('/customer/update/by-admin', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                   
+                    $('#customerEditModal').modal('hide');
+
+                    // optionally refresh customer list
+                    adminCustomerListLoad();
+                });
+            } else {
+                console.error('Unexpected response', response.data);
+                //alert('Update failed!');
+            }
+
+        } catch (error) {
+            console.error('Error occurred:', error);
+            alert('Something went wrong while updating the customer.');
+        }
     }
-
-    if(!package_category_id){
-        document.getElementById('customer_purpose_error').innerText = 'Please Choose Category';
-        isError = true
-    }
-
-    if(!name){
-        document.getElementById('customer_name_error').innerText = 'Please Enter Name';
-        isError = true
-    }
-
-    if(!email){
-        document.getElementById('customer_email_error').innerText = 'Please Enter Email';
-        isError = true
-    }
-
-    if(!phone){
-        document.getElementById('customer_phone_error').innerText = 'Please Enter Phone Number';
-        isError = true
-    }
-
-    if(!passport_no){
-        document.getElementById('customer_passport_no_error').innerText = 'Please Enter Passport Number';
-        isError = true
-    }
-
-    if(!age){
-        document.getElementById('customer_age_error').innerText = 'Please Enter Passport Number';
-        isError = true
-    }
-
-    if(!gender){
-        document.getElementById('customer_gender_error').innerText = 'Please Enter Passport Number';
-        isError = true
-    }
-
-    if(!date_of_birth){
-        document.getElementById('customer_date_of_birth_error').innerText = 'Please Enter Your Bith Date';
-        isError = true
-    }
-
-    if(!nid_number){
-        document.getElementById('customer_nid_number_error').innerText = 'Please Enter Your NID Number';
-        isError = true
-    }
-
-    if(!price){
-        document.getElementById('admin_package_price_error').innerText = 'Package Price is required';
-        isError = true
-    }
-
-    if(!country){
-        document.getElementById('customer_country_error_message').innerText = 'Country is required';
-        isError = true
-    }
-
-    if(!company_name){
-        document.getElementById('customer_company_name_error_message').innerText = 'Company name is required';
-        isError = true
-    }
-
-    if(!pic){
-        document.getElementById('customer_pic_error_message').innerText = 'PIC is required';
-        isError = true
-    }
-
-    if(!medical_date){
-        document.getElementById('customer_medical_date_error_message').innerText = 'Medical Date  is required';
-        isError = true
-    }
-
-    if(!medical_center){
-        document.getElementById('customer_medical_center_error_message').innerText = 'Medical Center  is required';
-        isError = true
-    }
-
-    if(!medical_result){
-        document.getElementById('customer_medical_result_error_message').innerText = 'Medical Result  is required';
-        isError = true
-    }
-
-    if(!visa_online){
-        document.getElementById('customer_visa_online_error_message').innerText = 'Visa Online  is required';
-        isError = true
-    }
-
-    if(!calling){
-        document.getElementById('customer_calling_error_message').innerText = 'Calling  is required';
-        isError = true
-    }
-
-    if(!training){
-        document.getElementById('customer_training_error_message').innerText = 'Training  is required';
-        isError = true
-    }
-
-    if(!e_vissa){
-        document.getElementById('customer_e_vissa_error_message').innerText = 'E-Visa  is required';
-        isError = true
-    }
-
-    if(!bmet){
-        document.getElementById('customer_bmet_error_message').innerText = 'BMET  is required';
-        isError = true
-    }
-
-    if(!fly){
-        document.getElementById('customer_fly_error_message').innerText = 'FLY  is required';
-        isError = true
-    }
-
-    if(!payment){
-        document.getElementById('customer_payment_error_message').innerText = 'Payment  is required';
-        isError = true
-    }
-
-    if(!payment_method){
-        document.getElementById('customer_payment_method_error_message').innerText = 'Payment Method is required';
-        isError = true
-    }
-
-    if(!approval){
-        document.getElementById('customer_approval_error_message').innerText = 'Approval is required';
-        isError = true
-    }
-
-
-
-    if(!customer_slot){
-        document.getElementById('customer_slot_error_message').innerText = 'Slot is required';
-        isError = true
-    }
-
-    if(isError) return;
-    console.log("all field done");
-}
-
-
-
-
-
-
-
-
-
-
 </script>

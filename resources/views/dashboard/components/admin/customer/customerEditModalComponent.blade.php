@@ -527,9 +527,67 @@
                                 id="customer_slot_error_message"></span>
                         </div>
 
-                        {{-- <div class="text-end">
-                            
-                        </div> --}}
+                        <!-- Analog Payment Card -->
+                        <div class="col-12 mb-4">
+                            <div class="card border rounded-4 shadow-sm">
+                                <div class="card-header bg-gradient rounded-top-4">
+                                    <h5 class="mb-0 fw-bold">Payment & Getway</h5>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <!-- Instruction -->
+                                    <div class="alert alert-info border-0 rounded-3 shadow-sm">
+                              <div class="alert alert-info border-0 rounded-3 shadow-sm">
+                                    <strong>Instructions:</strong> <br/>
+                                    Please fill in the fields below:
+                                    <ol class="mb-0 mt-2 ps-3">
+                                        <li>The Customer Price will be shown automatically.</li>
+                                        <li>Enter the amount the customer is paying now.</li>
+                                        <li>The remaining amount due will be calculated automatically below.</li>
+                                    </ol>
+                                </div>
+
+                                    <div class="row g-3">
+                                        <!-- Passenger Price -->
+                                        <div class="col-md-12">
+                                            <label for="passenger_price__payment_readonly"
+                                                class="form-label fw-semibold">Passenger Price (Auto)</label>
+                                            <input type="number" class="form-control bg-light"
+                                                id="passenger_price__payment_readonly" readonly
+                                                placeholder="Passenger price will show here">
+                                        </div>
+
+                                        <!-- Paid Now -->
+                                        <div class="col-md-6">
+                                            <label for="analog_payment_now" class="form-label fw-semibold">Amount Paid
+                                                Now (Cash)</label>
+                                            <input type="number" class="form-control" id="analog_payment_now"
+                                                placeholder="Enter how much paid now" oninput="calculateAnalogDue()">
+                                        </div>
+
+                                        <!-- Remaining Due -->
+                                        <div class="col-md-6">
+                                            <label for="analog_payment_due" class="form-label fw-semibold">Remaining
+                                                Amount (Due)</label>
+                                            <input type="number" class="form-control bg-light"
+                                                id="analog_payment_due" readonly
+                                                placeholder="Remaining due will show here">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-success">PAY NOW</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Error Message -->
+                                    <div class="mt-3">
+                                        <span class="text-danger fw-semibold"
+                                            id="analog_payment_error_message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
 
@@ -816,11 +874,16 @@
                 document.querySelector('.customer_mrp').value = parseInt(packageDetails.price) || '';
                 document.querySelector('.customer_passenger_price').value = parseInt(packageDetails.price) || '';
                 document.querySelector('.coupon_use_current_price').value = parseInt(packageDetails.price) || '';
+                //for payment getway 
+                document.querySelector('#passenger_price__payment_readonly').value = parseInt(packageDetails
+                    .price) || '';
                 comissoinCalculator();
 
                 // Show coupon section and table
                 let couponSection = document.querySelector('.coupon_section');
                 let dynamicCuponSection = document.querySelector('.dynamic_coupon_section');
+
+
 
                 if (couponLists.length > 0) {
                     couponSection.classList.remove('d-none');
@@ -1105,7 +1168,8 @@
                 // ✅ Add these two lines to reflect changes
                 document.querySelector('.customer_mrp').value = discount_amount;
                 document.querySelector('.customer_passenger_price').value = discount_amount;
-
+                // readonly field input
+                document.getElementById('passenger_price__payment_readonly').value = discount_amount;
                 Swal.fire({
                     icon: 'success',
                     title: 'Coupon Applied!',
@@ -1170,7 +1234,7 @@
     // ==============================
     document.querySelector('#package_categories_dropdown').addEventListener('change', function() {
         let selectedCategoryId = this.value;
-        // ✅ আগের details hide করো
+
         document.getElementById('purpose_wise_package_section').classList.add('d-none');
         document.querySelector('.coupon_section')?.classList.add('d-none');
         document.querySelector('#admin_price_section')?.classList.add('d-none');
@@ -1537,7 +1601,7 @@
                     timer: 2000,
                     showConfirmButton: false
                 }).then(() => {
-                   
+
                     $('#customerEditModal').modal('hide');
 
                     // optionally refresh customer list
@@ -1551,6 +1615,58 @@
         } catch (error) {
             console.error('Error occurred:', error);
             alert('Something went wrong while updating the customer.');
+        }
+    }
+
+
+
+
+    //======================================
+    //=====PAYMENT & GETWAY
+    //======================================
+    //set passenger price value
+    // Step 1: যেই ইনপুট দিলে, সেটা কপি হবে রিড-অনলি ফিল্ডে
+    // document.getElementById('customer_passenger_price').addEventListener('input', function() {
+    //     let price = this.value;
+    //     console.log(price); // Console output দেখার জন্য
+    //     document.getElementById('passenger_price__payment_readonly').value = price;
+
+    //     // Optional: সাথে সাথে হিসাবও করে দিতে চাইলে
+    //     calculateAnalogDue();
+    // });
+    document.addEventListener('DOMContentLoaded', function () {
+    const inputPrice = document.getElementById('customer_passenger_price');
+    const outputPrice = document.getElementById('passenger_price__payment_readonly');
+
+    if (inputPrice && outputPrice) {
+        inputPrice.addEventListener('input', function () {
+            let price = this.value;
+            console.log('Price:', price);  // console output
+            outputPrice.value = price;
+
+            // অপশনাল: সাথে সাথে হিসাব করতে চাইলে
+            calculateAnalogDue();
+        });
+    } else {
+        console.log('❌ কিছু ইনপুট আইডি পাওয়া যায়নি।');
+    }
+});
+
+
+    // Step 2: Due হিসাব করার ফাংশন
+    function calculateAnalogDue() {
+        const price = parseFloat(document.getElementById('passenger_price__payment_readonly').value) || 0;
+        const paid = parseFloat(document.getElementById('analog_payment_now').value) || 0;
+        const due = price - paid;
+
+        document.getElementById('analog_payment_due').value = due >= 0 ? due : 0;
+
+        // Optional: error দেখানো
+        const errorField = document.getElementById('analog_payment_error_message');
+        if (due < 0) {
+            errorField.innerText = "Paid amount cannot exceed passenger price.";
+        } else {
+            errorField.innerText = "";
         }
     }
 </script>

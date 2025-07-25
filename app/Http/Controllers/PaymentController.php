@@ -42,11 +42,11 @@ class PaymentController extends Controller
             if ($payment) {
                 $newPaidAmount = $payment->paid_amount + $paidAmountNew;
 
-                // অতিরিক্ত পেমেন্ট চেক
+                // extra payment ceck 
                 if ($newPaidAmount > $totalPrice) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => "আপনার কাছে এখনও {$payment->due_amount} টাকা বাকি আছে, তাই $paidAmountNew টাকা দেওয়া সম্ভব নয়।",
+                        'message' => "Your outstanding due amount is ৳{{ number_format($payment->due_amount, 2) }}. Therefore, you cannot pay ৳{{ number_format($paidAmountNew, 2) }} at this time.",
                     ], 422);
                 }
 
@@ -81,7 +81,7 @@ class PaymentController extends Controller
                     'payment' => $payment,
                 ]);
             } else {
-                // নতুন পেমেন্ট তৈরির সময়
+                // new payment history
                 do {
                     $invoice_no = 'INV' . strtoupper(Str::random(6)) . date('YmdHis');
                 } while (Payment::where('invoice_no', $invoice_no)->exists());
@@ -127,13 +127,13 @@ class PaymentController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-            // Optional: লগিং
+            // 
             // \Log::error('Payment Store Error: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'error' => $e->getMessage() // প্রোডাকশনে সরিয়ে ফেলো
+                'error' => $e->getMessage()
             ], 500);
         }
 }

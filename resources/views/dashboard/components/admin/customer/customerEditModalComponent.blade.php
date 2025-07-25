@@ -1689,14 +1689,14 @@ async function paymentNowBtn(event) {
     const errorMessage = document.getElementById('analog_payment_error_message');
 
     if (!customerId || !packageId || passengerPrice <= 0 || paidNow <= 0) {
-        errorMessage.innerText = '❌ Please fill all required fields properly.';
+        errorMessage.innerText = 'Please fill all required fields properly.';
         return;
     }
 
     const totalPaid = prevPaid + paidNow;
 
     if (totalPaid > passengerPrice) {
-        errorMessage.innerText = '❌ Total paid cannot be greater than passenger price.';
+        errorMessage.innerText = 'Total paid cannot be greater than passenger price.';
         return;
     }
 
@@ -1727,7 +1727,7 @@ async function paymentNowBtn(event) {
 
             Swal.fire({
                 icon: 'success',
-                title: '✅ Payment Successful!',
+                title: 'Payment Successful!',
                 text: res.data.message || 'Payment has been recorded successfully.',
                 timer: 2500,
                 showConfirmButton: false

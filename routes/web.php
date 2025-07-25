@@ -8,6 +8,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AgentProfileController;
@@ -215,7 +216,10 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
    Route::post('/admin/customer/restore-by-id', [AdminController::class, 'restoreCustomerById']);
    Route::post('/admin/customer/permanent-delete', [AdminController::class, 'permanentDeleteCustomer']);
 
-
+//payment getway
+   //Route::get('/admin/payment/getway', [AdminController::class, 'paymentGetway']);
+    Route::post('/admin/payment/getway', [PaymentController::class, 'paymentGetwayStore']);
+   //Route::post('/admin/payment/getway/update', [AdminController::class, 'paymentGetwayUpdate']);
 });
 
 

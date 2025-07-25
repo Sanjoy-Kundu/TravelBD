@@ -4,7 +4,7 @@
              <div class="sb-sidenav-menu">
                  <div class="nav">
                      <div class="sb-sidenav-menu-heading">Core</div>
-                     <a class="nav-link" href="index.html">
+                     <a class="nav-link" href="{{url('/admin/dashboard')}}">
                          <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                          Dashboard
                      </a>
@@ -77,7 +77,7 @@
                                  <nav class="sb-sidenav-menu-nested nav">
                                      <a class="nav-link" href="{{ url('/admin/customer/create') }}" target="_blank">Add
                                          Customer</a>
-                                     <a class="nav-link" href="{{url('/admin/customer/lists')}}">My Customer List</a>
+                                     {{-- <a class="nav-link" href="{{url('/admin/customer/lists')}}">Customer List</a> --}}
                                      <a class="nav-link" href="{{url('/admin/customer/all/lists')}}">Customer List</a>
                                  </nav>
                              </div>

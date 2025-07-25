@@ -585,11 +585,11 @@
 
                                         <!-- Pay Button -->
                                         <div class="col-md-6 d-flex align-items-end">
-                                            <button class="btn btn-success w-100" onclick="paymentNowBtn(event)">PAY
-                                                NOW</button>
+                                       <button class="btn btn-primary w-100" id="payNowButton" onclick="paymentNowBtn(event)">PAY NOW</button>
+
                                         </div>
                                     </div>
-
+                                    <button class="btn btn-success">VIEW PAYMENT HISTORY</button>
                                     <!-- Error Message -->
                                     <div class="mt-3">
                                         <span class="text-danger fw-semibold"
@@ -662,7 +662,8 @@
 
             if (res.data.status === 'success') {
                 let customer = res.data.customer;
-                console.log("==", customer);
+                let payments = customer.payment_data;
+                //console.log("==", customer);
                 // Set customer image
                 document.getElementById('customer_image_preview').src = customer.image ?
                     `/upload/dashboard/images/customers/${customer.image}` :
@@ -714,6 +715,19 @@
                 setField('.customer_payment', customer.payment);
                 setField('.customer_payment_method', customer.payment_method);
                 setField('.customer_slot_input', parseInt(customer.customer_slot) || '');
+
+                if (payments.length > 0) {
+                    // সর্বশেষ (latest) পেমেন্ট ধরতেছি
+                    const latest = payments[payments.length - 1];
+
+                    // Step 3: ইনপুট ফিল্ডে ভ্যালু সেট করো
+                    document.getElementById('previous_paid').value = parseInt(latest.paid_amount);
+                    document.getElementById('analog_payment_due').value = parseInt(latest.due_amount);
+                    document.getElementById('total_paid').value = parseInt(latest.paid_amount);
+                }
+
+
+
 
                 // Load categories and packages
                 await loadCategoryLists(customer.package_category_id, customer.package_id);
@@ -1722,9 +1736,10 @@ async function paymentNowBtn(event) {
             document.getElementById('previous_paid').value = newPaid;
             document.getElementById('analog_payment_now').value = '';
             document.getElementById('analog_payment_due').value = newDue;
-            document.getElementById('total_paid').value = '';
+            document.getElementById('total_paid').value = newPaid;
             errorMessage.innerText = '';
 
+            //updatePayNowState();
             Swal.fire({
                 icon: 'success',
                 title: 'Payment Successful!',
@@ -1749,4 +1764,33 @@ async function paymentNowBtn(event) {
         Swal.fire({ icon: 'error', title: 'Error!', text: msg });
     }
 }
+
+
+// function updatePayNowState() {
+//     const passengerPrice = parseFloat(document.getElementById('passenger_price__payment_readonly').value) || 0;
+//     const prevPaid = parseFloat(document.getElementById('previous_paid').value) || 0;
+//     const payNowBtn = document.getElementById('payNowButton');
+//     const payNowInput = document.getElementById('analog_payment_now');
+
+//     if (prevPaid >= passengerPrice) {
+//         // Full paid - disable button and make input readonly
+//         payNowBtn.disabled = true;
+//         payNowBtn.classList.add('btn-danger');
+//         payNowBtn.classList.remove('btn-primary');
+
+//         payNowInput.readOnly = true;
+//         payNowInput.placeholder = "Fully Paid";
+//         payNowInput.value = ''; // Optional: Clear input if needed
+//     } else {
+//         // Not fully paid - enable button and input
+//         payNowBtn.disabled = false;
+//         payNowBtn.classList.remove('btn-danger');
+//         payNowBtn.classList.add('btn-primary');
+
+//         payNowInput.readOnly = false;
+//         payNowInput.placeholder = "Enter amount";
+//     }
+// }
+
+
 </script>

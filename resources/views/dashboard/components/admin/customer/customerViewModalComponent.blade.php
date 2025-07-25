@@ -1,19 +1,23 @@
 <style>
-@media print {
-    .btn, .modal-header, .modal-footer {
-        display: none !important;
-    }
+    @media print {
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        .btn,
+        .modal-header,
+        .modal-footer {
+            display: none !important;
+        }
 
-    th, td {
-        border: 1px solid #000;
-        padding: 6px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 6px;
+        }
     }
-}
 </style>
 
 
@@ -22,7 +26,7 @@
 <div class="modal fade" id="customerViewModal" tabindex="-1" aria-labelledby="customerViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-          
+
             <div class="modal-header justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <img src="/images/logo/logo.png" alt="Agency Logo" style="height: 40px; margin-right: 10px;">
@@ -165,6 +169,20 @@
                                 <th>Created IP</th>
                                 <td class="created_by_ip">---</td>
                             </tr>
+
+                            <tr>
+                                <th>Total Amount</th>
+                                <td class="total_amount">---</td>
+                                <th>Payment Invoice</th>
+                                <td class="payment_invoice">---</td>
+                            </tr>
+
+                            <tr>
+                                <th>Due Amount</th>
+                                <td class="due_amount">---</td>
+                                <th>Already Paid Amount</th>
+                                <td class="paid_amount">---</td>
+                            </tr>
                         </tbody>
 
                     </table>
@@ -172,11 +190,12 @@
             </div>
             <div class="modal-footer justify-content-end">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                 <button type="button" class="btn btn-primary" onclick="printCustomerViewDetails()"><i class="bi bi-printer"></i> Print </button>
+                <button type="button" class="btn btn-primary" onclick="printCustomerViewDetails()"><i
+                        class="bi bi-printer"></i> Print </button>
             </div>
         </div>
     </div>
-   
+
 </div>
 
 
@@ -198,7 +217,12 @@
                 }
             })
             if (res.data.status == 'success') {
-                console.log(res.data.customer)
+
+                //console.log('view', res.data.customer)
+                // console.log('view', res.data.customer.payment[0].due_amount)
+                // console.log('view', res.data.customer.payment[0].paid_amount)
+                // console.log('view', res.data.customer.payment[0].invoice_no)
+                let paymentData = res.data.customer.payment_data;
                 if (res.data.customer.image) {
                     document.querySelector('.customer_image').src =
                         `/upload/dashboard/images/customers/${res.data.customer.image}`
@@ -267,8 +291,25 @@
                     'N/A'
                 document.querySelector('.payment').innerHTML = res.data.customer.payment || 'N/A'
                 document.querySelector('.created_by_ip').innerHTML = res.data.customer.created_by_ip || 'N/A'
+
+            if (paymentData && paymentData.length > 0) {
+                const payment = paymentData[0]; 
+                console.log('payment',payment);
+
+                document.querySelector('.total_amount').innerHTML = payment.total_price ? `৳ ${parseFloat(payment.total_price).toLocaleString()}` : 'N/A';
+                document.querySelector('.paid_amount').innerHTML = payment.paid_amount ? `৳ ${parseFloat(payment.paid_amount).toLocaleString()}` : 'N/A';
+                document.querySelector('.due_amount').innerHTML = payment.due_amount ? `৳ ${parseFloat(payment.due_amount).toLocaleString()}` : '৳ 0.00';
+                document.querySelector('.payment_invoice').innerHTML = payment.invoice_no || 'N/A';
             } else {
-                consolee.log('error', res.data)
+                document.querySelector('.total_amount').innerHTML = parseInt(res.data.customer.mrp);
+                document.querySelector('.paid_amount').innerHTML = '00';
+                document.querySelector('.due_amount').innerHTML = parseInt(res.data.customer.mrp);
+                document.querySelector('.payment_invoice').innerHTML = 'N/A';
+            }
+              
+
+            } else {
+                console.log('error', res.data)
             }
         } catch (error) {
             console.log('error', error)
@@ -279,17 +320,21 @@
 
 
     // print 
-function printCustomerViewDetails() {
-    const printContents = document.getElementById('printableCustomerViewDetails').innerHTML;
-    const printWindow = window.open('', '_blank', 'height=800,width=1000');
+    function printCustomerViewDetails() {
+        const printContents = document.getElementById('printableCustomerViewDetails').innerHTML;
+        const printWindow = window.open('', '_blank', 'height=800,width=1000');
 
-    const today = new Date();
-    const dateTime = today.toLocaleString('en-GB', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit', hour12: true
-    });
+        const today = new Date();
+        const dateTime = today.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
 
-    printWindow.document.write(`
+        printWindow.document.write(`
         <html>
         <head>
             <title>Customer Details</title>
@@ -372,16 +417,12 @@ function printCustomerViewDetails() {
         </html>
     `);
 
-    printWindow.document.close();
-    printWindow.focus();
+        printWindow.document.close();
+        printWindow.focus();
 
-    setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-    }, 1000);
-}
-
-
-
-
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 1000);
+    }
 </script>

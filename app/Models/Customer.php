@@ -55,4 +55,9 @@ protected $fillable = [
     {
         return $this->belongsTo(PackageCategory::class, 'package_category_id');
     }
+
+       public function paymentData()
+    {
+        return $this->hasMany(Payment::class,'customer_id');
+    }
 }

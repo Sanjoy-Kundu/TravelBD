@@ -8,6 +8,7 @@ use App\Models\Agent;
 use App\Models\Staff;
 use App\Mail\AdminOtp;
 use App\Models\Package;
+use App\Models\Payment;
 use App\Models\Customer;
 use Illuminate\Support\Str;
 use App\Mail\AgentTrashMail;
@@ -1196,11 +1197,12 @@ public function adminListsTrashData()
      */
     public function customerViewByRandom(Request $request){
         try{
-            $customer = Customer::with('package','packageCategory','admin','agent')->where('id', $request->id)->first();
+            $customer = Customer::with('package','packageCategory','admin','agent','paymentData')->where('id', $request->id)->first();
             if(!$customer){
                 return response()->json(["status" => "error", "message" => "Customer not found"]);
             }
-            return response()->json(["status" => "success", "customer" => $customer]);
+            //$paymentData = Payment::where('customer_id', $request->id)->latest()->first();
+            return response()->json(["status" => "success", "customer" => $customer,]);
         }catch(Exception $ex){
             return response()->json(["status" => "error", "message" => $ex->getMessage()]);
         }

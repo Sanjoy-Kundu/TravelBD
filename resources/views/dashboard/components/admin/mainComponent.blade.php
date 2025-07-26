@@ -100,9 +100,9 @@
 
         <div class="col-12 col-md-12">
             <div class="card shadow-sm border-0 rounded-3"
-                style="background: linear-gradient(135deg, #dadcde 0%, #e4efed 100%); box-shadow: 0 4px 15px rgba(210, 224, 241, 0.3); color: #1a1a1a;">
+                style="background-color:rgb(201, 233, 255); color:black">
                 <div class="card-header">
-                    <h5 class="mb-0">Customer Groth Info</h5>
+                    <h5 class="mb-0">Customer Added Per Month</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height: 300px;">
                     <canvas id="customerGrowthChart" style="max-height: 100%; max-width: 100%;"></canvas>
@@ -114,7 +114,7 @@
 
     <div class="col-12 col-md-12 mt-4">
         <div class="card shadow-sm border-0 rounded-3"
-            style="background: linear-gradient(135deg, #dadcde 0%, #e4efed 100%); box-shadow: 0 4px 15px rgba(210, 224, 241, 0.3); color: #1a1a1a;">
+            style="background-color:rgba(230, 205, 255, 0.85); color:black">
             <div class="card-header">
                 <h5 class="mb-0">Packages Sold Per Month</h5>
             </div>
@@ -255,7 +255,7 @@
                             datasets: [{
                                 label: 'New Customers',
                                 data: growthRes.data.data,
-                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                backgroundColor: 'rgba(54, 162, 235, 1)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
                                 borderWidth: 1,
                                 borderRadius: 5,
@@ -316,8 +316,8 @@
                             datasets: [{
                                 label: 'Package Sales',
                                 data: packageSalesRes.data.sales_count,
-                                backgroundColor: 'rgba(246, 211, 101, 0.7)', // Professional light yellow
-                                borderColor: 'rgba(253, 160, 133, 1)', // Soft orange
+                                backgroundColor: 'rgba(102, 51, 153, 0.85)', // Professional light yellow
+                                borderColor: 'rgba(75, 0, 130, 1)', // Soft orange
                                 borderWidth: 1,
                                 borderRadius: 5,
                             }]

@@ -84,10 +84,11 @@
     </div>
 
 
+    {{-- bar chart line chart and other charts --}}
     <div class="row g-4 mt-5">
-
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm border-0 rounded-3" style="background-color: #a8dfeb;">
+        <div class="col-12 col-md-12">
+            <div class="card shadow-sm border-0 rounded-3"
+                style="background: linear-gradient(135deg, #dadcde 0%, #e4efed 100%); box-shadow: 0 4px 15px rgba(210, 224, 241, 0.3); color: #1a1a1a;">
                 <div class="card-header">
                     <h5 class="mb-0">User Type Allocation</h5>
                 </div>
@@ -97,18 +98,32 @@
             </div>
         </div>
 
-
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm border-0 rounded-3">
+        <div class="col-12 col-md-12">
+            <div class="card shadow-sm border-0 rounded-3"
+                style="background: linear-gradient(135deg, #dadcde 0%, #e4efed 100%); box-shadow: 0 4px 15px rgba(210, 224, 241, 0.3); color: #1a1a1a;">
                 <div class="card-header">
-                    <h5 class="mb-0">Other Info</h5>
+                    <h5 class="mb-0">Customer Groth Info</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height: 300px;">
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <canvas id="customerGrowthChart" style="max-height: 100%; max-width: 100%;"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="col-12 col-md-12 mt-4">
+        <div class="card shadow-sm border-0 rounded-3"
+            style="background: linear-gradient(135deg, #dadcde 0%, #e4efed 100%); box-shadow: 0 4px 15px rgba(210, 224, 241, 0.3); color: #1a1a1a;">
+            <div class="card-header">
+                <h5 class="mb-0">Packages Sold Per Month</h5>
+            </div>
+            <div class="card-body d-flex justify-content-center align-items-center" style="height: 300px;">
+                <canvas id="packageSalesChart" style="max-height: 100%; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
@@ -157,7 +172,8 @@
                     document.getElementById('trash_customers').innerText = counts.customers_trash ?? 0;
                 }
 
-                const ctx = document.getElementById('userRoleChart').getContext('2d');
+                //user role chart start
+                const user_role_chart = document.getElementById('userRoleChart').getContext('2d');
 
 
                 const backgroundColors = [
@@ -172,7 +188,7 @@
                     'rgba(255, 193, 7, 1)'
                 ];
 
-                new Chart(ctx, {
+                new Chart(user_role_chart, {
                     type: 'pie',
                     data: {
                         labels: ['ADMINS', 'AGENTS', 'CUSTOMERS'],
@@ -220,6 +236,134 @@
                         }
                     }
                 });
+
+                //user role chart end    
+
+                //now customer growth chart start
+                const growthRes = await axios.get('/admin/customer-growth-data', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (growthRes.data) {
+                    const ctx = document.querySelector('#customerGrowthChart').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: growthRes.data.labels,
+                            datasets: [{
+                                label: 'New Customers',
+                                data: growthRes.data.data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1,
+                                        precision: 0
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Customers'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Month'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                },
+                                tooltip: {
+                                    enabled: true
+                                }
+                            }
+                        }
+                    });
+                }
+                //now customer growth chart end
+
+
+
+                //package sales chart start
+                const packageSalesRes = await axios.get('/admin/package-sales-data', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (packageSalesRes.data.sales_count) {
+                    const ctx = document.getElementById('packageSalesChart').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: packageSalesRes.data.labels,
+                            datasets: [{
+                                label: 'Package Sales',
+                                data: packageSalesRes.data.sales_count,
+                                backgroundColor: 'rgba(246, 211, 101, 0.7)', // Professional light yellow
+                                borderColor: 'rgba(253, 160, 133, 1)', // Soft orange
+                                borderWidth: 1,
+                                borderRadius: 5,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Total Sales'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Month'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const index = context.dataIndex;
+                                            const salesCount = context.dataset.data[index];
+                                            const packageNames = packageSalesRes.data
+                                                .package_names[index] || 'No package sold';
+                                            return `Sales: ${salesCount} (${packageNames})`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                //package sales chart end
+
             }
         } catch (error) {
             console.error("Dashboard count fetch error:", error);

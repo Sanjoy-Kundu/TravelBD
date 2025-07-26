@@ -16,6 +16,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\PackageCategoryController;
 use App\Http\Controllers\PackageDiscountController;
+use App\Http\Controllers\CustomerAnalyticsController;
 use App\Http\Controllers\CustomerPackagePdfController;
 
 // ====================== Admin Auth Routes ======================
@@ -220,6 +221,12 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
    //Route::get('/admin/payment/getway', [AdminController::class, 'paymentGetway']);
     Route::post('/admin/payment/getway', [PaymentController::class, 'paymentGetwayStore']);
    //Route::post('/admin/payment/getway/update', [AdminController::class, 'paymentGetwayUpdate']);
+
+
+    //for dahsboard graphs
+    Route::get('/admin/customer-growth-data', [CustomerAnalyticsController::class, 'monthlyCustomerGrowth']);
+    Route::get('/admin/package-sales-data', [CustomerAnalyticsController::class, 'packageSalesData']);
+
 });
 
 

@@ -110,18 +110,21 @@ class AdminController extends Controller
             'staffs' => Staff::count(),
             'agents' => Agent::count(),
             'packages' => Package::count(),
+            'customers' => Customer::count(),
 
             // Trash Counts
             'admins_trash' => Admin::onlyTrashed()->count(),
             'staffs_trash' => Staff::onlyTrashed()->count(),
             'agents_trash' => Agent::onlyTrashed()->count(),
             'packages_trash' => Package::onlyTrashed()->count(),
+            'customers_trash' => Customer::onlyTrashed()->count(),
 
             // Total (active + trash)
             'admins_total' => Admin::withTrashed()->count(),
             'staffs_total' => Staff::withTrashed()->count(),
             'agents_total' => Agent::withTrashed()->count(),
             'packages_total' => Package::withTrashed()->count(),
+            'customers_total' => Customer::withTrashed()->count(),
         ]
     ]);
 }
